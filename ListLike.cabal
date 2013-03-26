@@ -32,12 +32,22 @@ Library
           Data.ListLike.IO,
           Data.ListLike.Instances,
           Data.ListLike.String,
+          Data.ListLike.Text
+          Data.ListLike.Text.Text
+          Data.ListLike.Text.TextLazy
           Data.ListLike.Utils
+          Data.ListLike.Vector
+          Data.ListLike.Vector.Generic
+          Data.ListLike.Vector.Storable
+          Data.ListLike.Vector.Unboxed
+          Data.ListLike.Vector.Vector
   -- Other-Modules: Data.ConfigFile.Lexer
   Build-Depends: base       >= 3     && < 5
                 ,containers >= 0.3   && < 0.6
                 ,bytestring >= 0.9.1 && < 0.11
                 ,array      >= 0.3   && < 0.5
+                ,text       >= 0.11  && < 0.12
+                ,vector     >= 0.5   && < 0.11
   
 Executable runtests
   Buildable: False

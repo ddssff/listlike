@@ -46,6 +46,8 @@ import           Data.ListLike.Base
 import           Data.ListLike.String
 import           Data.ListLike.IO
 import           Data.ListLike.FoldableLL
+import           Data.ListLike.Text ()
+import           Data.ListLike.Vector ()
 import           Data.Int
 import           Data.Monoid
 import qualified Data.ByteString as BS
