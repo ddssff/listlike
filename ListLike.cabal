@@ -7,7 +7,7 @@ Copyright: Copyright (c) 2007-2008 John Goerzen
 license-file: COPYRIGHT
 extra-source-files: COPYRIGHT, README
 Category: Generics
-Cabal-Version: >= 1.6
+Cabal-Version: >= 1.8
 Build-Type: Simple
 homepage: http://software.complete.org/listlike
 synopsis: Generic support for list-like structures
@@ -49,12 +49,22 @@ Library
                 ,text       >= 0.11  && < 0.12
                 ,vector     >= 0.5   && < 0.11
   
-Executable runtests
-  Buildable: False
-  Main-Is: runtests.hs
-  HS-Source-Dirs: testsrc, .
-  Extensions: ExistentialQuantification
-      UndecidableInstances, CPP
+Test-suite listlike-tests
+  Hs-source-dirs: src testsrc
+  Main-is:        runtests.hs
+  Type:           exitcode-stdio-1.0
+
+  Other-modules:  TestInfrastructure
+  Build-depends:   base
+                  ,ListLike
+                  ,HUnit      >= 1.2 && < 2
+                  ,QuickCheck >= 2.4 && < 3
+                  ,random     >= 1   && < 2
+                  ,array
+                  ,bytestring
+                  ,containers
+                  ,text
+                  ,vector
 
 source-repository head
   type:     git
