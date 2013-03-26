@@ -27,6 +27,11 @@ import qualified Data.ListLike as LL
 import qualified Data.Array as A
 import qualified Data.Sequence as S
 import qualified Data.Foldable as F
+import qualified Data.Text as T
+import qualified Data.Text.Lazy as TL
+import qualified Data.Vector as V
+import qualified Data.Vector.Storable as VS
+import qualified Data.Vector.Unboxed as VU
 import System.Random
 import System.IO
 import qualified Test.HUnit as HU
@@ -86,6 +91,56 @@ instance Arbitrary i => Arbitrary (A.Array Int i) where
 instance (CoArbitrary i) => CoArbitrary (A.Array Int i) where
     coarbitrary l = coarbitrary (LL.toList l)
 
+instance Arbitrary (T.Text) where
+    arbitrary = sized (\n -> choose (0, n) >>= myVector)
+        where myVector n =
+                  do arblist <- vector n
+                     return (LL.fromList arblist)
+    shrink = map LL.fromList . shrink . LL.toList
+
+instance CoArbitrary (T.Text) where
+    coarbitrary l = coarbitrary (LL.toList l)
+
+instance Arbitrary (TL.Text) where
+    arbitrary = sized (\n -> choose (0, n) >>= myVector)
+        where myVector n =
+                  do arblist <- vector n
+                     return (LL.fromList arblist)
+    shrink = map LL.fromList . shrink . LL.toList
+
+instance CoArbitrary (TL.Text) where
+    coarbitrary l = coarbitrary (LL.toList l)
+
+instance Arbitrary i => Arbitrary (V.Vector i) where
+    arbitrary = sized (\n -> choose (0, n) >>= myVector)
+        where myVector n =
+                  do arblist <- vector n
+                     return (LL.fromList arblist)
+    shrink = map LL.fromList . shrink . LL.toList
+
+instance (CoArbitrary i) => CoArbitrary (V.Vector i) where
+    coarbitrary l = coarbitrary (LL.toList l)
+
+instance (Arbitrary i, VS.Storable i) => Arbitrary (VS.Vector i) where
+    arbitrary = sized (\n -> choose (0, n) >>= myVector)
+        where myVector n =
+                  do arblist <- vector n
+                     return (LL.fromList arblist)
+    shrink = map LL.fromList . shrink . LL.toList
+
+instance (CoArbitrary i, VS.Storable i) => CoArbitrary (VS.Vector i) where
+    coarbitrary l = coarbitrary (LL.toList l)
+
+instance (Arbitrary i, VU.Unbox i) => Arbitrary (VU.Vector i) where
+    arbitrary = sized (\n -> choose (0, n) >>= myVector)
+        where myVector n =
+                  do arblist <- vector n
+                     return (LL.fromList arblist)
+    shrink = map LL.fromList . shrink . LL.toList
+
+instance (CoArbitrary i, VU.Unbox i) => CoArbitrary (VU.Vector i) where
+    coarbitrary l = coarbitrary (LL.toList l)
+
 class (Show b, Arbitrary a, Show a, Eq a, Eq b, LL.ListLike a b) => TestLL a b where
   llcmp :: a -> [b] -> Property
   llcmp f l =  (putStrLn ("Expected: " ++ show l ++ "\nGot: " ++ show f))
@@ -104,6 +159,16 @@ instance TestLL BSL.ByteString Word8 where
 instance (Arbitrary a, Show a, Eq a) => TestLL (S.Seq a) a where
 
 instance (Arbitrary a, Show a, Eq a) => TestLL (A.Array Int a) a where
+
+instance TestLL T.Text Char where
+
+instance TestLL TL.Text Char where
+
+instance (Arbitrary a, Show a, Eq a) => TestLL (V.Vector a) a where
+
+instance (Arbitrary a, Show a, Eq a, VS.Storable a) => TestLL (VS.Vector a) a where
+
+instance (Arbitrary a, Show a, Eq a, VU.Unbox a) => TestLL (VU.Vector a) a where
 
 mapRemoveDups :: (Eq k1) => [(k1, v1)] -> [(k1, v1)]
 mapRemoveDups = nubBy (\(k1, _) (k2, _) -> k1 == k2)
@@ -154,11 +219,10 @@ runVerbTestText (HU.PutText put us) t = do
 instance Show (a -> b) where
     show _ = "(a -> b)"
 
-data (LL.ListLike f i, Arbitrary f, Arbitrary i, Show f, Show i, Eq i, Eq f) => LLTest f i = 
+data LLTest f i =
     forall t. Testable t => LLTest (f -> t)
 
-data (LL.ListLike f i, Arbitrary f, Arbitrary i, Show f, Show i, Eq i, Eq f, LL.ListLike f' f, TestLL f' f, Show f', Eq f', Arbitrary f') =>
-     LLWrap f' f i =
+data LLWrap f' f i =
          forall t. Testable t => LLWrap (f' -> t)
 
 w :: TestLL f i => String -> LLTest f i -> HU.Test
@@ -182,7 +246,8 @@ apw msg x = HU.TestLabel msg $ HU.TestList $
      wwrap "wrap MyList (MyList Int)" (x::LLWrap (MyList (MyList Int)) (MyList Int) Int),
      wwrap "wrap S.Seq (S.Seq Int)" (x::LLWrap (S.Seq (S.Seq Int)) (S.Seq Int) Int),
      wwrap "wrap Array (Array Int)" (x::LLWrap (A.Array Int (A.Array Int Int)) (A.Array Int Int) Int),
-     wwrap "wrap Array [Int]" (x::LLWrap (A.Array Int [Int]) [Int] Int)
+     wwrap "wrap Array [Int]" (x::LLWrap (A.Array Int [Int]) [Int] Int),
+     wwrap "wrap (Vector (Vector Int))" (x::LLWrap (V.Vector (V.Vector Int)) (V.Vector Int) Int)
      ]
 
 -- | all props, 1 args: full
@@ -200,7 +265,15 @@ apf msg x = HU.TestLabel msg $ HU.TestList $
      w "Sequence Char" (x::LLTest (S.Seq Char) Char),
      w "Array Int Int" (x::LLTest (A.Array Int Int) Int),
      w "Array Int Bool" (x::LLTest (A.Array Int Bool) Bool),
-     w "Array (Just Int)" (x::LLTest (A.Array Int (Maybe Int)) (Maybe Int))
+     w "Array (Just Int)" (x::LLTest (A.Array Int (Maybe Int)) (Maybe Int)),
+     w "Vector Int" (x::LLTest (V.Vector Int) Int),
+     w "StorableVector Int" (x::LLTest (VS.Vector Int) Int),
+     w "UnboxVector Int" (x::LLTest (VU.Vector Int) Int),
+     w "Vector Bool" (x::LLTest (V.Vector Bool) Bool),
+     w "StorableVector Bool" (x::LLTest (VS.Vector Bool) Bool),
+     w "UnboxVector Bool" (x::LLTest (VU.Vector Bool) Bool),
+     w "Text" (x::LLTest T.Text Char),
+     w "Text.Lazy" (x::LLTest TL.Text Char)
     ]
 
 -- | all props, 1 args: full
@@ -211,5 +284,9 @@ aps msg x = HU.TestLabel msg $ HU.TestList $
      w "Sequence Char" (x::LLTest (S.Seq Char) Char),
      w "ByteString" (x::LLTest BS.ByteString Word8),
      w "ByteString.Lazy" (x::LLTest BSL.ByteString Word8),
-     w "Array Int Char" (x::LLTest (A.Array Int Char) Char) 
+     w "Array Int Char" (x::LLTest (A.Array Int Char) Char),
+     w "Text" (x::LLTest T.Text Char),
+     w "Text.Lazy" (x::LLTest TL.Text Char),
+     w "Vector Char" (x::LLTest (V.Vector Char) Char),
+     w "Vector.Unbox Char" (x::LLTest (VU.Vector Char) Char)
     ]
