@@ -5,7 +5,7 @@ Maintainer: John Lato <jwlato@gmail.com>
 Author: John Goerzen
 Copyright: Copyright (c) 2007-2008 John Goerzen
 license-file: COPYRIGHT
-extra-source-files: COPYRIGHT, README
+extra-source-files: COPYRIGHT, README.md
 Category: Generics
 Cabal-Version: >= 1.8
 Build-Type: Simple
