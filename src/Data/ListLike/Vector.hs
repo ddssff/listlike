@@ -1,5 +1,5 @@
--- | ListLike instances for several @Data.Vector@ types.
--- The `Data.ListLike.Vector.Generic` instances are not exported from this
+-- | 'Data.ListLike.ListLike' instances for several @Data.Vector@ types.
+-- The @Data.ListLike.Vector.Generic@ instances are not exported from this
 -- module in order to prevent collisions.
 --
 module Data.ListLike.Vector (
