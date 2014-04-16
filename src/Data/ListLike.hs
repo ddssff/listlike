@@ -121,6 +121,8 @@ import Data.ListLike.Base
 import Data.ListLike.CharString
 import Data.ListLike.FoldableLL
 import Data.ListLike.Instances()
+import Data.ListLike.DList
+import Data.ListLike.FMList
 import Data.ListLike.String
 import Data.ListLike.Utils
 import Data.ListLike.IO

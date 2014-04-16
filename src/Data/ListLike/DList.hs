@@ -2,7 +2,6 @@
 -- | 'Data.ListLike.ListLike' instances for 'Data.DList.DList'
 module Data.ListLike.DList () where
 import qualified Prelude as P
-import Data.ListLike
 import Data.ListLike.Base
 import Data.ListLike.FoldableLL
 import Data.ListLike.IO
