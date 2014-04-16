@@ -25,13 +25,13 @@ Stability: Stable
 
 Library
   Hs-Source-Dirs: src
-  Exposed-Modules: Data.ListLike,
-          Data.ListLike.Base,
-          Data.ListLike.CharString,
-          Data.ListLike.FoldableLL,
-          Data.ListLike.IO,
-          Data.ListLike.Instances,
-          Data.ListLike.String,
+  Exposed-Modules: Data.ListLike
+          Data.ListLike.Base
+          Data.ListLike.CharString
+          Data.ListLike.FoldableLL
+          Data.ListLike.IO
+          Data.ListLike.Instances
+          Data.ListLike.String
           Data.ListLike.Text
           Data.ListLike.Text.Text
           Data.ListLike.Text.TextLazy
@@ -41,6 +41,8 @@ Library
           Data.ListLike.Vector.Storable
           Data.ListLike.Vector.Unboxed
           Data.ListLike.Vector.Vector
+          Data.ListLike.DList
+          Data.ListLike.FMList
   -- Other-Modules: Data.ConfigFile.Lexer
   Build-Depends: base       >= 3     && < 5
                 ,containers >= 0.3   && < 0.6
@@ -48,6 +50,8 @@ Library
                 ,array      >= 0.3   && < 0.6
                 ,text       >= 0.11  && < 1.2
                 ,vector     >= 0.5   && < 0.11
+                ,dlist      >= 0.7   && < 0.9
+                ,fmlist     >= 0.8   && < 0.9
   
 Test-suite listlike-tests
   Hs-source-dirs: src testsrc
