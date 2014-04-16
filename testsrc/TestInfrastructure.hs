@@ -25,6 +25,8 @@ import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as BSL
 import qualified Data.ListLike as LL
 import qualified Data.Array as A
+import qualified Data.DList as DL
+import qualified Data.FMList as FM
 import qualified Data.Sequence as S
 import qualified Data.Foldable as F
 import qualified Data.Text as T
@@ -36,10 +38,16 @@ import System.Random
 import System.IO
 import qualified Test.HUnit as HU
 import Text.Printf
+import Data.Function (on)
 import Data.Word
 import Data.List
 import Data.Monoid
 
+simpleArb :: (LL.ListLike f i, Arbitrary i) => Gen f
+simpleArb = sized (\n -> choose (0, n) >>= myVector)
+    where myVector n = do
+            arblist <- vector n
+            return (LL.fromList arblist)
 
 instance (Arbitrary i) => Arbitrary (MyList i) where
     arbitrary = sized (\n -> choose (0, n) >>= myVector)
@@ -49,6 +57,20 @@ instance (Arbitrary i) => Arbitrary (MyList i) where
     shrink (MyList l) = map MyList $ shrink l
 
 instance (CoArbitrary i) => CoArbitrary (MyList i) where
+    coarbitrary l = coarbitrary (LL.toList l)
+
+instance (Arbitrary i) => Arbitrary (DL.DList i) where
+    arbitrary = simpleArb
+    shrink = map LL.fromList . shrink . LL.toList
+
+instance (CoArbitrary i) => CoArbitrary (DL.DList i) where
+    coarbitrary l = coarbitrary (LL.toList l)
+
+instance (Arbitrary i) => Arbitrary (FM.FMList i) where
+    arbitrary = simpleArb
+    shrink = map LL.fromList . shrink . LL.toList
+
+instance (CoArbitrary i) => CoArbitrary (FM.FMList i) where
     coarbitrary l = coarbitrary (LL.toList l)
 
 instance (Arbitrary i) => Arbitrary (S.Seq i) where
@@ -150,7 +172,11 @@ class (Show b, Arbitrary a, Show a, Eq a, Eq b, LL.ListLike a b) => TestLL a b w
 
 instance (Arbitrary a, Show a, Eq a) => TestLL [a] a where
 
-instance (Arbitrary a, Show a, Eq a) => TestLL (MyList a) a where
+instance (Arbitrary a, Show a, Eq a) => TestLL (MyList a) a
+
+instance (Arbitrary a, Show a, Eq a) => TestLL (DL.DList a) a
+
+instance (Arbitrary a, Show a, Eq a) => TestLL (FM.FMList a) a
 
 instance TestLL BS.ByteString Word8 where
 
@@ -169,6 +195,9 @@ instance (Arbitrary a, Show a, Eq a) => TestLL (V.Vector a) a where
 instance (Arbitrary a, Show a, Eq a, VS.Storable a) => TestLL (VS.Vector a) a where
 
 instance (Arbitrary a, Show a, Eq a, VU.Unbox a) => TestLL (VU.Vector a) a where
+
+instance Eq a => Eq (FM.FMList a) where
+    (==) = (==) `on` FM.toList
 
 mapRemoveDups :: (Eq k1) => [(k1, v1)] -> [(k1, v1)]
 mapRemoveDups = nubBy (\(k1, _) (k2, _) -> k1 == k2)
@@ -266,6 +295,8 @@ apf msg x = HU.TestLabel msg $ HU.TestList $
      w "Array Int Int" (x::LLTest (A.Array Int Int) Int),
      w "Array Int Bool" (x::LLTest (A.Array Int Bool) Bool),
      w "Array (Just Int)" (x::LLTest (A.Array Int (Maybe Int)) (Maybe Int)),
+     w "DList Int" (x::LLTest (DL.DList Int) Int),
+     w "FMList Int" (x::LLTest (FM.FMList Int) Int),
      w "Vector Int" (x::LLTest (V.Vector Int) Int),
      w "StorableVector Int" (x::LLTest (VS.Vector Int) Int),
      w "UnboxVector Int" (x::LLTest (VU.Vector Int) Int),
@@ -282,6 +313,8 @@ aps msg x = HU.TestLabel msg $ HU.TestList $
     [w "String" (x::LLTest String Char),
      w "MyList Char" (x::LLTest (MyList Char) Char),
      w "Sequence Char" (x::LLTest (S.Seq Char) Char),
+     w "DList Char" (x::LLTest (DL.DList Char) Char),
+     w "FMList Char" (x::LLTest (FM.FMList Char) Char),
      w "ByteString" (x::LLTest BS.ByteString Word8),
      w "ByteString.Lazy" (x::LLTest BSL.ByteString Word8),
      w "Array Int Char" (x::LLTest (A.Array Int Char) Char),

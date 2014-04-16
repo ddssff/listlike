@@ -67,6 +67,8 @@ Test-suite listlike-tests
                   ,array
                   ,bytestring
                   ,containers
+                  ,dlist
+                  ,fmlist
                   ,text
                   ,vector
 
