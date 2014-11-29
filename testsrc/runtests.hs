@@ -91,6 +91,8 @@ prop_takeWhile f func = llcmp (LL.takeWhile func f)
                               (takeWhile func (LL.toList f))
 prop_dropWhile f func = llcmp (LL.dropWhile func f) 
                               (dropWhile func (LL.toList f))
+prop_dropWhileEnd f func = llcmp (LL.dropWhileEnd func f)
+                                 (dropWhileEnd func (LL.toList f))
 prop_span f func = 
     llcmp [(\(x, y) -> (LL.toList x, LL.toList y)) . LL.span func $ f]
           [span func (LL.toList f)]
@@ -258,6 +260,7 @@ allt = [apf "empty" (t prop_empty),
         apf "splitAt" (t prop_splitAt),
         apf "takeWhile" (t prop_takeWhile),
         apf "dropWhile" (t prop_dropWhile),
+        apf "dropWhileEnd" (t prop_dropWhileEnd),
         apf "span" (t prop_span),
         apf "break" (t prop_break),
         apf "group" (t prop_group),
