@@ -37,7 +37,7 @@ module Data.ListLike.Base
 import Prelude hiding (length, head, last, null, tail, map, filter, concat, 
                        any, lookup, init, all, foldl, foldr, foldl1, foldr1,
                        maximum, minimum, iterate, span, break, takeWhile,
-                       dropWhile, reverse, zip, zipWith, sequence,
+                       dropWhile, dropWhileEnd, reverse, zip, zipWith, sequence,
                        sequence_, mapM, mapM_, concatMap, and, or, sum,
                        product, repeat, replicate, cycle, take, drop,
                        splitAt, elem, notElem, unzip, lines, words,
@@ -216,13 +216,18 @@ class (FoldableLL full item, Monoid full) =>
         | otherwise = empty
         where x = head l
 
-    {- | Drops all elements form the start of the list that satisfy the
+    {- | Drops all elements from the start of the list that satisfy the
        function. -}
     dropWhile :: (item -> Bool) -> full -> full
     dropWhile func l
         | null l = empty
         | func (head l) = dropWhile func (tail l)
         | otherwise = l
+
+    {- | Drops all elements from the end of the list that satisfy the
+       function. -}
+    dropWhileEnd :: (item -> Bool) -> full -> full
+    dropWhileEnd func = foldr (\x xs -> if func x && null xs then empty else cons x xs) empty
 
     {- | The equivalent of @('takeWhile' f xs, 'dropWhile' f xs)@ -}
     span :: (item -> Bool) -> full -> (full, full)

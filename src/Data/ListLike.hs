@@ -51,7 +51,7 @@ module Data.ListLike
                  -- ** Unfolding
                  -- * Sublists
                  -- ** Extracting sublists
-                 take, drop, splitAt, takeWhile, dropWhile, span, break,
+                 take, drop, splitAt, takeWhile, dropWhile, dropWhileEnd, span, break,
                  group, inits, tails, 
                  -- ** Predicates
                  isPrefixOf, isSuffixOf, isInfixOf,
@@ -112,7 +112,7 @@ module Data.ListLike
 import Prelude hiding (length, head, last, null, tail, map, filter, concat, 
                        any, lookup, init, all, foldl, foldr, foldl1, foldr1,
                        maximum, minimum, iterate, span, break, takeWhile,
-                       dropWhile, reverse, zip, zipWith, sequence,
+                       dropWhile, dropWhileEnd, reverse, zip, zipWith, sequence,
                        sequence_, mapM, mapM_, concatMap, and, or, sum,
                        product, repeat, replicate, cycle, take, drop,
                        splitAt, elem, notElem, unzip, lines, words,
