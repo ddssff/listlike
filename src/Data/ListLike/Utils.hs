@@ -35,7 +35,7 @@ import Prelude hiding (length, head, last, null, tail, map, filter, concat,
                        sequence_, mapM, mapM_, concatMap, and, or, sum,
                        product, repeat, replicate, cycle, take, drop,
                        splitAt, elem, notElem, unzip, lines, words,
-                       unlines, unwords)
+                       unlines, unwords, foldMap)
 import Control.Monad (MonadPlus(..))
 import Data.ListLike.Base
 import Data.ListLike.FoldableLL
