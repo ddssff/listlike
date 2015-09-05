@@ -1,4 +1,5 @@
-{-# LANGUAGE ScopedTypeVariables
+{-# LANGUAGE CPP
+            ,ScopedTypeVariables
             ,RankNTypes
             ,ExistentialQuantification
             ,MultiParamTypeClasses
@@ -238,7 +239,11 @@ runVerbTestText (HU.PutText put us) t = do
                          put (HU.showCounts (HU.counts ss)) False us
   reportError   = reportProblem "Error:"   "Error in:   "
   reportFailure = reportProblem "Failure:" "Failure in: "
+#if MIN_VERSION_HUnit(1,3,0)
+  reportProblem p0 p1 _mloc msg ss us = put line True us
+#else
   reportProblem p0 p1 msg ss us = put line True us
+#endif
    where line  = "### " ++ kind ++ path' ++ '\n' : msg
          kind  = if null path' then p0 else p1
          path' = HU.showPath (HU.path ss)
