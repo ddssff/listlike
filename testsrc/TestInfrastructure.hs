@@ -74,6 +74,7 @@ instance (Arbitrary i) => Arbitrary (FM.FMList i) where
 instance (CoArbitrary i) => CoArbitrary (FM.FMList i) where
     coarbitrary l = coarbitrary (LL.toList l)
 
+#if ! MIN_VERSION_QuickCheck(2,8,2)
 instance (Arbitrary i) => Arbitrary (S.Seq i) where
     arbitrary = sized (\n -> choose (0, n) >>= myVector)
         where myVector n =
@@ -83,6 +84,7 @@ instance (Arbitrary i) => Arbitrary (S.Seq i) where
 
 instance (CoArbitrary i) => CoArbitrary (S.Seq i) where
     coarbitrary l = coarbitrary (LL.toList l)
+#endif
 
 instance Arbitrary (BSL.ByteString) where
     arbitrary = sized (\n -> choose (0, n) >>= myVector)
