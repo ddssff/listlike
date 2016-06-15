@@ -1,6 +1,10 @@
-{-# LANGUAGE MultiParamTypeClasses            
+{-# LANGUAGE MultiParamTypeClasses
             ,FlexibleInstances
-            ,TypeSynonymInstances #-}
+            ,TypeSynonymInstances
+            ,CPP #-}
+#ifndef UNSAFE
+{-# LANGUAGE Safe #-}
+#endif
 
 
 {-
@@ -47,7 +51,9 @@ import           Data.ListLike.String
 import           Data.ListLike.IO
 import           Data.ListLike.FoldableLL
 import           Data.ListLike.Text ()
+#ifdef UNSAFE
 import           Data.ListLike.Vector ()
+#endif
 import           Data.Int
 import           Data.Monoid
 import qualified Data.ByteString as BS

@@ -1,3 +1,11 @@
+listlike (4.3) unstable; urgency=low
+
+  * Enable the Safe extension in modules that allow it
+  * Add a cabal flag "safe" that omits modules, instances and imports
+    that cannot be built with the Safe extension.
+
+ -- David Fox <dsf@foxthompson.net>  Wed, 15 Jun 2016 11:43:32 -0700
+
 listlike (1.0.1.2) unstable; urgency=high
 
   * Rebuild for new GHC.  High urgency to allow ghc to go to testing.

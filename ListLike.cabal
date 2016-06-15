@@ -1,5 +1,5 @@
 Name: ListLike
-Version: 4.2.1
+Version: 4.3
 License: BSD3
 Maintainer: John Lato <jwlato@gmail.com>
 Author: John Goerzen
@@ -9,7 +9,7 @@ extra-source-files: COPYRIGHT, README.md
 Category: Generics
 Cabal-Version: >= 1.8
 Build-Type: Simple
-homepage: http://software.complete.org/listlike
+homepage: http://github.com/JohnLato/listlike
 synopsis: Generic support for list-like structures
 Description: Generic support for list-like structures in Haskell.
  .
@@ -22,6 +22,11 @@ Description: Generic support for list-like structures in Haskell.
  ByteString, for types that support input and output, and for types that can handle
  infinite lists.
 Stability: Stable
+
+flag safe
+  Description: Omit modules that cannot be build with the Safe extension
+  Default: False
+  Manual: True
 
 Library
   Hs-Source-Dirs: src
@@ -36,12 +41,6 @@ Library
           Data.ListLike.Text.Text
           Data.ListLike.Text.TextLazy
           Data.ListLike.Utils
-          Data.ListLike.Vector
-          Data.ListLike.Vector.Generic
-          Data.ListLike.Vector.Storable
-          Data.ListLike.Vector.Unboxed
-          Data.ListLike.Vector.Vector
-          Data.ListLike.DList
           Data.ListLike.FMList
   -- Other-Modules: Data.ConfigFile.Lexer
   Build-Depends: base       >= 4.6   && < 5
@@ -49,10 +48,20 @@ Library
                 ,bytestring >= 0.9.1 && < 0.11
                 ,array      >= 0.3   && < 0.6
                 ,text       >= 0.11  && < 1.3
-                ,vector     >= 0.5   && < 0.12
-                ,dlist      >= 0.7   && < 0.9
                 ,fmlist     >= 0.8   && < 0.10
-  
+  if !flag(safe)
+    GHC-Options: -DUNSAFE
+    Exposed-Modules:
+          Data.ListLike.Vector
+          Data.ListLike.Vector.Generic
+          Data.ListLike.Vector.Storable
+          Data.ListLike.Vector.Unboxed
+          Data.ListLike.Vector.Vector
+          Data.ListLike.DList
+    Build-Depends:
+      dlist      >= 0.7   && < 0.9
+     ,vector     >= 0.5   && < 0.12
+
 Test-suite listlike-tests
   Hs-source-dirs: src testsrc
   Main-is:        runtests.hs
@@ -67,10 +76,13 @@ Test-suite listlike-tests
                   ,array
                   ,bytestring
                   ,containers
-                  ,dlist
                   ,fmlist
                   ,text
-                  ,vector
+  if !flag(safe)
+    GHC-Options: -DUNSAFE
+    Build-depends:
+      dlist
+     ,vector
 
 source-repository head
   type:     git

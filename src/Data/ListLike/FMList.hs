@@ -1,3 +1,4 @@
+{-# LANGUAGE Safe #-}
 {-# LANGUAGE MultiParamTypeClasses, FlexibleInstances #-}
 -- | 'Data.ListLike.ListLike' instances for 'Data.FMList.FMList'
 module Data.ListLike.FMList () where

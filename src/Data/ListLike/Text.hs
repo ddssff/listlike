@@ -1,3 +1,4 @@
+{-# LANGUAGE Safe #-}
 module Data.ListLike.Text (
   module Data.ListLike.Text.Text
  ,module Data.ListLike.Text.TextLazy
