@@ -1,10 +1,13 @@
-{-# LANGUAGE Safe #-}
 {-# LANGUAGE ScopedTypeVariables
             ,MultiParamTypeClasses
             ,FunctionalDependencies
             ,FlexibleInstances
             ,BangPatterns
-            ,FlexibleContexts #-}
+            ,FlexibleContexts
+            ,CPP #-}
+#ifndef UNSAFE
+{-# LANGUAGE Safe #-}
+#endif
 
 {-
 Copyright (C) 2007 John Goerzen <jgoerzen@complete.org>

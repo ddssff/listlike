@@ -1,6 +1,9 @@
-{-# LANGUAGE Safe #-}
 {-# LANGUAGE MultiParamTypeClasses
-            ,FlexibleInstances #-}
+            ,FlexibleInstances
+            ,CPP #-}
+#ifndef UNSAFE
+{-# LANGUAGE Safe #-}
+#endif
 
 module Data.ListLike.Text.Text
 

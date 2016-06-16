@@ -1,6 +1,9 @@
+{-# LANGUAGE MultiParamTypeClasses
+            ,FunctionalDependencies,
+            CPP #-}
+#ifndef UNSAFE
 {-# LANGUAGE Safe #-}
-{-# LANGUAGE MultiParamTypeClasses            
-            ,FunctionalDependencies #-}
+#endif
 
 
 {-

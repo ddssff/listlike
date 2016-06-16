@@ -1,5 +1,7 @@
+{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances,CPP #-}
+#ifndef UNSAFE
 {-# LANGUAGE Safe #-}
-{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances #-}
+#endif
 -- | 'Data.ListLike.ListLike' instances for 'Data.FMList.FMList'
 module Data.ListLike.FMList () where
 import qualified Prelude as P
