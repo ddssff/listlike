@@ -50,7 +50,7 @@ Library
                 ,text       >= 0.11  && < 1.3
                 ,fmlist     >= 0.8   && < 0.10
   if !flag(safe)
-    GHC-Options: -DUNSAFE
+    CPP-Options: -DUNSAFE
     Exposed-Modules:
           Data.ListLike.Vector
           Data.ListLike.Vector.Generic
@@ -79,7 +79,7 @@ Test-suite listlike-tests
                   ,fmlist
                   ,text
   if !flag(safe)
-    GHC-Options: -DUNSAFE
+    CPP-Options: -DUNSAFE
     Build-depends:
       dlist
      ,vector
