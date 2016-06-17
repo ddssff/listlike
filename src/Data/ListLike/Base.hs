@@ -92,11 +92,16 @@ class (FoldableLL full item, Monoid full) =>
     snoc l item = append l (singleton item)
 
     {- | Combines two lists.  Like (++). -}
-    append :: full -> full -> full 
+    append :: full -> full -> full
     append = mappend
 
     {- | Extracts the first element of a 'ListLike'. -}
     head :: full -> item
+    head = maybe (error "head") fst . uncons
+
+    {- | Extract head and tail, return Nothing if empty -}
+    uncons :: full -> Maybe (item, full)
+    uncons x = if null x then Nothing else Just (head x, tail x) -- please don't
 
     {- | Extracts the last element of a 'ListLike'. -}
     last :: full -> item
@@ -106,7 +111,8 @@ class (FoldableLL full item, Monoid full) =>
                   _ -> last (tail l)
 
     {- | Gives all elements after the head. -}
-    tail :: full -> full 
+    tail :: full -> full
+    tail = maybe (error "tail") snd . uncons
 
     {- | All elements of the list except the last one.  See also 'inits'. -}
     init :: full -> full
@@ -518,6 +524,13 @@ class (FoldableLL full item, Monoid full) =>
     genericReplicate count x 
         | count <= 0 = empty
         | otherwise = map (\_ -> x) [1..count]
+
+#if __GLASGOW_HASKELL__ >= 708
+    {-# MINIMAL (singleton, uncons, null) |
+                (singleton, uncons, genericLength) |
+                (singleton, head, tail, null) |
+                (singleton, head, tail, genericLength) #-}
+#endif
 
 {-
 instance (ListLike full item) => Monad full where

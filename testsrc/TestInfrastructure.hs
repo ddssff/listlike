@@ -153,6 +153,16 @@ instance Arbitrary (UTF8.UTF8 BS.ByteString) where
 instance CoArbitrary (UTF8.UTF8 BS.ByteString) where
     coarbitrary l = coarbitrary (LL.toList l)
 
+instance Arbitrary (UTF8.UTF8 BSL.ByteString) where
+    arbitrary = sized (\n -> choose (0, n) >>= myVector)
+        where myVector n =
+                  do arblist <- vector n
+                     return (LL.fromList arblist)
+    shrink = map LL.fromList . shrink . LL.toList
+
+instance CoArbitrary (UTF8.UTF8 BSL.ByteString) where
+    coarbitrary l = coarbitrary (LL.toList l)
+
 #ifdef UNSAFE
 instance Arbitrary i => Arbitrary (V.Vector i) where
     arbitrary = sized (\n -> choose (0, n) >>= myVector)
@@ -215,6 +225,8 @@ instance TestLL T.Text Char where
 instance TestLL TL.Text Char where
 
 instance TestLL (UTF8.UTF8 BS.ByteString) Char where
+
+instance TestLL (UTF8.UTF8 BSL.ByteString) Char where
 
 #ifdef UNSAFE
 instance (Arbitrary a, Show a, Eq a) => TestLL (V.Vector a) a where
@@ -343,7 +355,8 @@ apf msg x = HU.TestLabel msg $ HU.TestList $
 #endif
      w "Text" (x::LLTest T.Text Char),
      w "Text.Lazy" (x::LLTest TL.Text Char),
-     w "UTF8 ByteString" (x::LLTest (UTF8.UTF8 BS.ByteString) Char)
+     w "UTF8 ByteString" (x::LLTest (UTF8.UTF8 BS.ByteString) Char),
+     w "UTF8 ByteString.Lazy" (x::LLTest (UTF8.UTF8 BSL.ByteString) Char)
     ]
 
 -- | all props, 1 args: full
@@ -361,7 +374,8 @@ aps msg x = HU.TestLabel msg $ HU.TestList $
      w "Array Int Char" (x::LLTest (A.Array Int Char) Char),
      w "Text" (x::LLTest T.Text Char),
      w "Text.Lazy" (x::LLTest TL.Text Char),
-     w "UTF8 ByteString" (x::LLTest (UTF8.UTF8 BS.ByteString) Char)
+     w "UTF8 ByteString" (x::LLTest (UTF8.UTF8 BS.ByteString) Char),
+     w "UTF8 ByteString.Lazy" (x::LLTest (UTF8.UTF8 BSL.ByteString) Char)
 #ifdef UNSAFE
     ,w "Vector Char" (x::LLTest (V.Vector Char) Char),
      w "Vector.Unbox Char" (x::LLTest (VU.Vector Char) Char)
