@@ -34,6 +34,7 @@ import qualified Data.Sequence as S
 import qualified Data.Foldable as F
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
+import qualified Data.String.UTF8 as UTF8
 #ifdef UNSAFE
 import qualified Data.Vector as V
 import qualified Data.Vector.Storable as VS
@@ -142,6 +143,16 @@ instance Arbitrary (TL.Text) where
 instance CoArbitrary (TL.Text) where
     coarbitrary l = coarbitrary (LL.toList l)
 
+instance Arbitrary (UTF8.UTF8 BS.ByteString) where
+    arbitrary = sized (\n -> choose (0, n) >>= myVector)
+        where myVector n =
+                  do arblist <- vector n
+                     return (LL.fromList arblist)
+    shrink = map LL.fromList . shrink . LL.toList
+
+instance CoArbitrary (UTF8.UTF8 BS.ByteString) where
+    coarbitrary l = coarbitrary (LL.toList l)
+
 #ifdef UNSAFE
 instance Arbitrary i => Arbitrary (V.Vector i) where
     arbitrary = sized (\n -> choose (0, n) >>= myVector)
@@ -202,6 +213,8 @@ instance (Arbitrary a, Show a, Eq a) => TestLL (A.Array Int a) a where
 instance TestLL T.Text Char where
 
 instance TestLL TL.Text Char where
+
+instance TestLL (UTF8.UTF8 BS.ByteString) Char where
 
 #ifdef UNSAFE
 instance (Arbitrary a, Show a, Eq a) => TestLL (V.Vector a) a where
@@ -329,7 +342,8 @@ apf msg x = HU.TestLabel msg $ HU.TestList $
      w "UnboxVector Bool" (x::LLTest (VU.Vector Bool) Bool),
 #endif
      w "Text" (x::LLTest T.Text Char),
-     w "Text.Lazy" (x::LLTest TL.Text Char)
+     w "Text.Lazy" (x::LLTest TL.Text Char),
+     w "UTF8 ByteString" (x::LLTest (UTF8.UTF8 BS.ByteString) Char)
     ]
 
 -- | all props, 1 args: full
@@ -346,7 +360,8 @@ aps msg x = HU.TestLabel msg $ HU.TestList $
      w "ByteString.Lazy" (x::LLTest BSL.ByteString Word8),
      w "Array Int Char" (x::LLTest (A.Array Int Char) Char),
      w "Text" (x::LLTest T.Text Char),
-     w "Text.Lazy" (x::LLTest TL.Text Char)
+     w "Text.Lazy" (x::LLTest TL.Text Char),
+     w "UTF8 ByteString" (x::LLTest (UTF8.UTF8 BS.ByteString) Char)
 #ifdef UNSAFE
     ,w "Vector Char" (x::LLTest (V.Vector Char) Char),
      w "Vector.Unbox Char" (x::LLTest (VU.Vector Char) Char)
