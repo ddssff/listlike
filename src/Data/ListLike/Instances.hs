@@ -117,6 +117,7 @@ instance ListLike BS.ByteString Word8 where
     cons = BS.cons
     snoc = BS.snoc
     append = BS.append
+    uncons = BS.uncons
     head = BS.head
     last = BS.last
     tail = BS.tail
@@ -227,6 +228,7 @@ instance ListLike BSL.ByteString Word8 where
     cons = BSL.cons
     snoc = BSL.snoc
     append = BSL.append
+    uncons = BSL.uncons
     head = BSL.head
     last = BSL.last
     tail = BSL.tail
@@ -588,9 +590,10 @@ instance ListLike (UTF8 BS.ByteString) Char where
     -- cons = UTF8.cons
     -- snoc = UTF8.snoc
     -- append = UTF8.append
-    head = fst . fromJust . UTF8.uncons
+    uncons = UTF8.uncons
+    head = fst . fromJust . uncons
     -- last = UTF8.last
-    tail = snd . fromJust . UTF8.uncons
+    tail = snd . fromJust . uncons
     -- init = UTF8.init
     null s = UTF8.length s == 0
     length = UTF8.length
@@ -698,9 +701,10 @@ instance ListLike (UTF8 BSL.ByteString) Char where
     -- cons = UTF8.cons
     -- snoc = UTF8.snoc
     -- append = UTF8.append
-    head = fst . fromJust . UTF8.uncons
+    uncons = UTF8.uncons
+    head = fst . fromJust . uncons
     -- last = UTF8.last
-    tail = snd . fromJust . UTF8.uncons
+    tail = snd . fromJust . uncons
     -- init = UTF8.init
     null s = UTF8.length s == 0
     length = fromInteger . toInteger . UTF8.length

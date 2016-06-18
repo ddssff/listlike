@@ -33,7 +33,7 @@ module Data.ListLike
                  
                  -- * Creation & Basic Functions
                  empty, singleton, 
-                 cons, snoc, append, head, last, tail, init, null, length,
+                 cons, snoc, append, uncons, head, last, tail, init, null, length,
                  -- * List transformations
                  map, rigidMap, reverse, intersperse,
                  -- ** Conversions
