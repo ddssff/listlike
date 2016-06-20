@@ -1,7 +1,6 @@
 {-# LANGUAGE MultiParamTypeClasses
             ,FlexibleContexts
             ,FlexibleInstances
-            ,OverlappingInstances
             ,UndecidableInstances #-}
 
 -- | ListLike instance for any type supporting the @Data.Vector.Generic@
@@ -21,7 +20,7 @@ import           Data.ListLike.String
 
 import           Data.Monoid
 
-instance V.Vector v a => FoldableLL (v a) a where
+instance {-# OVERLAPPABLE #-} V.Vector v a => FoldableLL (v a) a where
     foldl = V.foldl
     foldl' = V.foldl'
     foldl1 = V.foldl1
@@ -29,7 +28,7 @@ instance V.Vector v a => FoldableLL (v a) a where
     foldr' = V.foldr'
     foldr1 = V.foldr1
 
-instance (Monoid (v a), Eq (v a), V.Vector v a) => ListLike (v a) a where
+instance {-# OVERLAPPABLE #-} (Monoid (v a), Eq (v a), V.Vector v a) => ListLike (v a) a where
     empty = V.empty
     singleton = V.singleton
     cons = V.cons
