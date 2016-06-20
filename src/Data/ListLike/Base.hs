@@ -429,6 +429,7 @@ class (FoldableLL full item, Monoid full) =>
          Default implementation is @fromListLike = map id@ -}
     fromListLike :: ListLike full' item => full -> full'
     fromListLike = map id
+    {-# INLINE fromListLike #-}
 
     ------------------------------ Generalized functions
     {- | Generic version of 'nub' -}

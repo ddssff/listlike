@@ -64,7 +64,7 @@ instance ListLike (V.Vector a) a where
     findIndex = V.findIndex
     toList = V.toList
     fromList = V.fromList
-    fromListLike = fromList . toList
+    --fromListLike = fromList . toList
     --groupBy f = 
     genericLength = fromInteger . fromIntegral . V.length
     genericTake i = V.take (fromIntegral i)

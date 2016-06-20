@@ -172,7 +172,7 @@ instance ListLike BS.ByteString Word8 where
     --insert = BS.insert
     toList = BS.unpack
     fromList = BS.pack
-    fromListLike = fromList . toList
+    --fromListLike = fromList . toList
     --nubBy = BS.nubBy
     --deleteBy = BS.deleteBy
     --deleteFirstsBy = BS.deleteFirstsBy
@@ -284,7 +284,7 @@ instance ListLike BSL.ByteString Word8 where
     --insert = BSL.insert
     toList = BSL.unpack
     fromList = BSL.pack
-    fromListLike = fromList . toList
+    --fromListLike = fromList . toList
     --nubBy = BSL.nubBy
     --deleteBy = BSL.deleteBy
     --deleteFirstsBy = BSL.deleteFirstsBy
@@ -558,7 +558,7 @@ instance ListLike (S.Seq a) a where
     --insert = S.insert
     toList = F.toList
     fromList = S.fromList
-    fromListLike = fromList . toList
+    --fromListLike = fromList . toList
     --nubBy =
     --deleteBy =
     --deleteFirstsBy =

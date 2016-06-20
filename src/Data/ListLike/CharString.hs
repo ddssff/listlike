@@ -137,7 +137,7 @@ instance ListLike CharString Char where
     --insert = BS.insert
     toList = BS.unpack . unCS
     fromList = CS . BS.pack
-    fromListLike = fromList . toList
+    --fromListLike = fromList . toList
     --nubBy = BS.nubBy
     --deleteBy = BS.deleteBy
     --deleteFirstsBy = BS.deleteFirstsBy
@@ -256,7 +256,7 @@ instance ListLike CharStringLazy Char where
     --insert = BSL.insert
     toList = BSL.unpack . unCSL
     fromList = CSL . BSL.pack
-    fromListLike = fromList . toList
+    --fromListLike = fromList . toList
     --nubBy = BSL.nubBy
     --deleteBy = BSL.deleteBy
     --deleteFirstsBy = BSL.deleteFirstsBy
