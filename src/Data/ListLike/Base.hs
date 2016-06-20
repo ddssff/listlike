@@ -5,9 +5,6 @@
             ,BangPatterns
             ,FlexibleContexts
             ,CPP #-}
-#ifndef UNSAFE
-{-# LANGUAGE Safe #-}
-#endif
 
 {-
 Copyright (C) 2007 John Goerzen <jgoerzen@complete.org>
@@ -38,7 +35,7 @@ module Data.ListLike.Base
     InfiniteListLike(..),
     zip, zipWith, sequence_
     ) where
-import Prelude hiding (length, uncons, head, last, null, tail, map, filter, concat, 
+import Prelude hiding (length, uncons, head, last, null, tail, map, filter, concat,
                        any, lookup, init, all, foldl, foldr, foldl1, foldr1,
                        maximum, minimum, iterate, span, break, takeWhile,
                        dropWhile, dropWhileEnd, reverse, zip, zipWith, sequence,
@@ -92,7 +89,7 @@ class (FoldableLL full item, Monoid full) =>
     snoc l item = append l (singleton item)
 
     {- | Combines two lists.  Like (++). -}
-    append :: full -> full -> full
+    append :: full -> full -> full 
     append = mappend
 
     {- | Extracts the first element of a 'ListLike'. -}

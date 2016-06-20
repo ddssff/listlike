@@ -1,8 +1,12 @@
-listlike (4.3) unstable; urgency=low
+listlike (4.3.1) unstable; urgency=low
 
-  * Enable the Safe extension in modules that allow it
-  * Add a cabal flag "safe" that omits modules, instances and imports
-    that cannot be built with the Safe extension.
+  * Add uncons :: full -> Maybe (item, full), implement head and tail with it.
+  * Add a MINIMAL pragma for class ListLike
+  * INLINE fromListLike
+  * Remove fromListLike implementations that match the default
+  * Add a rewrite rule to replace fromListLike :: a -> a with id
+  * Get rid of OverlappingInstances pragma #-}
+  * Add instances for UTF8 ByteString
 
  -- David Fox <dsf@foxthompson.net>  Wed, 15 Jun 2016 11:43:32 -0700
 

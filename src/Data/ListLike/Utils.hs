@@ -1,7 +1,4 @@
-{-# LANGUAGE FlexibleContexts,CPP #-}
-#ifndef UNSAFE
-{-# LANGUAGE Safe #-}
-#endif
+{-# LANGUAGE FlexibleContexts #-}
 
 
 {-

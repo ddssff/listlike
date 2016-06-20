@@ -1,10 +1,6 @@
 {-# LANGUAGE MultiParamTypeClasses
             ,FlexibleInstances
-            ,TypeSynonymInstances
-            ,CPP #-}
-#ifndef UNSAFE
-{-# LANGUAGE Safe #-}
-#endif
+            ,TypeSynonymInstances #-}
 
 
 {-

@@ -1,7 +1,3 @@
-{-# LANGUAGE CPP #-}
-#ifndef UNSAFE
-{-# LANGUAGE Safe #-}
-#endif
 {-
 Copyright (C) 2007 John Goerzen <jgoerzen@complete.org>
 

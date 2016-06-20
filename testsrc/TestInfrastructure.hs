@@ -26,20 +26,16 @@ import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as BSL
 import qualified Data.ListLike as LL
 import qualified Data.Array as A
-#ifdef UNSAFE
 import qualified Data.DList as DL
-#endif
 import qualified Data.FMList as FM
 import qualified Data.Sequence as S
 import qualified Data.Foldable as F
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
 import qualified Data.String.UTF8 as UTF8
-#ifdef UNSAFE
 import qualified Data.Vector as V
 import qualified Data.Vector.Storable as VS
 import qualified Data.Vector.Unboxed as VU
-#endif
 import System.Random
 import System.IO
 import qualified Test.HUnit as HU
@@ -65,14 +61,12 @@ instance (Arbitrary i) => Arbitrary (MyList i) where
 instance (CoArbitrary i) => CoArbitrary (MyList i) where
     coarbitrary l = coarbitrary (LL.toList l)
 
-#ifdef UNSAFE
 instance (Arbitrary i) => Arbitrary (DL.DList i) where
     arbitrary = simpleArb
     shrink = map LL.fromList . shrink . LL.toList
 
 instance (CoArbitrary i) => CoArbitrary (DL.DList i) where
     coarbitrary l = coarbitrary (LL.toList l)
-#endif
 
 instance (Arbitrary i) => Arbitrary (FM.FMList i) where
     arbitrary = simpleArb
@@ -163,7 +157,6 @@ instance Arbitrary (UTF8.UTF8 BSL.ByteString) where
 instance CoArbitrary (UTF8.UTF8 BSL.ByteString) where
     coarbitrary l = coarbitrary (LL.toList l)
 
-#ifdef UNSAFE
 instance Arbitrary i => Arbitrary (V.Vector i) where
     arbitrary = sized (\n -> choose (0, n) >>= myVector)
         where myVector n =
@@ -193,7 +186,6 @@ instance (Arbitrary i, VU.Unbox i) => Arbitrary (VU.Vector i) where
 
 instance (CoArbitrary i, VU.Unbox i) => CoArbitrary (VU.Vector i) where
     coarbitrary l = coarbitrary (LL.toList l)
-#endif
 
 class (Show b, Arbitrary a, Show a, Eq a, Eq b, LL.ListLike a b) => TestLL a b where
   llcmp :: a -> [b] -> Property
@@ -206,9 +198,7 @@ instance (Arbitrary a, Show a, Eq a) => TestLL [a] a where
 
 instance (Arbitrary a, Show a, Eq a) => TestLL (MyList a) a
 
-#ifdef UNSAFE
 instance (Arbitrary a, Show a, Eq a) => TestLL (DL.DList a) a
-#endif
 
 instance (Arbitrary a, Show a, Eq a) => TestLL (FM.FMList a) a
 
@@ -228,13 +218,11 @@ instance TestLL (UTF8.UTF8 BS.ByteString) Char where
 
 instance TestLL (UTF8.UTF8 BSL.ByteString) Char where
 
-#ifdef UNSAFE
 instance (Arbitrary a, Show a, Eq a) => TestLL (V.Vector a) a where
 
 instance (Arbitrary a, Show a, Eq a, VS.Storable a) => TestLL (VS.Vector a) a where
 
 instance (Arbitrary a, Show a, Eq a, VU.Unbox a) => TestLL (VU.Vector a) a where
-#endif
 
 instance Eq a => Eq (FM.FMList a) where
     (==) = (==) `on` FM.toList
@@ -320,9 +308,7 @@ apw msg x = HU.TestLabel msg $ HU.TestList $
      wwrap "wrap S.Seq (S.Seq Int)" (x::LLWrap (S.Seq (S.Seq Int)) (S.Seq Int) Int),
      wwrap "wrap Array (Array Int)" (x::LLWrap (A.Array Int (A.Array Int Int)) (A.Array Int Int) Int),
      wwrap "wrap Array [Int]" (x::LLWrap (A.Array Int [Int]) [Int] Int)
-#ifdef UNSAFE
     ,wwrap "wrap (Vector (Vector Int))" (x::LLWrap (V.Vector (V.Vector Int)) (V.Vector Int) Int)
-#endif
      ]
 
 -- | all props, 1 args: full
@@ -341,18 +327,14 @@ apf msg x = HU.TestLabel msg $ HU.TestList $
      w "Array Int Int" (x::LLTest (A.Array Int Int) Int),
      w "Array Int Bool" (x::LLTest (A.Array Int Bool) Bool),
      w "Array (Just Int)" (x::LLTest (A.Array Int (Maybe Int)) (Maybe Int)),
-#ifdef UNSAFE
      w "DList Int" (x::LLTest (DL.DList Int) Int),
-#endif
      -- w "FMList Int" (x::LLTest (FM.FMList Int) Int),
-#ifdef UNSAFE
      w "Vector Int" (x::LLTest (V.Vector Int) Int),
      w "StorableVector Int" (x::LLTest (VS.Vector Int) Int),
      w "UnboxVector Int" (x::LLTest (VU.Vector Int) Int),
      w "Vector Bool" (x::LLTest (V.Vector Bool) Bool),
      w "StorableVector Bool" (x::LLTest (VS.Vector Bool) Bool),
      w "UnboxVector Bool" (x::LLTest (VU.Vector Bool) Bool),
-#endif
      w "Text" (x::LLTest T.Text Char),
      w "Text.Lazy" (x::LLTest TL.Text Char),
      w "UTF8 ByteString" (x::LLTest (UTF8.UTF8 BS.ByteString) Char),
@@ -365,9 +347,7 @@ aps msg x = HU.TestLabel msg $ HU.TestList $
     [w "String" (x::LLTest String Char),
      w "MyList Char" (x::LLTest (MyList Char) Char),
      w "Sequence Char" (x::LLTest (S.Seq Char) Char),
-#ifdef UNSAFE
      w "DList Char" (x::LLTest (DL.DList Char) Char),
-#endif
      -- w "FMList Char" (x::LLTest (FM.FMList Char) Char),
      w "ByteString" (x::LLTest BS.ByteString Word8),
      w "ByteString.Lazy" (x::LLTest BSL.ByteString Word8),
@@ -376,8 +356,6 @@ aps msg x = HU.TestLabel msg $ HU.TestList $
      w "Text.Lazy" (x::LLTest TL.Text Char),
      w "UTF8 ByteString" (x::LLTest (UTF8.UTF8 BS.ByteString) Char),
      w "UTF8 ByteString.Lazy" (x::LLTest (UTF8.UTF8 BSL.ByteString) Char)
-#ifdef UNSAFE
     ,w "Vector Char" (x::LLTest (V.Vector Char) Char),
      w "Vector.Unbox Char" (x::LLTest (VU.Vector Char) Char)
-#endif
     ]

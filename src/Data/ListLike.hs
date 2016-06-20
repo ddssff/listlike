@@ -1,7 +1,3 @@
-{-# LANGUAGE CPP #-}
-#ifndef UNSAFE
-{-# LANGUAGE Safe #-}
-#endif
 {-
 Copyright (C) 2007 John Goerzen <jgoerzen@complete.org>
 
@@ -125,9 +121,7 @@ import Data.ListLike.Base
 import Data.ListLike.CharString
 import Data.ListLike.FoldableLL
 import Data.ListLike.Instances()
-#ifdef UNSAFE
 import Data.ListLike.DList
-#endif
 import Data.ListLike.FMList
 import Data.ListLike.String
 import Data.ListLike.Utils

@@ -1,10 +1,6 @@
-{-# LANGUAGE MultiParamTypeClasses
+{-# LANGUAGE MultiParamTypeClasses            
             ,FlexibleInstances
-            ,TypeSynonymInstances
-            ,CPP #-}
-#ifndef UNSAFE
-{-# LANGUAGE Safe #-}
-#endif
+            ,TypeSynonymInstances #-}
 
 
 {-
@@ -51,11 +47,9 @@ import           Data.ListLike.String
 import           Data.ListLike.IO
 import           Data.ListLike.FoldableLL
 import           Data.ListLike.Text ()
-#ifdef UNSAFE
 import           Data.ListLike.Vector ()
-#endif
 import           Data.Int
-import           Data.Maybe (fromJust)
+import           Data.Maybe (fromMaybe)
 import           Data.Monoid
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Char8 as BSC
@@ -591,9 +585,9 @@ instance ListLike (UTF8 BS.ByteString) Char where
     -- snoc = UTF8.snoc
     -- append = UTF8.append
     uncons = UTF8.uncons
-    head = fst . fromJust . uncons
+    head = fst . fromMaybe (error "head") . uncons
     -- last = UTF8.last
-    tail = snd . fromJust . uncons
+    tail = snd . fromMaybe (error "tail") . uncons
     -- init = UTF8.init
     null s = UTF8.length s == 0
     length = UTF8.length
@@ -702,9 +696,9 @@ instance ListLike (UTF8 BSL.ByteString) Char where
     -- snoc = UTF8.snoc
     -- append = UTF8.append
     uncons = UTF8.uncons
-    head = fst . fromJust . uncons
+    head = fst . fromMaybe (error "head") . uncons
     -- last = UTF8.last
-    tail = snd . fromJust . uncons
+    tail = snd . fromMaybe (error "tail") . uncons
     -- init = UTF8.init
     null s = UTF8.length s == 0
     length = fromInteger . toInteger . UTF8.length

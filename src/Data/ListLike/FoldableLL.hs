@@ -1,10 +1,6 @@
 {-# LANGUAGE MultiParamTypeClasses
             ,FunctionalDependencies
-            ,FlexibleInstances
-            ,CPP #-}
-#ifndef UNSAFE
-{-# LANGUAGE Safe #-}
-#endif
+            ,FlexibleInstances #-}
 
 {-
 Copyright (C) 2007 John Goerzen <jgoerzen@complete.org>
