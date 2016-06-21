@@ -1,6 +1,9 @@
 {-# LANGUAGE MultiParamTypeClasses
             ,FlexibleContexts
             ,FlexibleInstances
+#if __GLASGOW_HASKELL__ < 710
+            ,OverlappingInstances
+#endif
             ,UndecidableInstances #-}
 
 -- | ListLike instance for any type supporting the @Data.Vector.Generic@
