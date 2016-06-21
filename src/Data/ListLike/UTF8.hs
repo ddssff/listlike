@@ -16,11 +16,12 @@ import qualified Data.ByteString as BS
 import qualified Data.ByteString.Char8 as BSC
 import qualified Data.ByteString.Lazy as BSL
 import qualified Data.ByteString.Lazy.Char8 as BSLC
-import Data.Maybe (fromMaybe)
 import Data.ListLike.Base
 import Data.ListLike.FoldableLL
 import Data.ListLike.IO
 import Data.ListLike.String (StringLike(..))
+import Data.Maybe (fromMaybe)
+import Data.Monoid (Monoid(..))
 import Data.String.UTF8 (UTF8)
 import qualified Data.String.UTF8 as UTF8
 
