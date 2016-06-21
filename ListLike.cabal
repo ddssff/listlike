@@ -24,6 +24,7 @@ Description: Generic support for list-like structures in Haskell.
 Stability: Stable
 
 Library
+  GHC-Options: -O2
   Hs-Source-Dirs: src
   Exposed-Modules: Data.ListLike
           Data.ListLike.Base
@@ -56,6 +57,7 @@ Library
                 ,utf8-string
 
 Test-suite listlike-tests
+  GHC-Options: -O2
   Hs-source-dirs: testsrc
   Main-is:        runtests.hs
   Type:           exitcode-stdio-1.0
