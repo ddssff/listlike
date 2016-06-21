@@ -35,6 +35,7 @@ Library
           Data.ListLike.Text
           Data.ListLike.Text.Text
           Data.ListLike.Text.TextLazy
+          Data.ListLike.UTF8
           Data.ListLike.Utils
           Data.ListLike.Vector
           Data.ListLike.Vector.Generic
