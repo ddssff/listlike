@@ -2,7 +2,8 @@
             ,MultiParamTypeClasses
             ,FlexibleInstances
             ,TypeFamilies
-            ,TypeSynonymInstances #-}
+            ,TypeSynonymInstances
+            ,UndecidableInstances #-}
 
 {- |
 Instances of 'Data.ListLike.ListLike' and related classes.
@@ -25,7 +26,8 @@ import Data.ListLike.IO
 import Data.ListLike.String (StringLike(..))
 import Data.Maybe (fromMaybe)
 import Data.Monoid (Monoid(..))
-import Data.String.UTF8 (UTF8)
+import Data.String (IsString(fromString))
+import Data.String.UTF8 (UTF8, UTF8Bytes)
 import qualified Data.String.UTF8 as UTF8
 import GHC.Generics
 
@@ -51,6 +53,9 @@ instance Constructor C1_0UTF8 where
 data D1UTF8 = D1UTF8
 data C1_0UTF8 = C1_0UTF8
 data S1_0_0UTF8 = S1_0_0UTF8
+
+instance UTF8Bytes string index => IsString (UTF8 string) where
+  fromString = UTF8.fromString
 
 instance FoldableLL (UTF8 BS.ByteString) Char where
     foldl = UTF8.foldl
