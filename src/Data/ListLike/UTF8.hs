@@ -275,3 +275,5 @@ instance StringLike (UTF8 BSL.ByteString) where
 instance Monoid (UTF8 BSL.ByteString) where
     mempty = UTF8.fromString []
     mappend a b = UTF8.fromRep (mappend (UTF8.toRep a) (UTF8.toRep b))
+
+{-# RULES "fromListLike/a" fromListLike = id :: a -> a #-}
