@@ -1,5 +1,4 @@
 language: haskell
-sudo: false
 env:
   - CABALVER=1.18 GHCVER=7.4.2
   - CABALVER=1.18 GHCVER=7.6.3
