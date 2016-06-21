@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE MultiParamTypeClasses
             ,FlexibleContexts
             ,FlexibleInstances
