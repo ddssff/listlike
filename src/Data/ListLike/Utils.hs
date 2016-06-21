@@ -69,7 +69,7 @@ unzip inp = foldr convert (empty, empty) inp
 
 -- | Converts to a MonadPlus instance
 toMonadPlus :: (MonadPlus m, ListLike full a) => full -> m (a, full)
-toMonadPlus = maybe mzero pure . uncons
+toMonadPlus = maybe mzero return . uncons
 
 -- | List-like destructor (like Data.Maybe.maybe)
 list :: ListLike full a => b -> (a -> full -> b) -> full -> b
