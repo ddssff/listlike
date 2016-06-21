@@ -38,7 +38,9 @@ instance Generic (UTF8 string) where
 instance Datatype D1UTF8 where
     datatypeName _ = "UTF8"
     moduleName _ = "Data.String.UTF8"
+#if __GLASGOW_HASKELL__ < 708
     isNewtype _ = True
+#endif
 
 instance Constructor C1_0UTF8 where
     conName _ = "Str"
