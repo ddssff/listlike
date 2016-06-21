@@ -1,11 +1,11 @@
-{-# LANGUAGE CPP #-}
-{-# LANGUAGE MultiParamTypeClasses
+{-# LANGUAGE CPP
+            ,MultiParamTypeClasses
             ,FlexibleContexts
             ,FlexibleInstances
-#if __GLASGOW_HASKELL__ < 710
-            ,OverlappingInstances
-#endif
             ,UndecidableInstances #-}
+#if __GLASGOW_HASKELL__ < 710
+{-# LANGUAGE OverlappingInstances #-}
+#endif
 
 -- | ListLike instance for any type supporting the @Data.Vector.Generic@
 -- interface.  To avoid collisions with other Vector instances, this module
