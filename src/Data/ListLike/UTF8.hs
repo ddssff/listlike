@@ -12,6 +12,7 @@ Re-exported by "Data.ListLike".
 
 module Data.ListLike.UTF8 () where
 
+import Control.Applicative ((<$>))
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Char8 as BSC
 import qualified Data.ByteString.Lazy as BSL
