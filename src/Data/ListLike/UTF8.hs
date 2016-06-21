@@ -1,4 +1,5 @@
-{-# LANGUAGE MultiParamTypeClasses
+{-# LANGUAGE CPP
+            ,MultiParamTypeClasses
             ,FlexibleInstances
             ,TypeFamilies
             ,TypeSynonymInstances #-}
