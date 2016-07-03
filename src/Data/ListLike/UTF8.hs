@@ -20,6 +20,7 @@ import qualified Data.ByteString as BS
 import qualified Data.ByteString.Char8 as BSC
 import qualified Data.ByteString.Lazy as BSL
 import qualified Data.ByteString.Lazy.Char8 as BSLC
+import Control.DeepSeq (NFData(rnf))
 import Data.ListLike.Base
 import Data.ListLike.FoldableLL
 import Data.ListLike.IO
@@ -31,28 +32,8 @@ import Data.String.UTF8 (UTF8, UTF8Bytes)
 import qualified Data.String.UTF8 as UTF8
 import GHC.Generics
 
--- | Temporary home of a Generic instance for the UTF8 wrapper type -
--- see https://github.com/glguy/utf8-string/pull/19.
-instance Generic (UTF8 string) where
-    type Rep (UTF8 string) = D1 D1UTF8 (C1 C1_0UTF8 (S1 NoSelector (Rec0 (UTF8 string))))
-    from g1 = M1 (M1 (M1 (K1 g1)))
-    to (M1 (M1 (M1 (K1 g1)))) = g1
-
-instance Datatype D1UTF8 where
-    datatypeName _ = "UTF8"
-    moduleName _ = "Data.String.UTF8"
-#if __GLASGOW_HASKELL__ >= 708
-    isNewtype _ = True
-#endif
-
-instance Constructor C1_0UTF8 where
-    conName _ = "Str"
-
--- Generic representation:
-
-data D1UTF8 = D1UTF8
-data C1_0UTF8 = C1_0UTF8
-data S1_0_0UTF8 = S1_0_0UTF8
+utf8rnf :: NFData a => UTF8 a -> ()
+utf8rnf = rnf . UTF8.toRep
 
 instance UTF8Bytes string index => IsString (UTF8 string) where
   fromString = UTF8.fromString
