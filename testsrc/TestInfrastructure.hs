@@ -32,6 +32,7 @@ import qualified Data.Sequence as S
 import qualified Data.Foldable as F
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
+import qualified Data.Text.Lazy.Builder as TB
 import qualified Data.String.UTF8 as UTF8
 import qualified Data.Vector as V
 import qualified Data.Vector.Storable as VS
@@ -137,6 +138,16 @@ instance Arbitrary (TL.Text) where
 instance CoArbitrary (TL.Text) where
     coarbitrary l = coarbitrary (LL.toList l)
 
+instance Arbitrary (TB.Builder) where
+    arbitrary = sized (\n -> choose (0, n) >>= myVector)
+        where myVector n =
+                  do arblist <- vector n
+                     return (LL.fromList arblist)
+    shrink = map LL.fromList . shrink . LL.toList
+
+instance CoArbitrary (TB.Builder) where
+    coarbitrary l = coarbitrary (LL.toList l)
+
 instance Arbitrary (UTF8.UTF8 BS.ByteString) where
     arbitrary = sized (\n -> choose (0, n) >>= myVector)
         where myVector n =
@@ -213,6 +224,8 @@ instance (Arbitrary a, Show a, Eq a) => TestLL (A.Array Int a) a where
 instance TestLL T.Text Char where
 
 instance TestLL TL.Text Char where
+
+instance TestLL TB.Builder Char where
 
 instance TestLL (UTF8.UTF8 BS.ByteString) Char where
 
@@ -337,6 +350,7 @@ apf msg x = HU.TestLabel msg $ HU.TestList $
      w "UnboxVector Bool" (x::LLTest (VU.Vector Bool) Bool),
      w "Text" (x::LLTest T.Text Char),
      w "Text.Lazy" (x::LLTest TL.Text Char),
+     w "Text.Builder" (x::LLTest TB.Builder Char),
      w "UTF8 ByteString" (x::LLTest (UTF8.UTF8 BS.ByteString) Char),
      w "UTF8 ByteString.Lazy" (x::LLTest (UTF8.UTF8 BSL.ByteString) Char)
     ]
@@ -354,6 +368,7 @@ aps msg x = HU.TestLabel msg $ HU.TestList $
      w "Array Int Char" (x::LLTest (A.Array Int Char) Char),
      w "Text" (x::LLTest T.Text Char),
      w "Text.Lazy" (x::LLTest TL.Text Char),
+     w "Text.Builder" (x::LLTest TB.Builder Char),
      w "UTF8 ByteString" (x::LLTest (UTF8.UTF8 BS.ByteString) Char),
      w "UTF8 ByteString.Lazy" (x::LLTest (UTF8.UTF8 BSL.ByteString) Char)
     ,w "Vector Char" (x::LLTest (V.Vector Char) Char),
