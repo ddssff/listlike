@@ -29,6 +29,7 @@ Library
   Hs-Source-Dirs: src
   Exposed-Modules: Data.ListLike
           Data.ListLike.Base
+          Data.ListLike.Chars
           Data.ListLike.CharString
           Data.ListLike.FoldableLL
           Data.ListLike.IO

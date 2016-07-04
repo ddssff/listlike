@@ -95,6 +95,7 @@ module Data.ListLike
 
                  -- ** ByteStrings
                  -- $notesbytestring
+                 Chars(..),
                  CharString (..),
                  CharStringLazy (..),
 
@@ -118,6 +119,7 @@ import Prelude hiding (length, head, last, null, tail, map, filter, concat,
                        splitAt, elem, notElem, unzip, lines, words,
                        unlines, unwords, foldMap)
 import Data.ListLike.Base
+import Data.ListLike.Chars
 import Data.ListLike.CharString
 import Data.ListLike.FoldableLL
 import Data.ListLike.Instances()
