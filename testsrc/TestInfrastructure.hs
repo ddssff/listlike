@@ -25,6 +25,7 @@ import Test.QuickCheck.Test
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as BSL
 import qualified Data.ListLike as LL
+import qualified Data.ListLike.Chars as Chars
 import qualified Data.Array as A
 import qualified Data.DList as DL
 import qualified Data.FMList as FM
@@ -106,6 +107,16 @@ instance Arbitrary (BS.ByteString) where
     shrink = map LL.fromList . shrink . LL.toList
 
 instance CoArbitrary (BS.ByteString) where
+    coarbitrary l = coarbitrary (LL.toList l)
+
+instance Arbitrary Chars.Chars where
+    arbitrary = sized (\n -> choose (0, n) >>= myVector)
+        where myVector n =
+                  do arblist <- vector n
+                     return (LL.fromList arblist)
+    shrink = map LL.fromList . shrink . LL.toList
+
+instance CoArbitrary Chars.Chars where
     coarbitrary l = coarbitrary (LL.toList l)
 
 instance Arbitrary i => Arbitrary (A.Array Int i) where
@@ -216,6 +227,8 @@ instance (Arbitrary a, Show a, Eq a) => TestLL (FM.FMList a) a
 instance TestLL BS.ByteString Word8 where
 
 instance TestLL BSL.ByteString Word8 where
+
+instance TestLL Chars.Chars Char where
 
 instance (Arbitrary a, Show a, Eq a) => TestLL (S.Seq a) a where
 
@@ -334,6 +347,7 @@ apf msg x = HU.TestLabel msg $ HU.TestList $
      w "MyList Bool" (x::LLTest (MyList Bool) Bool),
      w "ByteString" (x::LLTest BS.ByteString Word8),
      w "ByteString.Lazy" (x::LLTest BSL.ByteString Word8),
+     w "Chars" (x::LLTest Chars.Chars Char),
      w "Sequence Int" (x::LLTest (S.Seq Int) Int),
      w "Sequence Bool" (x::LLTest (S.Seq Bool) Bool),
      w "Sequence Char" (x::LLTest (S.Seq Char) Char),
@@ -365,6 +379,7 @@ aps msg x = HU.TestLabel msg $ HU.TestList $
      -- w "FMList Char" (x::LLTest (FM.FMList Char) Char),
      w "ByteString" (x::LLTest BS.ByteString Word8),
      w "ByteString.Lazy" (x::LLTest BSL.ByteString Word8),
+     w "Chars" (x::LLTest Chars.Chars Char),
      w "Array Int Char" (x::LLTest (A.Array Int Char) Char),
      w "Text" (x::LLTest T.Text Char),
      w "Text.Lazy" (x::LLTest TL.Text Char),
