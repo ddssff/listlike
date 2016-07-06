@@ -1,10 +1,14 @@
-{-# LANGUAGE MultiParamTypeClasses
+{-# LANGUAGE CPP
+            ,MultiParamTypeClasses
             ,FlexibleInstances #-}
 
 module Data.ListLike.Text.Builder
 
 where
 
+#if !MIN_VERSION_base(4,8,0)
+import           Control.Applicative
+#endif
 import           Control.DeepSeq (NFData(rnf))
 import qualified Data.Text.Lazy.Builder as Builder
 import           Data.ListLike.Base as LL

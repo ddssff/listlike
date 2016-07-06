@@ -1,12 +1,15 @@
 -- | Work in progress.
-{-# LANGUAGE MultiParamTypeClasses
+{-# LANGUAGE CPP
+            ,MultiParamTypeClasses
             ,FlexibleInstances #-}
 
 module Data.ListLike.Chars
 
 where
 
-import           Prelude as P
+#if !MIN_VERSION_base(4,8,0)
+import           Control.Applicative
+#endif
 import           Control.DeepSeq
 import           Control.Monad
 import           Data.String as String (IsString(fromString))
