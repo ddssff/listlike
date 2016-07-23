@@ -1,3 +1,9 @@
+listlike (4.5) unstable; urgency=low
+
+  * Add stripSuffix and stripPrefix (jhance)
+
+ -- David Fox <dsf@seereason.com>  Sat, 23 Jul 2016 10:18:47 -0700
+
 listlike (4.3.1) unstable; urgency=low
 
   * Add uncons :: full -> Maybe (item, full), implement head and tail with it.
