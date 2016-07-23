@@ -17,6 +17,7 @@ For license and copyright information, see the file COPYRIGHT
 -}
 module Main where
 
+import Control.Applicative
 import Test.QuickCheck
 import qualified Data.ListLike as LL
 import qualified Data.Foldable as F
@@ -110,6 +111,11 @@ prop_isSuffixOf f1 f2 = LL.isSuffixOf f1 f2 ==
     (isSuffixOf (LL.toList f1) (LL.toList f2))
 prop_isInfixOf f1 f2 = LL.isInfixOf f1 f2 ==
     (isInfixOf (LL.toList f1) (LL.toList f2))
+prop_stripPrefix f1 f2 = (LL.toList <$> LL.stripPrefix f1 f2) ==
+    (stripPrefix (LL.toList f1) (LL.toList f2))
+prop_stripPrefix2 f1 f2 = (LL.toList <$> LL.stripPrefix f1 (f1 <> f2)) ==
+    (stripPrefix (LL.toList f1) (LL.toList $ f1 <> f2))
+prop_stripSuffix f1 f2 = LL.stripSuffix f1 (f2 <> f1) == Just f2
 prop_elem f i = LL.elem i f == elem i (LL.toList f)
 prop_notElem f i = LL.notElem i f == notElem i (LL.toList f)
 prop_find f func = LL.find func f == find func (LL.toList f)
@@ -269,6 +275,9 @@ allt = [apf "empty" (t prop_empty),
         apf "isPrefixOf" (t prop_isPrefixOf),
         apf "isSuffixOf" (t prop_isSuffixOf),
         apf "isInfixOf" (t prop_isInfixOf),
+        apf "stripPrefix" (t prop_stripPrefix),
+        apf "stripPrefix2" (t prop_stripPrefix2),
+        apf "stripSuffix" (t prop_stripSuffix),
         apf "elem" (t prop_elem),
         apf "notElem" (t prop_notElem),
         apf "find" (t prop_find),

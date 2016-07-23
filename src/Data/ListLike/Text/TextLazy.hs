@@ -58,6 +58,8 @@ instance ListLike T.Text Char where
     tails = fromList . T.tails
     isPrefixOf = T.isPrefixOf
     isSuffixOf = T.isSuffixOf
+    stripPrefix = T.stripPrefix
+    stripSuffix = T.stripSuffix
     elem = T.isInfixOf . T.singleton
     find = T.find
     filter = T.filter
