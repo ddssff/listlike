@@ -288,6 +288,19 @@ class (FoldableLL full item, Monoid full) =>
         any (isPrefixOf needle) thetails
         where thetails = asTypeOf (tails haystack) [haystack]
 
+    ------------------------------ Conditionally modify based on predicates
+    {- | Remove a prefix from a listlike if possible -}
+    stripPrefix :: Eq item => full -> full -> Maybe full
+    stripPrefix xs ys = if xs `isPrefixOf` ys
+                            then Just $ drop (length xs) ys
+                            else Nothing
+
+    {- | Remove a suffix from a listlike if possible -}
+    stripSuffix :: Eq item => full -> full -> Maybe full
+    stripSuffix xs ys = if xs `isSuffixOf` ys
+                            then Just $ take (length ys - length xs) ys
+                            else Nothing
+
     ------------------------------ Searching
     {- | True if the item occurs in the list -}
     elem :: Eq item => item -> full -> Bool
@@ -607,6 +620,7 @@ instance ListLike [a] a where
     isPrefixOf = L.isPrefixOf
     isSuffixOf = L.isSuffixOf
     isInfixOf = L.isInfixOf
+    stripPrefix = L.stripPrefix
     elem = L.elem
     notElem = L.notElem
     find = L.find

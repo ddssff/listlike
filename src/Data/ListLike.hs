@@ -55,6 +55,8 @@ module Data.ListLike
                  group, inits, tails, 
                  -- ** Predicates
                  isPrefixOf, isSuffixOf, isInfixOf,
+                 -- ** Modify based on predicate
+                 stripPrefix, stripSuffix,
                  -- * Searching lists
                  -- ** Searching by equality
                  elem, notElem,
