@@ -1,4 +1,5 @@
-{-# LANGUAGE ScopedTypeVariables
+{-# LANGUAGE CPP
+            ,ScopedTypeVariables
             ,RankNTypes
             ,ExistentialQuantification
             ,MultiParamTypeClasses
@@ -6,6 +7,10 @@
             ,FlexibleInstances
             ,UndecidableInstances
             ,FlexibleContexts #-}
+
+#if __GLASGOW_HASKELL__ >= 708
+{-# LANGUAGE AllowAmbiguousTypes #-}
+#endif
 
 {-
 Copyright (C) 2007 John Goerzen <jgoerzen@complete.org>
