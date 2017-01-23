@@ -26,7 +26,8 @@ Written by John Goerzen, jgoerzen\@complete.org
 -}
 
 module Data.ListLike.Utils
-    (and, or, sum, product, zip, zipWith, unzip, sequence_, toMonadPlus, list
+    (and, or, sum, product, zip, zipWith, unzip, sequence_, toMonadPlus, list,
+     intercalate
     ) where
 import Prelude hiding (length, head, last, null, tail, map, filter, concat, 
                        any, lookup, init, all, foldl, foldr, foldl1, foldr1,
@@ -74,3 +75,10 @@ toMonadPlus = maybe mzero return . uncons
 -- | List-like destructor (like Data.Maybe.maybe)
 list :: ListLike full a => b -> (a -> full -> b) -> full -> b
 list d f = maybe d (uncurry f) . toMonadPlus
+
+-- | 'intercalate' @xs xss@ is equivalent to @('concat' ('intersperse'
+-- xs xss))@.  It inserts the list @xs@ in between the lists in @xss@
+-- and concatenates the result.
+intercalate :: (ListLike a item, ListLike b a)
+            => a -> b -> a
+intercalate x = concat . intersperse x
