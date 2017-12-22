@@ -49,6 +49,7 @@ import           Data.ListLike.IO
 import           Data.ListLike.FoldableLL
 import           Data.Int
 import           Data.Monoid
+import           Data.Semigroup (Semigroup(..))
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.ByteString.Lazy.Char8 as BSL
 import qualified System.IO as IO
@@ -62,6 +63,9 @@ import           Control.Arrow
 --   this allows for ListLike instances with Char elements.
 newtype CharString = CS { unCS :: BS.ByteString }
   deriving (Read, Show, Eq, Ord)
+
+instance Semigroup CharString where
+  (<>) = mappend
 
 instance Monoid CharString where
   mempty = CS mempty
@@ -177,6 +181,9 @@ instance StringLike CharString where
 --   this allows for ListLike instances with Char elements.
 newtype CharStringLazy = CSL { unCSL :: BSL.ByteString }
   deriving (Read, Show, Eq, Ord)
+
+instance Semigroup CharStringLazy where
+  (<>) = mappend
 
 instance Monoid CharStringLazy where
   mempty = CSL mempty

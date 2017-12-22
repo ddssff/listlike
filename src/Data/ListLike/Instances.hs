@@ -52,6 +52,7 @@ import           Data.ListLike.Vector ()
 import           Data.Int
 import           Data.Maybe (fromMaybe)
 import           Data.Monoid
+import           Data.Semigroup (Semigroup(..))
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Char8 as BSC
 import qualified Data.Foldable as F
@@ -338,6 +339,9 @@ instance (Ix i) => FoldableLL (A.Array i e) e where
     foldr = F.foldr
     foldr1 = F.foldr1
     foldr' = F.foldr'
+
+instance (Integral i, Ix i) => Semigroup (A.Array i e) where
+  (<>) = mappend
 
 instance (Integral i, Ix i) => Monoid (A.Array i e) where
     mempty = A.listArray (0, -1) []

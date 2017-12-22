@@ -14,6 +14,7 @@ import           Data.Monoid
 import           Control.DeepSeq
 import           Control.Monad
 import           Data.String as String (IsString(fromString))
+import           Data.Semigroup (Semigroup(..))
 import qualified Data.Text.Lazy as T
 import qualified Data.Text.Lazy.IO as TI
 import qualified Data.Text.Lazy.Builder as Builder
@@ -33,6 +34,9 @@ builder :: Chars -> Builder.Builder
 builder (B x) = x
 builder (T s) = Builder.fromLazyText s
 {-# INLINE builder #-}
+
+instance Semigroup Chars where
+  (<>) = mappend
 
 instance Monoid Chars where
     mempty = B mempty
