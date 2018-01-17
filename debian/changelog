@@ -1,3 +1,10 @@
+listlike (4.6) unstable; urgency=medium
+
+  * Workaround for GHC-8.4 to provide Semigroup instance for listlike types
+  * Add intercalate
+
+ -- David Fox <dsf@seereason.com>  Tue, 16 Jan 2018 19:17:23 -0800
+
 listlike (4.5.1) unstable; urgency=low
 
   * Changes for ghc-8.0.2.
