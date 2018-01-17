@@ -29,6 +29,7 @@ import qualified Data.ListLike.Chars as Chars
 import qualified Data.Array as A
 import qualified Data.DList as DL
 import qualified Data.FMList as FM
+import qualified Data.Semigroup as Sem
 import qualified Data.Sequence as S
 import qualified Data.Foldable as F
 import qualified Data.Text as T
@@ -265,6 +266,8 @@ instance LL.FoldableLL (MyList a) a where
     foldr1 f (MyList x) = foldr1 f x
     foldl1 f (MyList x) = foldl1 f x
 
+instance Sem.Semigroup (MyList a) where
+  (<>) = mappend
 instance Monoid (MyList a) where
     mempty = MyList []
     mappend (MyList x) (MyList y) = MyList (x ++ y)

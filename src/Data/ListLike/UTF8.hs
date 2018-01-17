@@ -29,6 +29,7 @@ import Data.ListLike.IO
 import Data.ListLike.String (StringLike(..))
 import Data.Maybe (fromMaybe)
 import Data.Monoid (Monoid(..))
+import Data.Semigroup (Semigroup(..))
 import Data.String (IsString(fromString))
 import Data.String.UTF8 (UTF8, UTF8Bytes)
 import qualified Data.String.UTF8 as UTF8
@@ -144,6 +145,9 @@ instance StringLike (UTF8 BS.ByteString) where
     toString = UTF8.toString
     fromString = UTF8.fromString
 
+instance Semigroup (UTF8 BS.ByteString) where
+  (<>) = mappend
+
 instance Monoid (UTF8 BS.ByteString) where
     mempty = UTF8.fromString []
     mappend a b = UTF8.fromRep (mappend (UTF8.toRep a) (UTF8.toRep b))
@@ -250,6 +254,9 @@ instance ListLikeIO (UTF8 BSL.ByteString) Char where
     -- readFile = BSL.readFile
     -- writeFile = BSL.writeFile
     -- appendFile = BSL.appendFile
+
+instance Semigroup (UTF8 BSL.ByteString) where
+  (<>) = mappend
 
 instance StringLike (UTF8 BSL.ByteString) where
     toString = UTF8.toString

@@ -60,6 +60,9 @@ Library
                 ,utf8-string
                 ,deepseq
 
+  If !impl(ghc >= 8.4)
+    Build-Depends: semigroups >= 0.16 && < 0.19
+
 Test-suite listlike-tests
   GHC-Options: -O2
   Hs-source-dirs: testsrc
@@ -80,6 +83,8 @@ Test-suite listlike-tests
                   ,text
                   ,vector
                   ,utf8-string
+  If !impl(ghc >= 8.4)
+    Build-Depends: semigroups >= 0.16 && < 0.19
 
 source-repository head
   type:     git
