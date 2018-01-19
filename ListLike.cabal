@@ -1,17 +1,17 @@
 Name: ListLike
-Version: 4.6
+Version: 4.6.1
 License: BSD3
-Maintainer: John Lato <jwlato@gmail.com>
+Maintainer: David Fox <dsf@seereason.com>
 Author: John Goerzen
 Copyright: Copyright (c) 2007-2008 John Goerzen
 license-file: COPYRIGHT
 extra-source-files: COPYRIGHT, README.md
-Category: Generics
+Category: list, string, text, bytestring, vector
 Cabal-Version: >= 1.8
 Build-Type: Simple
 homepage: http://github.com/JohnLato/listlike
-synopsis: Generic support for list-like structures
-Description: Generic support for list-like structures in Haskell.
+synopsis: Generalized support for list-like structures
+Description: Generalized support for list-like structures in Haskell.
  .
  The ListLike module provides a common interface to the various Haskell
  types that are list-like.  Predefined interfaces include standard
