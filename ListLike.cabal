@@ -61,7 +61,7 @@ Library
                 ,deepseq
 
   If !impl(ghc >= 8.4)
-    Build-Depends: semigroups >= 0.16 && < 0.19
+    Build-Depends: semigroups >= 0.16 && < 0.20
 
 Test-suite listlike-tests
   GHC-Options: -O2
@@ -84,7 +84,7 @@ Test-suite listlike-tests
                   ,vector
                   ,utf8-string
   If !impl(ghc >= 8.4)
-    Build-Depends: semigroups >= 0.16 && < 0.19
+    Build-Depends: semigroups >= 0.16 && < 0.20
 
 source-repository head
   type:     git
