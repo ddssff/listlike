@@ -38,9 +38,6 @@ import GHC.Generics
 utf8rnf :: NFData a => UTF8 a -> ()
 utf8rnf = rnf . UTF8.toRep
 
-instance UTF8Bytes string index => IsString (UTF8 string) where
-  fromString = UTF8.fromString
-
 instance FoldableLL (UTF8 BS.ByteString) Char where
     foldl = UTF8.foldl
     -- foldl' = UTF8.foldl'
