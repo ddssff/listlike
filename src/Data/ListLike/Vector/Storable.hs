@@ -67,11 +67,11 @@ instance Storable a => ListLike (V.Vector a) a where
     toList = V.toList
     fromList = V.fromList
     --fromListLike = fromList . toList
-    --groupBy f = 
+    --groupBy f =
     genericLength = fromInteger . fromIntegral . V.length
     genericTake i = V.take (fromIntegral i)
     genericDrop i = V.drop (fromIntegral i)
-    --genericSplitAt i = 
+    --genericSplitAt i =
     genericReplicate i = V.replicate (fromIntegral i)
 
     sequence  = liftM fromList . P.sequence  . toList

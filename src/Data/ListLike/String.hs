@@ -25,7 +25,7 @@ module Data.ListLike.String
     ( StringLike(..)
     )
        where
-import Prelude hiding (length, head, last, null, tail, map, filter, concat, 
+import Prelude hiding (length, head, last, null, tail, map, filter, concat,
                        any, lookup, init, all, foldl, foldr, foldl1, foldr1,
                        maximum, minimum, iterate, span, break, takeWhile,
                        dropWhile, reverse, zip, zipWith, sequence,
@@ -42,13 +42,13 @@ to a 'String'.  Minimal complete definition is 'toString' and
 class StringLike s where
     {- | Converts the structure to a 'String' -}
     toString :: s -> String
-    
+
     {- | Converts a 'String' to a list -}
     fromString :: String -> s
 
     {- | Breaks a string into a list of strings -}
     lines :: (ListLike full s) => s -> full
-    --lines = map fromString . L.lines . toString 
+    --lines = map fromString . L.lines . toString
     lines = myLines
 
     {- | Breaks a string into a list of words -}

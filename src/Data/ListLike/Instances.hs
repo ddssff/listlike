@@ -1,4 +1,4 @@
-{-# LANGUAGE MultiParamTypeClasses            
+{-# LANGUAGE MultiParamTypeClasses
             ,FlexibleInstances
             ,TypeSynonymInstances #-}
 
@@ -28,7 +28,7 @@ Written by John Goerzen, jgoerzen\@complete.org
 -}
 
 module Data.ListLike.Instances () where
-import Prelude hiding (length, head, last, null, tail, map, filter, concat, 
+import Prelude hiding (length, head, last, null, tail, map, filter, concat,
                        any, lookup, init, all, foldl, foldr, foldl1, foldr1,
                        maximum, minimum, iterate, span, break, takeWhile,
                        dropWhile, reverse, zip, zipWith, sequence,
@@ -262,7 +262,7 @@ instance ListLike BSL.ByteString Word8 where
     filter = BSL.filter
     --partition = BSL.partition
     index l i = BSL.index l (fromIntegral i)
-    elemIndex i = mi64toi . BSL.elemIndex i 
+    elemIndex i = mi64toi . BSL.elemIndex i
     --elemIndices x = fromList . L.map fromIntegral . BSL.elemIndices x
     findIndex f = mi64toi . BSL.findIndex f
     --findIndices x = fromList . L.map fromIntegral . BSL.findIndices x
@@ -356,12 +356,12 @@ instance (Integral i, Ix i) => Monoid (A.Array i e) where
 instance (Integral i, Ix i) => ListLike (A.Array i e) e where
     empty = mempty
     singleton i = A.listArray (0, 0) [i]
-    cons i l = 
+    cons i l =
         -- To add something to the beginning of an array, we must
         -- change the bounds and set the first element.
         (A.ixmap (blow - 1, bhigh) id l) // [(blow - 1, i)]
         where (blow, bhigh) = A.bounds l
-    snoc l i = 
+    snoc l i =
         -- Here we must change the bounds and set the last element
         (A.ixmap (blow, bhigh + 1) id l) // [(bhigh + 1, i)]
         where (blow, bhigh) = A.bounds l
@@ -376,7 +376,7 @@ instance (Integral i, Ix i) => ListLike (A.Array i e) e where
     length = genericLength
     -- map
     rigidMap = A.amap
-    reverse l = A.listArray (A.bounds l) (L.reverse (A.elems l)) 
+    reverse l = A.listArray (A.bounds l) (L.reverse (A.elems l))
     -- intersperse
     -- concat
     -- concatMap
@@ -432,7 +432,7 @@ instance (Integral i, Ix i) => ListLike (A.Array i e) e where
     -- insertBy
     genericLength l = fromIntegral (bhigh - blow + 1)
         where (blow, bhigh) = A.bounds l
-    genericTake count l 
+    genericTake count l
         | count > genericLength l = l
         | count <= 0 = empty
         | otherwise = A.listArray (blow, blow + (fromIntegral count) - 1)
@@ -442,7 +442,7 @@ instance (Integral i, Ix i) => ListLike (A.Array i e) e where
                           (L.genericDrop count (A.elems l))
         where (blow, bhigh) = A.bounds l
     -- geneicSplitAt
-    genericReplicate count i = A.listArray (0, (fromIntegral count) - 1) 
+    genericReplicate count i = A.listArray (0, (fromIntegral count) - 1)
                                            (L.genericReplicate count i)
 
 
@@ -516,7 +516,7 @@ instance ListLike (S.Seq a) a where
     reverse = S.reverse
     --intersperse =
     --concat =
-    --concatMap = 
+    --concatMap =
     --rigidConcatMap =
     any = F.any
     all = F.all

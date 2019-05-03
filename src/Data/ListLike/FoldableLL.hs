@@ -24,19 +24,19 @@ Generic tools for data structures that can be folded.
 Written by John Goerzen, jgoerzen\@complete.org
 
 -}
-module Data.ListLike.FoldableLL 
+module Data.ListLike.FoldableLL
     (-- * FoldableLL Class
      FoldableLL(..),
      -- * Utilities
      fold, foldMap, foldM, sequence_, mapM_
-    ) where 
+    ) where
 import Prelude hiding (foldl, foldr, foldr1, sequence_, mapM_, foldMap)
 import qualified Data.Foldable as F
 import Data.Monoid
 import Data.Maybe
 import qualified Data.List as L
 
-{- | This is the primary class for structures that are to be considered 
+{- | This is the primary class for structures that are to be considered
 foldable.  A minimum complete definition provides 'foldl' and 'foldr'.
 
 Instances of 'FoldableLL' can be folded, and can be many and varied.

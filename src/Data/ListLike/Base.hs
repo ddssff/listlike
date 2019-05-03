@@ -29,7 +29,7 @@ Generic operations over list-like structures
 Written by John Goerzen, jgoerzen\@complete.org
 -}
 
-module Data.ListLike.Base 
+module Data.ListLike.Base
     (
     ListLike(..),
     InfiniteListLike(..),
@@ -89,7 +89,7 @@ class (FoldableLL full item, Monoid full) =>
     snoc l item = append l (singleton item)
 
     {- | Combines two lists.  Like (++). -}
-    append :: full -> full -> full 
+    append :: full -> full -> full
     append = mappend
 
     {- | Extracts the first element of a 'ListLike'. -}
@@ -134,7 +134,7 @@ class (FoldableLL full item, Monoid full) =>
          as fast, if not faster, than this function and is recommended
          if it will work for your purposes.  See also 'mapM'. -}
     map :: ListLike full' item' => (item -> item') -> full -> full'
-    map func inp  
+    map func inp
         | null inp = empty
         | otherwise = cons (func (head inp)) (map func (tail inp))
 
@@ -146,7 +146,7 @@ class (FoldableLL full item, Monoid full) =>
     rigidMap = map
 
     {- | Reverse the elements in a list. -}
-    reverse :: full -> full 
+    reverse :: full -> full
     reverse l = rev l empty
         where rev rl a
                 | null rl = a
@@ -217,7 +217,7 @@ class (FoldableLL full item, Monoid full) =>
 
     {- | Returns all elements at start of list that satisfy the function. -}
     takeWhile :: (item -> Bool) -> full -> full
-    takeWhile func l 
+    takeWhile func l
         | null l = empty
         | func x = cons x (takeWhile func (tail l))
         | otherwise = empty
@@ -240,7 +240,7 @@ class (FoldableLL full item, Monoid full) =>
     span :: (item -> Bool) -> full -> (full, full)
     span func l
         | null l = (empty, empty)
-        | func x = (cons x ys, zs) 
+        | func x = (cons x ys, zs)
         | otherwise = (empty, l)
        where (ys, zs) = span func (tail l)
              x = head l
@@ -275,7 +275,7 @@ class (FoldableLL full item, Monoid full) =>
     isPrefixOf needle haystack
         | null needle = True
         | null haystack = False
-        | otherwise = (head needle) == (head haystack) && 
+        | otherwise = (head needle) == (head haystack) &&
                       isPrefixOf (tail needle) (tail haystack)
 
     {- | True when the first list is at the beginning of the second. -}
@@ -284,7 +284,7 @@ class (FoldableLL full item, Monoid full) =>
 
     {- | True when the first list is wholly containted within the second -}
     isInfixOf :: Eq item => full -> full -> Bool
-    isInfixOf needle haystack = 
+    isInfixOf needle haystack =
         any (isPrefixOf needle) thetails
         where thetails = asTypeOf (tails haystack) [haystack]
 
@@ -318,8 +318,8 @@ class (FoldableLL full item, Monoid full) =>
                     Just x -> Just (index l x)
 
     {- | Returns only the elements that satisfy the function. -}
-    filter :: (item -> Bool) -> full -> full 
-    filter func l 
+    filter :: (item -> Bool) -> full -> full
+    filter func l
         | null l = empty
         | func (head l) = cons (head l) (filter func (tail l))
         | otherwise = filter func (tail l)
@@ -333,7 +333,7 @@ class (FoldableLL full item, Monoid full) =>
     {- | The element at 0-based index i.  Raises an exception if i is out
          of bounds.  Like (!!) for lists. -}
     index :: full -> Int -> item
-    index l i 
+    index l i
         | null l = error "index: index not found"
         | i < 0 = error "index: index must be >= 0"
         | i == 0 = head l
@@ -343,7 +343,7 @@ class (FoldableLL full item, Monoid full) =>
     elemIndex :: Eq item => item -> full -> Maybe Int
     elemIndex e l = findIndex (== e) l
 
-    {- | Returns the indices of the matching elements.  See also 
+    {- | Returns the indices of the matching elements.  See also
        'findIndices' -}
     elemIndices :: (Eq item, ListLike result Int) => item -> full -> result
     elemIndices i l = findIndices (== i) l
@@ -363,15 +363,15 @@ class (FoldableLL full item, Monoid full) =>
     sequence :: (Monad m, ListLike fullinp (m item)) =>
                 fullinp -> m full
     sequence l = foldr func (return empty) l
-        where func litem results = 
+        where func litem results =
                 do x <- litem
                    xs <- results
                    return (cons x xs)
 
-    {- | A map in monad space.  Same as @'sequence' . 'map'@ 
-         
+    {- | A map in monad space.  Same as @'sequence' . 'map'@
+
          See also 'rigidMapM' -}
-    mapM :: (Monad m, ListLike full' item') => 
+    mapM :: (Monad m, ListLike full' item') =>
             (item -> m item') -> full -> m full'
     mapM func l = sequence mapresult
             where mapresult = asTypeOf (map func l) []
@@ -416,11 +416,11 @@ class (FoldableLL full item, Monoid full) =>
     sort = sortBy compare
 
     {- | Inserts the element at the last place where it is still less than or
-         equal to the next element.  On data types that do not preserve 
+         equal to the next element.  On data types that do not preserve
          ordering, or enforce their own ordering, the result may not
          be what you expect.  On types such as maps, this may result in
          changing an existing item.  See also 'insertBy'. -}
-    insert :: Ord item => item -> full -> full 
+    insert :: Ord item => item -> full -> full
     insert = insertBy compare
 
     ------------------------------ Conversions
@@ -431,7 +431,7 @@ class (FoldableLL full item, Monoid full) =>
     toList = fromListLike
 
     {- | Generates the structure from a list. -}
-    fromList :: [item] -> full 
+    fromList :: [item] -> full
     fromList [] = empty
     fromList (x:xs) = cons x (fromList xs)
 
@@ -481,7 +481,7 @@ class (FoldableLL full item, Monoid full) =>
     intersectBy func xs ys = filter (\x -> any (func x) ys) xs
 
     {- | Generic version of 'group'. -}
-    groupBy :: (ListLike full' full, Eq item) => 
+    groupBy :: (ListLike full' full, Eq item) =>
                 (item -> item -> Bool) -> full -> full'
     groupBy eq l
         | null l = empty
@@ -491,12 +491,12 @@ class (FoldableLL full item, Monoid full) =>
                             xs = tail l
 
     {- | Sort function taking a custom comparison function -}
-    sortBy :: (item -> item -> Ordering) -> full -> full 
+    sortBy :: (item -> item -> Ordering) -> full -> full
     sortBy cmp = foldr (insertBy cmp) empty
 
     {- | Like 'insert', but with a custom comparison function -}
     insertBy :: (item -> item -> Ordering) -> item ->
-                full -> full 
+                full -> full
     insertBy cmp x ys
         | null ys = singleton x
         | otherwise = case cmp x (head ys) of
@@ -521,7 +521,7 @@ class (FoldableLL full item, Monoid full) =>
 
     {- | Generic version of 'drop' -}
     genericDrop :: Integral a => a -> full -> full
-    genericDrop n l 
+    genericDrop n l
         | n <= 0 = l
         | null l = l
         | otherwise = genericDrop (n - 1) (tail l)
@@ -532,7 +532,7 @@ class (FoldableLL full item, Monoid full) =>
 
     {- | Generic version of 'replicate' -}
     genericReplicate :: Integral a => a -> item -> full
-    genericReplicate count x 
+    genericReplicate count x
         | count <= 0 = empty
         | otherwise = map (\_ -> x) [1..count]
 
@@ -571,7 +571,7 @@ class (ListLike full item) => InfiniteListLike full item | full -> item where
 
     {- | Converts a finite list into a circular one -}
     cycle :: full -> full
-    cycle xs 
+    cycle xs
         | null xs = error "ListLike.cycle: empty list"
         | otherwise = xs' where xs' = append xs xs'
 

@@ -34,7 +34,7 @@ module Data.ListLike.CharString (
 
 where
 
-import Prelude hiding (length, head, last, null, tail, map, filter, concat, 
+import Prelude hiding (length, head, last, null, tail, map, filter, concat,
                        any, lookup, init, all, foldl, foldr, foldl1, foldr1,
                        maximum, minimum, iterate, span, break, takeWhile,
                        dropWhile, reverse, zip, zipWith, sequence,

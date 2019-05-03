@@ -29,7 +29,7 @@ module Data.ListLike.IO
     ( ListLikeIO(..)
     )
        where
-import Prelude hiding (length, head, last, null, tail, map, filter, concat, 
+import Prelude hiding (length, head, last, null, tail, map, filter, concat,
                        any, lookup, init, all, foldl, foldr, foldl1, foldr1,
                        maximum, minimum, iterate, span, break, takeWhile,
                        dropWhile, reverse, zip, zipWith, sequence,
@@ -48,7 +48,7 @@ importing them.
 Note that some types may not be capable of lazy reading or writing.
 Therefore, the usual semantics of "System.IO" functions regarding laziness
 may or may not be available from a particular implementation.
-    
+
 Minimal complete definition:
 
 * hGetLine
@@ -104,7 +104,7 @@ class (ListLike full item) => ListLikeIO full item | full -> item where
     -- | Interact with stdin and stdout by using a function to transform
     -- input to output.  May be lazy.  See 'System.IO.interact' for more.
     interact :: (full -> full) -> IO ()
-    interact func = 
+    interact func =
         do c <- getContents
            putStr (func c)
 
