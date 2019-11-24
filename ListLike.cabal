@@ -9,7 +9,7 @@ extra-source-files: COPYRIGHT, README.md
 Category: list, string, text, bytestring, vector
 Cabal-Version: >= 1.8
 Build-Type: Simple
-homepage: http://github.com/JohnLato/listlike
+homepage: http://github.com/ddssff/listlike
 synopsis: Generalized support for list-like structures
 Description: Generalized support for list-like structures in Haskell.
  .
