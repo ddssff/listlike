@@ -104,7 +104,7 @@ module Data.ListLike
 
                  -- * Base Typeclasses
                  -- ** The ListLike class
-                 ListLike,
+                 ListLike, ListOps,
                  -- ** The FoldableLL class
                  FoldableLL,
                  -- ** The StringLike class

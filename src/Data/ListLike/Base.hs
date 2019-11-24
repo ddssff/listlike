@@ -5,6 +5,7 @@
             ,FlexibleInstances
             ,BangPatterns
             ,FlexibleContexts
+            ,ConstraintKinds
             ,CPP #-}
 
 {-
@@ -32,7 +33,7 @@ Written by John Goerzen, jgoerzen\@complete.org
 
 module Data.ListLike.Base
     (
-    ListLike(..),
+    ListLike(..), ListOps,
     toList, fromList,
     InfiniteListLike(..),
     zip, zipWith, sequence_
@@ -555,6 +556,10 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
                 (singleton, head, tail, null) |
                 (singleton, head, tail, genericLength) #-}
 #endif
+
+-- | A version of 'ListLike' with a single type parameter, the item
+-- type is obtained using the 'Item' type function from 'IsList'.
+type ListOps full = (ListLike full (Item full))
 
 {-
 instance (ListLike full item) => Monad full where
