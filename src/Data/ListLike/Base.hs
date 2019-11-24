@@ -443,14 +443,21 @@ class (FoldableLL full item, Monoid full) =>
 
     ------------------------------ Generalized functions
     {- | Generic version of 'nub' -}
+    -- This code is adapted from Data.List in base.
     nubBy :: (item -> item -> Bool) -> full -> full
-    nubBy f l = nubBy' l (empty :: full)
-     where
-      nubBy' ys xs
-        | null ys              = empty
-        | any (f (head ys)) xs = nubBy' (tail ys) xs
-        | otherwise            = let y = head ys
-                                 in  cons y (nubBy' (tail ys) (cons y xs))
+    nubBy eq l = nubBy' l mempty
+      where
+        nubBy' ys xs =
+          case uncons ys of
+            Nothing -> mempty
+            Just (y, ys')
+              | elem_by y xs -> nubBy' ys' xs
+              | otherwise -> cons y (nubBy' ys' (cons y xs))
+        elem_by :: item -> full -> Bool
+        elem_by y xs =
+          case uncons xs of
+            Nothing -> False
+            Just (x, xs') -> x `eq` y || elem_by y xs'
 {-
     nubBy f l
         | null l = empty
