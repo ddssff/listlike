@@ -46,6 +46,7 @@ import System.IO
 import qualified Test.HUnit as HU
 import Text.Printf
 import Data.Function (on)
+import Data.String (IsString(fromString))
 import Data.Word
 import Data.List
 import Data.Monoid (Monoid(..))
@@ -286,9 +287,11 @@ instance LL.ListLike (MyList a) a where
     tail (MyList x) = MyList (tail x)
     null (MyList x) = null x
 
+instance IsString (MyList Char) where
+    fromString = MyList
+
 instance LL.StringLike (MyList Char) where
     toString (MyList x) = x
-    fromString x = MyList x
 
 mkTest :: Testable prop => String -> prop -> HU.Test
 mkTest msg test = HU.TestLabel msg $ HU.TestCase (quickCheckResult test >>= HU.assertBool msg . isSuccess)

@@ -51,6 +51,7 @@ import           Data.ListLike.FoldableLL
 import           Data.Int
 import           Data.Monoid
 import           Data.Semigroup (Semigroup(..))
+import           Data.String (IsString(..))
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.ByteString.Lazy.Char8 as BSL
 --import qualified System.IO as IO
@@ -177,9 +178,11 @@ instance ListLikeIO CharString Char where
     writeFile fp = BS.writeFile fp . unCS
     appendFile fp = BS.appendFile fp . unCS
 
+instance IsString CharString where
+    fromString = CS . BS.pack
+
 instance StringLike CharString where
     toString = BS.unpack . unCS
-    fromString = CS . BS.pack
 
 --------------------------------------------------
 -- ByteString.Lazy
@@ -307,6 +310,8 @@ instance ListLikeIO CharStringLazy Char where
     writeFile fp = BSL.writeFile fp . unCSL
     appendFile fp = BSL.appendFile fp . unCSL
 
+instance IsString CharStringLazy where
+    fromString = CSL . BSL.pack
+
 instance StringLike CharStringLazy where
     toString = BSL.unpack . unCSL
-    fromString = CSL . BSL.pack

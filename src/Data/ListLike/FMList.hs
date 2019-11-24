@@ -65,7 +65,6 @@ instance IsString (FMList Char) where
   fromString = FM.fromList
 
 instance StringLike (FMList Char) where
-  fromString = FM.fromList
   toString = FM.toList
   lines = map FM.fromList . S.lines . FM.toList
   words = map FM.fromList . S.words . FM.toList

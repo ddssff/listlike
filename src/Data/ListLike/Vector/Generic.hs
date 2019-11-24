@@ -24,6 +24,7 @@ import           Data.ListLike.Base
 import           Data.ListLike.FoldableLL
 import           Data.ListLike.String
 import           Data.Monoid
+import           Data.String (IsString(fromString))
 import           GHC.Exts (IsList(..))
 
 instance {-# OVERLAPPABLE #-} V.Vector v a => FoldableLL (v a) a where
@@ -93,9 +94,11 @@ instance {-# OVERLAPPABLE #-} (IsList (v a), Item (v a) ~ a, Monoid (v a), Eq (v
     sequence  = liftM fromList . P.sequence  . toList
     mapM func = liftM fromList . P.mapM func . toList
 
+instance (Eq (v Char), V.Vector v Char) => IsString (v Char) where
+    fromString = V.fromList
+
 instance (Eq (v Char), V.Vector v Char) => StringLike (v Char) where
     toString = V.toList
-    fromString = V.fromList
     --words =
     --lines =
     unwords = let sp = V.singleton ' ' in V.concat . intersperse sp . toList

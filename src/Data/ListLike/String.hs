@@ -23,6 +23,7 @@ Written by John Goerzen, jgoerzen\@complete.org
 
 module Data.ListLike.String
     ( StringLike(..)
+    , fromString
     )
        where
 import Prelude hiding (length, head, last, null, tail, map, filter, concat,
@@ -35,16 +36,14 @@ import Prelude hiding (length, head, last, null, tail, map, filter, concat,
                        unlines, unwords)
 import qualified Data.List as L
 import Data.ListLike.Base
+import Data.String
 
 {- | An extension to 'ListLike' for those data types that are similar
 to a 'String'.  Minimal complete definition is 'toString' and
 'fromString'. -}
-class StringLike s where
+class IsString s => StringLike s where
     {- | Converts the structure to a 'String' -}
     toString :: s -> String
-
-    {- | Converts a 'String' to a list -}
-    fromString :: String -> s
 
     {- | Breaks a string into a list of strings -}
     lines :: (ListLike full s) => s -> full

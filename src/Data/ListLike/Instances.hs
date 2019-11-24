@@ -64,6 +64,7 @@ import qualified Data.Array.IArray as A
 import           Data.Array.IArray((!), (//), Ix(..))
 import qualified Data.ByteString.Lazy as BSL
 import qualified Data.ByteString.Lazy.Char8 as BSLC
+import           Data.String (IsString(fromString))
 --import           Data.String.UTF8 (UTF8)
 --import qualified Data.String.UTF8 as UTF8
 import qualified System.IO as IO
@@ -113,7 +114,7 @@ illegalBufferSize handle fn sz =
 
 instance StringLike String where
     toString = id
-    fromString = id
+    --fromString = id
 
 instance InfiniteListLike [a] a where
     iterate = L.iterate
@@ -236,7 +237,7 @@ instance ListLikeIO BS.ByteString Word8 where
 #if 0
 instance StringLike BS.ByteString where
     toString = BSU.toString
-    fromString = BSU.fromString
+    --fromString = BSU.fromString
 #endif
 
 --------------------------------------------------
@@ -357,7 +358,7 @@ instance ListLikeIO BSL.ByteString Word8 where
 #if 0
 instance StringLike BSL.ByteString where
     toString = BSLU.toString
-    fromString = BSLU.fromString
+    --fromString = BSLU.fromString
 #endif
 
 --------------------------------------------------
@@ -491,9 +492,11 @@ instance (Integral i, Ix i) => ListLike (A.Array i e) e where
                                            (L.genericReplicate count i)
 
 
+instance (Integral i, Ix i) => IsString (A.Array i Char) where
+    fromString = fromList
+
 instance (Integral i, Ix i) => StringLike (A.Array i Char) where
     toString = toList
-    fromString = fromList
     -- lines
     -- words
 
@@ -534,7 +537,7 @@ instance ListLikeIO (S.Seq Char) Char where
 
 instance StringLike (S.Seq Char) where
     toString = toList
-    fromString = fromList
+    --fromString = fromList
 
 instance FoldableLL (S.Seq a) a where
     foldl = F.foldl

@@ -43,7 +43,7 @@ instance ListLike (DList a) a where
 
 instance StringLike (DList Char) where
   toString = D.toList
-  fromString = D.fromList
+  -- fromString = D.fromList
   lines = map D.fromList . S.lines . D.toList
   words = map D.fromList . S.words . D.toList
   unlines = D.fromList . S.unlines . map D.toList

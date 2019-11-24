@@ -45,7 +45,10 @@ instance Monoid Chars where
     mappend a b = B $ mappend (builder a) (builder b)
 
 instance String.IsString Chars where
-  fromString = B . String.fromString
+  -- Builder already has an IsString instance, do we want to use it?
+  -- fromString = B . String.fromString
+  -- or do we want the implementation that used to be in the StringLike instance?
+  fromString = B . Builder.fromLazyText . LL.fromString
 
 instance FoldableLL Chars Char where
     foldl f r0 (B b) = LL.foldl f r0 . Builder.toLazyText $ b
@@ -91,7 +94,7 @@ instance ListLikeIO Chars Char where
 instance StringLike Chars where
     toString (B b) = toString . Builder.toLazyText $ b
     toString (T s) = toString $ s
-    fromString = B . Builder.fromLazyText . LL.fromString
+    -- fromString = B . Builder.fromLazyText . LL.fromString
 
 instance NFData Chars where
     rnf (B b) = rnf . Builder.toLazyText $ b

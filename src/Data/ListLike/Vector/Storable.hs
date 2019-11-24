@@ -14,6 +14,7 @@ import           Data.Vector.Storable ((!))
 import           Data.ListLike.Base
 import           Data.ListLike.FoldableLL
 import           Data.ListLike.String
+import           Data.String (IsString(fromString))
 
 import           Data.Monoid
 import           Foreign.Storable (Storable)
@@ -80,9 +81,11 @@ instance Storable a => ListLike (V.Vector a) a where
     sequence  = liftM fromList . P.sequence  . toList
     mapM func = liftM fromList . P.mapM func . toList
 
+instance IsString (V.Vector Char) where
+    fromString = fromList
+
 instance StringLike (V.Vector Char) where
     toString = toList
-    fromString = fromList
     --words =
     --lines =
     unwords = let sp = V.singleton ' ' in V.concat . intersperse sp . toList

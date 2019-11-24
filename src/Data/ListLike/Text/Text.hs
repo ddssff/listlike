@@ -98,7 +98,7 @@ instance ListLikeIO T.Text Char where
 
 instance StringLike T.Text where
     toString = T.unpack
-    fromString = T.pack
+    -- fromString = T.pack
     words = fromList . T.words
     lines = fromList . T.lines
     unwords = T.unwords . toList
