@@ -35,10 +35,10 @@ module Data.ListLike.Base
     InfiniteListLike(..),
     zip, zipWith, sequence_
     ) where
-import Prelude hiding (length, uncons, head, last, null, tail, map, filter, concat,
+import Prelude hiding (length, {-uncons,-} head, last, null, tail, map, filter, concat,
                        any, lookup, init, all, foldl, foldr, foldl1, foldr1,
                        maximum, minimum, iterate, span, break, takeWhile,
-                       dropWhile, dropWhileEnd, reverse, zip, zipWith, sequence,
+                       dropWhile, {-dropWhileEnd,-} reverse, zip, zipWith, sequence,
                        sequence_, mapM, mapM_, concatMap, and, or, sum,
                        product, repeat, replicate, cycle, take, drop,
                        splitAt, elem, notElem, unzip, lines, words,
@@ -165,7 +165,7 @@ class (FoldableLL full item, Monoid full) =>
 
     ------------------------------ Special folds
     {- | Flatten the structure. -}
-    concat :: (ListLike full' full, Monoid full) => full' -> full
+    concat :: (ListLike full' full{-, Monoid full-}) => full' -> full
     concat = fold
 
     {- | Map a function over the items and concatenate the results.

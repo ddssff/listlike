@@ -4,6 +4,7 @@
             ,TypeFamilies
             ,TypeSynonymInstances
             ,UndecidableInstances #-}
+{-# OPTIONS -fno-warn-orphans #-}
 
 {- |
 Instances of 'Data.ListLike.ListLike' and related classes.
@@ -22,7 +23,7 @@ import qualified Data.ByteString as BS
 import qualified Data.ByteString.Char8 as BSC
 import qualified Data.ByteString.Lazy as BSL
 import qualified Data.ByteString.Lazy.Char8 as BSLC
-import Control.DeepSeq (NFData(rnf))
+--import Control.DeepSeq (NFData(rnf))
 import Data.ListLike.Base
 import Data.ListLike.FoldableLL
 import Data.ListLike.IO
@@ -30,13 +31,15 @@ import Data.ListLike.String (StringLike(..))
 import Data.Maybe (fromMaybe)
 import Data.Monoid (Monoid(..))
 import Data.Semigroup (Semigroup(..))
-import Data.String (IsString(fromString))
-import Data.String.UTF8 (UTF8, UTF8Bytes)
+--import Data.String (IsString(fromString))
+import Data.String.UTF8 (UTF8{-, UTF8Bytes-})
 import qualified Data.String.UTF8 as UTF8
-import GHC.Generics
+--import GHC.Generics
 
+#if 0
 utf8rnf :: NFData a => UTF8 a -> ()
 utf8rnf = rnf . UTF8.toRep
+#endif
 
 instance FoldableLL (UTF8 BS.ByteString) Char where
     foldl = UTF8.foldl

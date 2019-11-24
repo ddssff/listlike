@@ -6,6 +6,7 @@
 #if __GLASGOW_HASKELL__ < 710
 {-# LANGUAGE OverlappingInstances #-}
 #endif
+{-# OPTIONS -fno-warn-orphans #-}
 
 -- | ListLike instance for any type supporting the @Data.Vector.Generic@
 -- interface.  To avoid collisions with other Vector instances, this module
@@ -22,7 +23,7 @@ import           Data.ListLike.Base
 import           Data.ListLike.FoldableLL
 import           Data.ListLike.String
 
-import           Data.Monoid
+--import           Data.Monoid
 
 instance {-# OVERLAPPABLE #-} V.Vector v a => FoldableLL (v a) a where
     foldl = V.foldl
@@ -92,12 +93,14 @@ instance (Eq (v Char), V.Vector v Char) => StringLike (v Char) where
     unwords = let sp = V.singleton ' ' in V.concat . intersperse sp . toList
     unlines = let eol = V.singleton '\n' in V.concat . intersperse eol . toList
 
+isPrefixOf' :: (V.Vector v a, Eq (v a)) => v a -> v a -> Bool
 isPrefixOf' needle haystack
   | V.null needle = True
   | V.length needle < V.length haystack =
             needle == V.slice 0 (V.length needle) haystack
   | V.length needle == V.length haystack = needle == haystack
   | otherwise = False
+isSuffixOf' :: (V.Vector v a, Eq (v a)) => v a -> v a -> Bool
 isSuffixOf' needle haystack
   | V.null needle = True
   | V.length needle < V.length haystack =

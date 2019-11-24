@@ -1,5 +1,6 @@
 {-# LANGUAGE MultiParamTypeClasses
             ,FlexibleInstances #-}
+{-# OPTIONS -fno-warn-orphans #-}
 
 module Data.ListLike.Text.TextLazy
 

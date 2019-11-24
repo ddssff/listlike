@@ -42,18 +42,18 @@ import Prelude hiding (length, head, last, null, tail, map, filter, concat,
                        product, repeat, replicate, cycle, take, drop,
                        splitAt, elem, notElem, unzip, lines, words,
                        unlines, unwords)
-import qualified Data.Foldable as F
+--import qualified Data.Foldable as F
 import           Data.ListLike.Base
 import           Data.ListLike.String
 import           Data.ListLike.IO
 import           Data.ListLike.FoldableLL
 import           Data.Int
-import           Data.Monoid
+--import           Data.Monoid
 import           Data.Semigroup (Semigroup(..))
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.ByteString.Lazy.Char8 as BSL
-import qualified System.IO as IO
-import           Data.Word
+--import qualified System.IO as IO
+--import           Data.Word
 import           Control.Arrow
 
 --------------------------------------------------

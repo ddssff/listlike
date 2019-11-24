@@ -1,4 +1,5 @@
-{-# LANGUAGE MultiParamTypeClasses
+{-# LANGUAGE CPP
+            ,MultiParamTypeClasses
             ,FunctionalDependencies
             ,FlexibleInstances #-}
 
@@ -32,7 +33,9 @@ module Data.ListLike.FoldableLL
     ) where
 import Prelude hiding (foldl, foldr, foldr1, sequence_, mapM_, foldMap)
 import qualified Data.Foldable as F
+#if 0
 import Data.Monoid
+#endif
 import Data.Maybe
 import qualified Data.List as L
 

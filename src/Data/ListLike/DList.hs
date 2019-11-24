@@ -1,21 +1,22 @@
 {-# LANGUAGE NoImplicitPrelude, MultiParamTypeClasses, FlexibleInstances #-}
+{-# OPTIONS -fno-warn-orphans #-}
 -- | 'Data.ListLike.ListLike' instances for 'Data.DList.DList'
 module Data.ListLike.DList () where
-import qualified Prelude as P
+--import qualified Prelude as P
 import Data.ListLike.Base
 import Data.ListLike.FoldableLL
-import Data.ListLike.IO
+--import Data.ListLike.IO
 import Data.ListLike.String
 import Data.DList (DList(..))
 import qualified Data.DList as D
-import Data.Foldable (Foldable)
+--import Data.Foldable (Foldable)
 import qualified Data.Foldable as F
-import Data.Traversable (Traversable)
-import qualified Data.Traversable as T
-import Data.String (IsString)
+--import Data.Traversable (Traversable)
+--import qualified Data.Traversable as T
+--import Data.String (IsString)
 import qualified Data.String as S
 import Control.Category
-import Data.Char (Char(..))
+import Data.Char (Char)
 
 instance FoldableLL (DList a) a where
   foldl = F.foldl

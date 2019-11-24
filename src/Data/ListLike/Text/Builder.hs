@@ -1,6 +1,7 @@
 {-# LANGUAGE CPP
             ,MultiParamTypeClasses
             ,FlexibleInstances #-}
+{-# OPTIONS -fno-warn-orphans #-}
 
 module Data.ListLike.Text.Builder
 
@@ -16,7 +17,7 @@ import           Data.ListLike.FoldableLL as LL
 import           Data.ListLike.IO
 import           Data.ListLike.String as LL
 import           Data.ListLike.Text.TextLazy ()
-import           Data.String (IsString(fromString))
+--import           Data.String (IsString(fromString))
 
 instance FoldableLL Builder.Builder Char where
     foldl f r0 = LL.foldl f r0 . Builder.toLazyText

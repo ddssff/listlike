@@ -112,10 +112,10 @@ module Data.ListLike
                  InfiniteListLike
                 )
        where
-import Prelude hiding (length, head, last, null, tail, map, filter, concat, 
+import Prelude hiding (length, head, last, null, tail, map, filter, concat,
                        any, lookup, init, all, foldl, foldr, foldl1, foldr1,
                        maximum, minimum, iterate, span, break, takeWhile,
-                       dropWhile, dropWhileEnd, reverse, zip, zipWith, sequence,
+                       dropWhile, {-dropWhileEnd,-} reverse, zip, zipWith, sequence,
                        sequence_, mapM, mapM_, concatMap, and, or, sum,
                        product, repeat, replicate, cycle, take, drop,
                        splitAt, elem, notElem, unzip, lines, words,
@@ -124,9 +124,9 @@ import Data.ListLike.Base
 import Data.ListLike.Chars
 import Data.ListLike.CharString
 import Data.ListLike.FoldableLL
-import Data.ListLike.Instances()
-import Data.ListLike.DList
-import Data.ListLike.FMList
+import Data.ListLike.Instances ()
+import Data.ListLike.DList ()
+import Data.ListLike.FMList ()
 import Data.ListLike.String
 import Data.ListLike.Utils
 import Data.ListLike.IO

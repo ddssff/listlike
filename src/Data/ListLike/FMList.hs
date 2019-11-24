@@ -1,23 +1,24 @@
 {-# LANGUAGE MultiParamTypeClasses, FlexibleInstances #-}
+{-# OPTIONS -fno-warn-orphans #-}
 -- | 'Data.ListLike.ListLike' instances for 'Data.FMList.FMList'
 module Data.ListLike.FMList () where
-import qualified Prelude as P
+import Prelude hiding (cycle, map)
 import Data.ListLike.Base
 import Data.ListLike.FoldableLL
-import Data.ListLike.IO
+--import Data.ListLike.IO
 import Data.ListLike.String
 import Data.FMList (FMList(..))
 import qualified Data.FMList as FM
-import Data.Foldable (Foldable)
+--import Data.Foldable (Foldable)
 import qualified Data.Foldable as F
-import Data.Traversable (Traversable)
-import qualified Data.Traversable as T
+--import Data.Traversable (Traversable)
+--import qualified Data.Traversable as T
 import Data.String (IsString)
 import qualified Data.String as S
 import Control.Monad.Zip (MonadZip)
 import qualified Control.Monad.Zip as Z
-import Data.Function
-import Data.Char (Char(..))
+--import Data.Function
+import Data.Char (Char)
 
 instance FoldableLL (FMList a) a where
   foldl = F.foldl

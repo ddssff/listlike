@@ -12,18 +12,18 @@ import           Control.Applicative
 import           Data.Monoid
 #endif
 import           Control.DeepSeq
-import           Control.Monad
+--import           Control.Monad
 import           Data.String as String (IsString(fromString))
 import           Data.Semigroup (Semigroup(..))
 import qualified Data.Text.Lazy as T
-import qualified Data.Text.Lazy.IO as TI
+--import qualified Data.Text.Lazy.IO as TI
 import qualified Data.Text.Lazy.Builder as Builder
-import           Data.Text.Encoding (decodeUtf8)
+--import           Data.Text.Encoding (decodeUtf8)
 import           Data.ListLike.Base as LL
 import           Data.ListLike.FoldableLL as LL
 import           Data.ListLike.IO
 import           Data.ListLike.String as LL
-import           Data.ListLike.Text
+import           Data.ListLike.Text ()
 
 data Chars
     = B Builder.Builder

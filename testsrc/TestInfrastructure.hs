@@ -7,6 +7,7 @@
             ,FlexibleInstances
             ,UndecidableInstances
             ,FlexibleContexts #-}
+{-# OPTIONS -fno-warn-orphans #-}
 
 {-
 Copyright (C) 2007 John Goerzen <jgoerzen@complete.org>
@@ -21,7 +22,7 @@ For license and copyright information, see the file COPYRIGHT
 module TestInfrastructure where
 
 import Test.QuickCheck
-import Test.QuickCheck.Test
+--import Test.QuickCheck.Test
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as BSL
 import qualified Data.ListLike as LL
@@ -31,7 +32,7 @@ import qualified Data.DList as DL
 import qualified Data.FMList as FM
 import qualified Data.Semigroup as Sem
 import qualified Data.Sequence as S
-import qualified Data.Foldable as F
+--import qualified Data.Foldable as F
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as TL
 import qualified Data.Text.Lazy.Builder as TB
@@ -39,14 +40,14 @@ import qualified Data.String.UTF8 as UTF8
 import qualified Data.Vector as V
 import qualified Data.Vector.Storable as VS
 import qualified Data.Vector.Unboxed as VU
-import System.Random
+--import System.Random
 import System.IO
 import qualified Test.HUnit as HU
 import Text.Printf
 import Data.Function (on)
 import Data.Word
 import Data.List
-import Data.Monoid
+--import Data.Monoid
 
 simpleArb :: (LL.ListLike f i, Arbitrary i) => Gen f
 simpleArb = sized (\n -> choose (0, n) >>= myVector)
@@ -282,23 +283,25 @@ instance LL.StringLike (MyList Char) where
     toString (MyList x) = x
     fromString x = MyList x
 
+mkTest :: Testable prop => String -> prop -> HU.Test
 mkTest msg test = HU.TestLabel msg $ HU.TestCase (quickCheck test)
 
 -- Modified from HUnit
 runVerbTestText :: HU.PutText st -> HU.Test -> IO (HU.Counts, st)
-runVerbTestText (HU.PutText put us) t = do
-  (counts, us') <- HU.performTest reportStart reportError reportFailure us t
+runVerbTestText (HU.PutText put us) test = do
+  (counts, us') <- HU.performTest reportStart reportError reportFailure us test
   us'' <- put (HU.showCounts counts) True us'
   return (counts, us'')
  where
-  reportStart ss us = do hPrintf stderr "\rTesting %-68s\n" (HU.showPath (HU.path ss))
-                         put (HU.showCounts (HU.counts ss)) False us
+  reportStart ss us' = do
+    hPrintf stderr "\rTesting %-68s\n" (HU.showPath (HU.path ss))
+    put (HU.showCounts (HU.counts ss)) False us'
   reportError   = reportProblem "Error:"   "Error in:   "
   reportFailure = reportProblem "Failure:" "Failure in: "
 #if MIN_VERSION_HUnit(1,3,0)
-  reportProblem p0 p1 _mloc msg ss us = put line True us
+  reportProblem p0 p1 _mloc msg ss us' = put line True us'
 #else
-  reportProblem p0 p1 msg ss us = put line True us
+  reportProblem p0 p1 msg ss us' = put line True us'
 #endif
    where line  = "### " ++ kind ++ path' ++ '\n' : msg
          kind  = if null path' then p0 else p1
@@ -316,8 +319,7 @@ data LLWrap f' f i =
          forall t. Testable t => LLWrap (f' -> t)
 
 w :: TestLL f i => String -> LLTest f i -> HU.Test
-w msg f = case f of
-                    LLTest theTest -> mkTest msg theTest
+w msg (LLTest theTest) = mkTest msg theTest
 
 ws :: (LL.StringLike f, TestLL f i) => String -> LLTest f i -> HU.Test
 ws = w

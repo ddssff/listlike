@@ -1,7 +1,7 @@
 {-# LANGUAGE MultiParamTypeClasses
             ,FlexibleInstances
             ,TypeSynonymInstances #-}
-
+{-# OPTIONS -fno-warn-orphans #-}
 
 {-
 Copyright (C) 2007 John Goerzen <jgoerzen@complete.org>
@@ -47,22 +47,22 @@ import           Data.ListLike.String
 import           Data.ListLike.IO
 import           Data.ListLike.FoldableLL
 import           Data.ListLike.Text ()
-import           Data.ListLike.UTF8
+import           Data.ListLike.UTF8 ()
 import           Data.ListLike.Vector ()
 import           Data.Int
-import           Data.Maybe (fromMaybe)
-import           Data.Monoid
+--import           Data.Maybe (fromMaybe)
+--import           Data.Monoid
 import           Data.Semigroup (Semigroup(..))
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Char8 as BSC
-import qualified Data.Foldable as F
-import qualified Data.Traversable as T
+--import qualified Data.Foldable as F
+--import qualified Data.Traversable as T
 import qualified Data.Array.IArray as A
 import           Data.Array.IArray((!), (//), Ix(..))
 import qualified Data.ByteString.Lazy as BSL
 import qualified Data.ByteString.Lazy.Char8 as BSLC
-import           Data.String.UTF8 (UTF8)
-import qualified Data.String.UTF8 as UTF8
+--import           Data.String.UTF8 (UTF8)
+--import qualified Data.String.UTF8 as UTF8
 import qualified System.IO as IO
 import           Data.Word
 
@@ -332,7 +332,7 @@ instance StringLike BSL.ByteString where
 --------------------------------------------------
 -- Arrays
 
-instance (Ix i) => FoldableLL (A.Array i e) e where
+instance {-Ix i =>-} FoldableLL (A.Array i e) e where
     foldl = F.foldl
     foldl1 = F.foldl1
     foldl' = F.foldl'

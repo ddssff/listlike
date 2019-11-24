@@ -7,6 +7,7 @@
             ,FlexibleInstances
             ,UndecidableInstances
             ,FlexibleContexts #-}
+{-# OPTIONS -fno-warn-missing-signatures #-}
 
 #if __GLASGOW_HASKELL__ >= 708
 {-# LANGUAGE AllowAmbiguousTypes #-}
@@ -22,17 +23,17 @@ For license and copyright information, see the file COPYRIGHT
 -}
 module Main where
 
-import Control.Applicative
+--import Control.Applicative
 import Test.QuickCheck
 import qualified Data.ListLike as LL
-import qualified Data.Foldable as F
-import System.Random
+--import qualified Data.Foldable as F
+--import System.Random
 import qualified Test.HUnit as HU
 import System.IO
-import Text.Printf
-import Data.Word
+--import Text.Printf
+--import Data.Word
 import Data.List
-import Data.Monoid
+--import Data.Monoid
 import TestInfrastructure
 import Data.Foldable(foldr', fold, foldMap)
 import System.Info
