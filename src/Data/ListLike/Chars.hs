@@ -94,7 +94,8 @@ instance ListLikeIO Chars Char where
 instance StringLike Chars where
     toString (B b) = toString . Builder.toLazyText $ b
     toString (T s) = toString $ s
-    -- fromString = B . Builder.fromLazyText . LL.fromString
+    fromLazyText = B . Builder.fromLazyText
+    fromText = B . Builder.fromText
 
 instance NFData Chars where
     rnf (B b) = rnf . Builder.toLazyText $ b

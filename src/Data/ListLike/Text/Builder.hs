@@ -47,6 +47,8 @@ instance ListLikeIO Builder.Builder Char where
 
 instance StringLike Builder.Builder where
     toString = toString . Builder.toLazyText
+    fromText = Builder.fromText
+    fromLazyText = Builder.fromLazyText
 
 instance NFData Builder.Builder where
     rnf = rnf . Builder.toLazyText

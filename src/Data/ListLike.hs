@@ -72,7 +72,8 @@ module Data.ListLike
                  ListLikeIO(..),
                  -- * Special lists
                  -- ** Strings
-                 toString, fromString, lines, words,
+                 toString, fromString, lines, words, show,
+                 fromStringLike, fromText, fromLazyText,
                  -- ** \"Set\" operations
                  nub, delete, deleteFirsts, union, intersect,
                  -- ** Ordered lists
@@ -119,7 +120,7 @@ import Prelude hiding (length, head, last, null, tail, map, filter, concat,
                        sequence_, mapM, mapM_, concatMap, and, or, sum,
                        product, repeat, replicate, cycle, take, drop,
                        splitAt, elem, notElem, unzip, lines, words,
-                       unlines, unwords, foldMap)
+                       unlines, unwords, foldMap, show)
 import Data.ListLike.Base
 import Data.ListLike.Chars
 import Data.ListLike.CharString

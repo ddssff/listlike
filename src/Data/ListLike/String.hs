@@ -21,6 +21,8 @@ String-like functions
 Written by John Goerzen, jgoerzen\@complete.org
 -}
 
+{-# LANGUAGE FlexibleContexts #-}
+
 module Data.ListLike.String
     ( StringLike(..)
     , fromString
@@ -37,6 +39,8 @@ import Prelude hiding (length, head, last, null, tail, map, filter, concat,
 import qualified Data.List as L
 import Data.ListLike.Base
 import Data.String
+import Data.Text (Text)
+import qualified Data.Text.Lazy as Lazy (Text)
 
 {- | An extension to 'ListLike' for those data types that are similar
 to a 'String'.  Minimal complete definition is 'toString' and
@@ -61,6 +65,22 @@ class IsString s => StringLike s where
     {- | Joins words -}
     unwords :: ListLike full s => full -> s
     unwords = myUnwords
+
+    {- | Generalize the 'Show' method t return any 'StringLike'. -}
+    show :: Show a => a -> s
+    show = fromString . Prelude.show
+
+    fromStringLike :: StringLike s' => s -> s'
+    fromStringLike = fromString . toString
+
+    {- | Implement 'fromText' to avoid extra 'String' conversions. -}
+    fromText :: StringLike Text => Text -> s
+    fromText = fromString . toString
+    {- | Implement 'fromLazyText' to avoid extra 'String' conversions. -}
+    fromLazyText :: StringLike Lazy.Text => Lazy.Text -> s
+    fromLazyText = fromString . toString
+
+{-# DEPRECATED fromStringLike "Use fromString . toString or something more efficient using local knowledge" #-}
 
 -- For some reason, Hugs required splitting these out into
 -- separate functions.

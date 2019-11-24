@@ -10,6 +10,7 @@ import           Prelude as P
 import           Control.Monad
 import qualified Data.Text as T
 import qualified Data.Text.IO as TI
+import qualified Data.Text.Lazy as Lazy (toStrict)
 import           Data.Text.Encoding (decodeUtf8)
 import           Data.ListLike.Base as LL
 import           Data.ListLike.FoldableLL
@@ -98,8 +99,10 @@ instance ListLikeIO T.Text Char where
 
 instance StringLike T.Text where
     toString = T.unpack
-    -- fromString = T.pack
     words = fromList . T.words
     lines = fromList . T.lines
     unwords = T.unwords . toList
     unlines = T.unlines . toList
+
+    fromText = id
+    fromLazyText = Lazy.toStrict
