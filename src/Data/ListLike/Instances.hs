@@ -1,4 +1,5 @@
-{-# LANGUAGE MultiParamTypeClasses
+{-# LANGUAGE CPP
+            ,MultiParamTypeClasses
             ,FlexibleInstances
             ,TypeSynonymInstances #-}
 {-# OPTIONS -fno-warn-orphans #-}
@@ -75,8 +76,10 @@ import           Data.Word
 instance ListLikeIO String Char where
     hGetLine = IO.hGetLine
     hGetContents = IO.hGetContents
-    hGet h c = BSL.hGet h c >>= (return . toString)
-    hGetNonBlocking h i = BSL.hGetNonBlocking h i >>= (return . toString)
+    hGet h c | c <= 0 = pure mempty
+    hGet h c = cons <$> IO.hGetChar h <*> hGet h (pred c)
+    -- hGetNonBlocking h i >>= (return . toString)
+    hGetNonBlocking h i = error "Unimplemented: hGetNonBlocking in instance ListLikeIO String Char"
     hPutStr = IO.hPutStr
     hPutStrLn = IO.hPutStrLn
     getLine = IO.getLine
@@ -86,6 +89,24 @@ instance ListLikeIO String Char where
     interact = IO.interact
     readFile = IO.readFile
     writeFile = IO.writeFile
+
+{-
+import           Data.ByteString.Internal (createAndTrim)
+import qualified System.IO.Error as IO
+
+hGetNonBlocking :: IO.Handle -> Int -> IO BS.ByteString
+hGetNonBlocking h i
+    | i >  0    = createAndTrim i $ \p -> IO.hGetBufNonBlocking h p i
+    | i == 0    = return empty
+    | otherwise = illegalBufferSize h "hGetNonBlocking'" i
+
+illegalBufferSize :: IO.Handle -> String -> Int -> IO a
+illegalBufferSize handle fn sz =
+    ioError (IO.mkIOError IO.illegalOperationErrorType msg (Just handle) Nothing)
+    --TODO: System.IO uses InvalidArgument here, but it's not exported :-(
+    where
+      msg = fn ++ ": illegal ByteString size " ++ showsPrec 9 sz []
+-}
 
 instance StringLike String where
     toString = id
@@ -199,9 +220,18 @@ instance ListLikeIO BS.ByteString Word8 where
     writeFile = BS.writeFile
     appendFile = BS.appendFile
 
+-- There is no bijection between Strings and ByteStrings that I know
+-- of.  The elements of a String are Unicode code points, and while
+-- every String can be UTF8-encoded into a ByteString, there are
+-- ByteStrings that can not be decoded into valid Strings - notably
+-- "\128".  So should ByteString be an instance of StringLike?
+-- Probably not.  Unfortunately, this instance is used to implement
+-- the ListLikeIO instance for String!  This must not stand.
+#if 0
 instance StringLike BS.ByteString where
-    toString = map (toEnum . fromIntegral) . BS.unpack
-    fromString = BS.pack . map (fromIntegral . fromEnum)
+    toString = BSU.toString
+    fromString = BSU.fromString
+#endif
 
 --------------------------------------------------
 -- ByteString.Lazy
@@ -315,9 +345,11 @@ instance ListLikeIO BSL.ByteString Word8 where
     writeFile = BSL.writeFile
     appendFile = BSL.appendFile
 
+#if 0
 instance StringLike BSL.ByteString where
-    toString = map (toEnum . fromIntegral) . BSL.unpack
-    fromString = BSL.pack . map (fromIntegral . fromEnum)
+    toString = BSLU.toString
+    fromString = BSLU.fromString
+#endif
 
 --------------------------------------------------
 -- Map
