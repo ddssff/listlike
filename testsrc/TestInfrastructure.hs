@@ -47,7 +47,7 @@ import Text.Printf
 import Data.Function (on)
 import Data.Word
 import Data.List
---import Data.Monoid
+import Data.Monoid (Monoid(..))
 
 simpleArb :: (LL.ListLike f i, Arbitrary i) => Gen f
 simpleArb = sized (\n -> choose (0, n) >>= myVector)

@@ -23,7 +23,7 @@ import           Data.ListLike.Base
 import           Data.ListLike.FoldableLL
 import           Data.ListLike.String
 
---import           Data.Monoid
+import           Data.Monoid
 
 instance {-# OVERLAPPABLE #-} V.Vector v a => FoldableLL (v a) a where
     foldl = V.foldl

@@ -38,6 +38,7 @@ import Prelude hiding (length, head, last, null, tail, map, filter, concat,
                        splitAt, elem, notElem, unzip, lines, words,
                        unlines, unwords)
 import qualified Prelude as P
+import           Control.Applicative ((<$>), (<*>))
 import           Control.Monad
 import qualified Data.List as L
 import qualified Data.Sequence as S
@@ -52,7 +53,7 @@ import           Data.ListLike.UTF8 ()
 import           Data.ListLike.Vector ()
 import           Data.Int
 --import           Data.Maybe (fromMaybe)
---import           Data.Monoid
+import           Data.Monoid
 import           Data.Semigroup (Semigroup(..))
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Char8 as BSC
@@ -76,10 +77,10 @@ import           Data.Word
 instance ListLikeIO String Char where
     hGetLine = IO.hGetLine
     hGetContents = IO.hGetContents
-    hGet h c | c <= 0 = pure mempty
+    hGet _ c | c <= 0 = return mempty
     hGet h c = cons <$> IO.hGetChar h <*> hGet h (pred c)
     -- hGetNonBlocking h i >>= (return . toString)
-    hGetNonBlocking h i = error "Unimplemented: hGetNonBlocking in instance ListLikeIO String Char"
+    hGetNonBlocking _h _i = error "Unimplemented: hGetNonBlocking in instance ListLikeIO String Char"
     hPutStr = IO.hPutStr
     hPutStrLn = IO.hPutStrLn
     getLine = IO.getLine
@@ -364,7 +365,8 @@ instance StringLike BSL.ByteString where
 --------------------------------------------------
 -- Arrays
 
-instance {-Ix i =>-} FoldableLL (A.Array i e) e where
+-- This constraint is required for ghc < 8
+instance Ix i => FoldableLL (A.Array i e) e where
     foldl = F.foldl
     foldl1 = F.foldl1
     foldl' = F.foldl'

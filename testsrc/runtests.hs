@@ -23,7 +23,7 @@ For license and copyright information, see the file COPYRIGHT
 -}
 module Main where
 
---import Control.Applicative
+import Control.Applicative ((<$>), (<*>))
 import Test.QuickCheck
 import qualified Data.ListLike as LL
 --import qualified Data.Foldable as F
@@ -33,7 +33,7 @@ import System.IO
 --import Text.Printf
 --import Data.Word
 import Data.List
---import Data.Monoid
+import Data.Monoid
 import TestInfrastructure
 import Data.Foldable(foldr', fold, foldMap)
 import System.Exit

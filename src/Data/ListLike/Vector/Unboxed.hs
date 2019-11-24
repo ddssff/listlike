@@ -14,7 +14,7 @@ import           Data.ListLike.Base
 import           Data.ListLike.FoldableLL
 import           Data.ListLike.String
 
---import           Data.Monoid
+import           Data.Monoid
 
 
 instance Unbox a => FoldableLL (V.Vector a) a where
