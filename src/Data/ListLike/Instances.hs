@@ -1,6 +1,7 @@
 {-# LANGUAGE CPP
             ,MultiParamTypeClasses
             ,FlexibleInstances
+            ,TypeFamilies
             ,TypeSynonymInstances #-}
 {-# OPTIONS -fno-warn-orphans #-}
 
@@ -67,6 +68,7 @@ import qualified Data.ByteString.Lazy.Char8 as BSLC
 --import qualified Data.String.UTF8 as UTF8
 import qualified System.IO as IO
 import           Data.Word
+import           GHC.Exts (IsList(..))
 
 --------------------------------------------------
 -- []
@@ -129,6 +131,11 @@ instance FoldableLL BS.ByteString Word8 where
     foldr' = BS.foldr'
     foldr1 = BS.foldr1
 
+instance IsList BS.ByteString where
+    type Item BS.ByteString = Word8
+    toList = BS.unpack
+    fromList = BS.pack
+
 instance ListLike BS.ByteString Word8 where
     empty = BS.empty
     singleton = BS.singleton
@@ -188,8 +195,6 @@ instance ListLike BS.ByteString Word8 where
     --intersect = BS.intersect
     sort = BS.sort
     --insert = BS.insert
-    toList = BS.unpack
-    fromList = BS.pack
     --fromListLike = fromList . toList
     --nubBy = BS.nubBy
     --deleteBy = BS.deleteBy
@@ -248,6 +253,11 @@ instance FoldableLL BSL.ByteString Word8 where
 mi64toi :: Maybe Int64 -> Maybe Int
 mi64toi Nothing = Nothing
 mi64toi (Just x) = Just (fromIntegral x)
+
+instance IsList BSL.ByteString where
+    type Item BSL.ByteString = Word8
+    toList = BSL.unpack
+    fromList = BSL.pack
 
 instance ListLike BSL.ByteString Word8 where
     empty = BSL.empty
@@ -309,8 +319,6 @@ instance ListLike BSL.ByteString Word8 where
     --intersect = BSL.intersect
     --sort = BSL.sort
     --insert = BSL.insert
-    toList = BSL.unpack
-    fromList = BSL.pack
     --fromListLike = fromList . toList
     --nubBy = BSL.nubBy
     --deleteBy = BSL.deleteBy
@@ -387,6 +395,11 @@ instance (Integral i, Ix i) => Monoid (A.Array i e) where
               newbhigh = bhigh + newlen
               (blow, bhigh) = A.bounds l1
 
+instance (Integral i, Ix i) => IsList (A.Array i e) where
+    type Item (A.Array i e) = e
+    toList = A.elems
+    fromList l = A.listArray (0, genericLength l - 1) l
+
 instance (Integral i, Ix i) => ListLike (A.Array i e) e where
     empty = mempty
     singleton i = A.listArray (0, 0) [i]
@@ -453,8 +466,6 @@ instance (Integral i, Ix i) => ListLike (A.Array i e) e where
     -- intersect
     sort l = A.listArray (A.bounds l) (L.sort (A.elems l))
     -- insert
-    toList = A.elems
-    fromList l = A.listArray (0, genericLength l - 1) l
     -- fromListLike
     nubBy f = fromList . L.nubBy f . toList
     -- deleteBy
@@ -589,8 +600,6 @@ instance ListLike (S.Seq a) a where
     --intersect =
     sort = S.sort
     --insert = S.insert
-    toList = F.toList
-    fromList = S.fromList
     --fromListLike = fromList . toList
     --nubBy =
     --deleteBy =

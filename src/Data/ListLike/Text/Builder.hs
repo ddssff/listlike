@@ -1,5 +1,6 @@
 {-# LANGUAGE CPP
             ,MultiParamTypeClasses
+            ,TypeFamilies
             ,FlexibleInstances #-}
 {-# OPTIONS -fno-warn-orphans #-}
 
@@ -18,10 +19,17 @@ import           Data.ListLike.IO
 import           Data.ListLike.String as LL
 import           Data.ListLike.Text.TextLazy ()
 --import           Data.String (IsString(fromString))
+import           GHC.Exts (IsList(..))
 
 instance FoldableLL Builder.Builder Char where
     foldl f r0 = LL.foldl f r0 . Builder.toLazyText
     foldr f r0 = LL.foldr f r0 . Builder.toLazyText
+
+instance IsList Builder.Builder where
+    type Item Builder.Builder = Char
+    -- Can we do better?
+    toList = LL.toList'
+    fromList = LL.fromList'
 
 instance ListLike Builder.Builder Char where
     singleton = Builder.singleton

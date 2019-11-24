@@ -24,7 +24,7 @@ import qualified Data.ByteString.Char8 as BSC
 import qualified Data.ByteString.Lazy as BSL
 import qualified Data.ByteString.Lazy.Char8 as BSLC
 --import Control.DeepSeq (NFData(rnf))
-import Data.ListLike.Base
+import Data.ListLike.Base as LL
 import Data.ListLike.FoldableLL
 import Data.ListLike.IO
 import Data.ListLike.String (StringLike(..))
@@ -34,6 +34,7 @@ import Data.Semigroup (Semigroup(..))
 --import Data.String (IsString(fromString))
 import Data.String.UTF8 (UTF8{-, UTF8Bytes-})
 import qualified Data.String.UTF8 as UTF8
+import GHC.Exts (IsList(..))
 --import GHC.Generics
 
 #if 0
@@ -48,6 +49,11 @@ instance FoldableLL (UTF8 BS.ByteString) Char where
     foldr = UTF8.foldr
     -- foldr' = UTF8.foldr'
     -- foldr1 = UTF8.foldr1
+
+instance IsList (UTF8 BS.ByteString) where
+    type Item (UTF8 BS.ByteString) = Char
+    toList = UTF8.toString
+    fromList = LL.fromList' -- LL.map id
 
 instance ListLike (UTF8 BS.ByteString) Char where
     empty = mempty
@@ -108,7 +114,7 @@ instance ListLike (UTF8 BS.ByteString) Char where
     -- --intersect = UTF8.intersect
     -- sort = UTF8.sort
     -- --insert = UTF8.insert
-    toList = UTF8.toString
+    --toList = UTF8.toString
     -- fromList = UTF8.pack
     -- fromListLike = fromList . toList
     -- --nubBy = UTF8.nubBy
@@ -162,6 +168,11 @@ instance FoldableLL (UTF8 BSL.ByteString) Char where
     foldr = UTF8.foldr
     -- foldr' = UTF8.foldr'
     -- foldr1 = UTF8.foldr1
+
+instance IsList (UTF8 BSL.ByteString) where
+    type Item (UTF8 BSL.ByteString) = Char
+    toList = UTF8.toString
+    fromList = LL.fromList' -- LL.map id
 
 instance ListLike (UTF8 BSL.ByteString) Char where
     empty = mempty
@@ -222,7 +233,7 @@ instance ListLike (UTF8 BSL.ByteString) Char where
     -- --intersect = UTF8.intersect
     -- sort = UTF8.sort
     -- --insert = UTF8.insert
-    toList = UTF8.toString
+    -- toList = UTF8.toString
     -- fromList = UTF8.pack
     -- fromListLike = fromList . toList
     -- --nubBy = UTF8.nubBy

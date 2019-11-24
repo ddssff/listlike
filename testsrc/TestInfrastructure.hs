@@ -6,6 +6,7 @@
             ,FunctionalDependencies
             ,FlexibleInstances
             ,UndecidableInstances
+            ,TypeFamilies
             ,FlexibleContexts #-}
 {-# OPTIONS -fno-warn-orphans #-}
 
@@ -48,6 +49,7 @@ import Data.Function (on)
 import Data.Word
 import Data.List
 import Data.Monoid (Monoid(..))
+import GHC.Exts (IsList(Item))
 
 simpleArb :: (LL.ListLike f i, Arbitrary i) => Gen f
 simpleArb = sized (\n -> choose (0, n) >>= myVector)
@@ -273,6 +275,11 @@ instance Monoid (MyList a) where
     mempty = MyList []
     mappend (MyList x) (MyList y) = MyList (x ++ y)
 
+instance IsList (MyList a) where
+    type Item (MyList a) = a
+    toList (MyList xs) = xs
+    fromList = MyList
+
 instance LL.ListLike (MyList a) a where
     singleton x = MyList [x]
     head (MyList x) = head x
@@ -390,7 +397,7 @@ aps msg x = HU.TestLabel msg $ HU.TestList $
      w "Text.Lazy" (x::LLTest TL.Text Char),
      w "Text.Builder" (x::LLTest TB.Builder Char),
      w "UTF8 ByteString" (x::LLTest (UTF8.UTF8 BS.ByteString) Char),
-     w "UTF8 ByteString.Lazy" (x::LLTest (UTF8.UTF8 BSL.ByteString) Char)
-    ,w "Vector Char" (x::LLTest (V.Vector Char) Char),
+     w "UTF8 ByteString.Lazy" (x::LLTest (UTF8.UTF8 BSL.ByteString) Char),
+     w "Vector Char" (x::LLTest (V.Vector Char) Char),
      w "Vector.Unbox Char" (x::LLTest (VU.Vector Char) Char)
     ]

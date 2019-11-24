@@ -1,5 +1,6 @@
 {-# LANGUAGE MultiParamTypeClasses
             ,FlexibleInstances
+            ,TypeFamilies
             ,TypeSynonymInstances #-}
 
 
@@ -55,6 +56,7 @@ import qualified Data.ByteString.Lazy.Char8 as BSL
 --import qualified System.IO as IO
 --import           Data.Word
 import           Control.Arrow
+import           GHC.Exts (IsList(..))
 
 --------------------------------------------------
 -- ByteString
@@ -77,6 +79,11 @@ instance FoldableLL CharString Char where
     foldl1 f    ls = BS.foldl1 f (unCS ls)
     foldr f i0  ls = BS.foldr f i0 (unCS ls)
     foldr1 f    ls = BS.foldr1 f (unCS ls)
+
+instance IsList CharString where
+  type Item CharString = Char
+  toList = BS.unpack . unCS
+  fromList = CS . BS.pack
 
 instance ListLike CharString Char where
     empty = CS BS.empty
@@ -135,8 +142,8 @@ instance ListLike CharString Char where
     --intersect = BS.intersect
     --sort = BS.sort
     --insert = BS.insert
-    toList = BS.unpack . unCS
-    fromList = CS . BS.pack
+    --toList = BS.unpack . unCS
+    --fromList = CS . BS.pack
     --fromListLike = fromList . toList
     --nubBy = BS.nubBy
     --deleteBy = BS.deleteBy
@@ -200,6 +207,11 @@ mi64toi :: Maybe Int64 -> Maybe Int
 mi64toi Nothing = Nothing
 mi64toi (Just x) = Just (fromIntegral x)
 
+instance IsList CharStringLazy where
+  type Item CharStringLazy = Char
+  toList = BSL.unpack . unCSL
+  fromList = CSL . BSL.pack
+
 instance ListLike CharStringLazy Char where
     empty = CSL BSL.empty
     singleton = CSL . BSL.singleton
@@ -257,8 +269,8 @@ instance ListLike CharStringLazy Char where
     --intersect = BSL.intersect
     --sort = BSL.sort
     --insert = BSL.insert
-    toList = BSL.unpack . unCSL
-    fromList = CSL . BSL.pack
+    --toList = BSL.unpack . unCSL
+    --fromList = CSL . BSL.pack
     --fromListLike = fromList . toList
     --nubBy = BSL.nubBy
     --deleteBy = BSL.deleteBy

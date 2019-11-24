@@ -1,4 +1,5 @@
 {-# LANGUAGE MultiParamTypeClasses
+            ,TypeFamilies
             ,FlexibleInstances #-}
 {-# OPTIONS -fno-warn-orphans #-}
 
@@ -15,6 +16,7 @@ import           Data.ListLike.FoldableLL
 import           Data.ListLike.String
 
 import           Data.Monoid
+import           GHC.Exts (IsList(..))
 
 
 instance Unbox a => FoldableLL (V.Vector a) a where
@@ -64,8 +66,8 @@ instance Unbox a => ListLike (V.Vector a) a where
     filter = V.filter
     index = (!)
     findIndex = V.findIndex
-    toList = V.toList
-    fromList = V.fromList
+    --toList = V.toList
+    --fromList = V.fromList
     --fromListLike = fromList . toList
     --groupBy f =
     genericLength = fromInteger . fromIntegral . V.length

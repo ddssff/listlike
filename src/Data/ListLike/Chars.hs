@@ -1,6 +1,7 @@
 -- | Work in progress.
 {-# LANGUAGE CPP
             ,MultiParamTypeClasses
+            ,TypeFamilies
             ,FlexibleInstances #-}
 
 module Data.ListLike.Chars
@@ -24,6 +25,7 @@ import           Data.ListLike.FoldableLL as LL
 import           Data.ListLike.IO
 import           Data.ListLike.String as LL
 import           Data.ListLike.Text ()
+import           GHC.Exts (IsList(..))
 
 data Chars
     = B Builder.Builder
@@ -59,6 +61,11 @@ instance FoldableLL Chars Char where
     foldr' f r0 (T s) = LL.foldr' f r0 $ s
     foldr1 f (B b) = LL.foldr1 f . Builder.toLazyText $ b
     foldr1 f (T s) = LL.foldr1 f $ s
+
+instance IsList Chars where
+    type Item Chars = Char
+    toList = LL.toList'
+    fromList = LL.fromList'
 
 instance ListLike Chars Char where
     singleton = B . Builder.singleton

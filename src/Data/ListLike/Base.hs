@@ -1,4 +1,5 @@
 {-# LANGUAGE ScopedTypeVariables
+            ,TypeFamilies
             ,MultiParamTypeClasses
             ,FunctionalDependencies
             ,FlexibleInstances
@@ -32,6 +33,7 @@ Written by John Goerzen, jgoerzen\@complete.org
 module Data.ListLike.Base
     (
     ListLike(..),
+    toList, fromList,
     InfiniteListLike(..),
     zip, zipWith, sequence_
     ) where
@@ -48,6 +50,7 @@ import Data.ListLike.FoldableLL
 import qualified Control.Monad as M
 import Data.Monoid
 import Data.Maybe
+import GHC.Exts (IsList(Item, fromList, {-fromListN,-} toList))
 
 {- | The class implementing list-like functions.
 
@@ -67,7 +70,7 @@ Implementators must define at least:
 
 * null or genericLength
 -}
-class (FoldableLL full item, Monoid full) =>
+class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
     ListLike full item | full -> item where
 
     ------------------------------ Creation
@@ -426,16 +429,19 @@ class (FoldableLL full item, Monoid full) =>
     ------------------------------ Conversions
 
     {- | Converts the structure to a list.  This is logically equivolent
-         to 'fromListLike', but may have a more optimized implementation. -}
-    toList :: full -> [item]
-    toList = fromListLike
+         to 'fromListLike', but may have a more optimized implementation.
+         These two functions are now retired in favor of the methods of
+         IsList, but they are retained here because some instances still
+         use this implementation. -}
+    toList' :: full -> [item]
+    toList' = fromListLike
 
     {- | Generates the structure from a list. -}
-    fromList :: [item] -> full
-    fromList [] = empty
-    fromList (x:xs) = cons x (fromList xs)
+    fromList' :: [item] -> full
+    fromList' [] = empty
+    fromList' (x:xs) = cons x (fromList xs)
 
-    {- | Converts one ListLike to another.  See also 'toList'.
+    {- | Converts one ListLike to another.  See also 'toList''.
          Default implementation is @fromListLike = map id@ -}
     fromListLike :: ListLike full' item => full -> full'
     fromListLike = map id
@@ -601,8 +607,6 @@ instance ListLike [a] a where
     rigidMap = L.map
     reverse = L.reverse
     intersperse = L.intersperse
-    toList = id
-    fromList = id
     -- fromListLike = toList
     concat = L.concat . toList
     -- concatMap func = fromList . L.concatMap func

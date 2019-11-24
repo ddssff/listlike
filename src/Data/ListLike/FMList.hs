@@ -1,4 +1,4 @@
-{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses, FlexibleInstances, TypeFamilies #-}
 {-# OPTIONS -fno-warn-orphans #-}
 -- | 'Data.ListLike.ListLike' instances for 'Data.FMList.FMList'
 module Data.ListLike.FMList () where
@@ -19,6 +19,7 @@ import Control.Monad.Zip (MonadZip)
 import qualified Control.Monad.Zip as Z
 --import Data.Function
 import Data.Char (Char)
+import GHC.Exts (IsList(..))
 
 instance FoldableLL (FMList a) a where
   foldl = F.foldl
@@ -27,6 +28,11 @@ instance FoldableLL (FMList a) a where
   foldr1 = F.foldr1
   foldl' = F.foldl'
   foldr' = F.foldr'
+
+instance IsList (FMList a) where
+  type Item (FMList a) = a
+  fromList = FM.fromList
+  toList = FM.toList
 
 instance ListLike (FMList a) a where
   empty = FM.empty
@@ -38,8 +44,8 @@ instance ListLike (FMList a) a where
   tail = FM.tail
   last = FM.last
   init = FM.init
-  fromList = FM.fromList
-  toList = FM.toList
+  --fromList = FM.fromList
+  --toList = FM.toList
   null = FM.null
   genericLength = FM.genericLength
   length = FM.length

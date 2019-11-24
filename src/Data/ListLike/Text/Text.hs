@@ -67,8 +67,8 @@ instance ListLike T.Text Char where
     filter = T.filter
     index = T.index
     findIndex = T.findIndex
-    toList = T.unpack
-    fromList = T.pack
+    --toList = T.unpack
+    --fromList = T.pack
     --fromListLike = fromList . toList
     groupBy f = fromList . T.groupBy f
     genericLength = fromInteger . fromIntegral . T.length

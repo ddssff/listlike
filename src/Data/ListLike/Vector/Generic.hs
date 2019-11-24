@@ -2,6 +2,7 @@
             ,MultiParamTypeClasses
             ,FlexibleContexts
             ,FlexibleInstances
+            ,TypeFamilies
             ,UndecidableInstances #-}
 #if __GLASGOW_HASKELL__ < 710
 {-# LANGUAGE OverlappingInstances #-}
@@ -22,8 +23,8 @@ import           Data.Vector.Generic ((!))
 import           Data.ListLike.Base
 import           Data.ListLike.FoldableLL
 import           Data.ListLike.String
-
 import           Data.Monoid
+import           GHC.Exts (IsList(..))
 
 instance {-# OVERLAPPABLE #-} V.Vector v a => FoldableLL (v a) a where
     foldl = V.foldl
@@ -33,7 +34,14 @@ instance {-# OVERLAPPABLE #-} V.Vector v a => FoldableLL (v a) a where
     foldr' = V.foldr'
     foldr1 = V.foldr1
 
-instance {-# OVERLAPPABLE #-} (Monoid (v a), Eq (v a), V.Vector v a) => ListLike (v a) a where
+#if 0
+instance {-# OVERLAPPABLE #-} (Monoid (v a), Eq (v a), V.Vector v a) => IsList (v a) where
+    type Item (v a) = a
+    toList = V.toList
+    fromList = V.fromList
+#endif
+
+instance {-# OVERLAPPABLE #-} (IsList (v a), Item (v a) ~ a, Monoid (v a), Eq (v a), V.Vector v a) => ListLike (v a) a where
     empty = V.empty
     singleton = V.singleton
     cons = V.cons
@@ -72,8 +80,8 @@ instance {-# OVERLAPPABLE #-} (Monoid (v a), Eq (v a), V.Vector v a) => ListLike
     filter = V.filter
     index = (!)
     findIndex = V.findIndex
-    toList = V.toList
-    fromList = V.fromList
+    --toList = V.toList
+    --fromList = V.fromList
     --fromListLike = fromList . toList
     --groupBy f =
     genericLength = fromInteger . fromIntegral . V.length

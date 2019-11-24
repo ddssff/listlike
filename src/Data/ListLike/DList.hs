@@ -17,6 +17,7 @@ import qualified Data.Foldable as F
 import qualified Data.String as S
 import Control.Category
 import Data.Char (Char)
+import GHC.Exts (IsList(..))
 
 instance FoldableLL (DList a) a where
   foldl = F.foldl
@@ -36,8 +37,8 @@ instance ListLike (DList a) a where
   tail = D.tail
   rigidMap = D.map
   null = null . D.toList
-  toList = D.toList
-  fromList = D.fromList
+  --toList = D.toList
+  --fromList = D.fromList
   replicate = D.replicate
 
 instance StringLike (DList Char) where
