@@ -46,8 +46,8 @@ prop_singleton f x = (LL.toList $ asTypeOf (LL.singleton x) f) == [x]
 prop_empty f = (LL.toList l == []) && (LL.null l) && (LL.length l == 0)
     where l = asTypeOf LL.empty f
 
-prop_tofromlist f = 
-    LL.toList f == l && 
+prop_tofromlist f =
+    LL.toList f == l &&
     LL.length f == length l &&
     f == (LL.fromList . LL.toList $ f)
     where l = LL.toList f
@@ -71,7 +71,7 @@ prop_rigidMap f func = llcmp (LL.rigidMap func f) (map func (LL.toList f))
 prop_reverse f = llcmp (LL.reverse f) (reverse (LL.toList f))
 prop_intersperse f i = llcmp (LL.intersperse i f) (intersperse i (LL.toList f))
 
-prop_concat f = 
+prop_concat f =
     llcmp (LL.concat f) (concat $ map LL.toList (LL.toList f))
 
 prop_concatmap :: forall full item. (TestLL full item, TestLL [item] item) => full -> (item -> [item]) -> Property
@@ -92,18 +92,18 @@ prop_replicate f count i = count <= 1000 ==> llcmp res (replicate count i)
 prop_take f count = llcmp (LL.take count f) (take count (LL.toList f))
 prop_drop f count = count >= 0 ==> llcmp (LL.drop count f) (drop count (LL.toList f))
 prop_splitAt f count = count >= 0 ==>
-    llcmp [(\(x, y) -> (LL.toList x, LL.toList y)) . LL.splitAt count $ f] 
+    llcmp [(\(x, y) -> (LL.toList x, LL.toList y)) . LL.splitAt count $ f]
           [LL.splitAt count (LL.toList f)]
-prop_takeWhile f func = llcmp (LL.takeWhile func f) 
+prop_takeWhile f func = llcmp (LL.takeWhile func f)
                               (takeWhile func (LL.toList f))
-prop_dropWhile f func = llcmp (LL.dropWhile func f) 
+prop_dropWhile f func = llcmp (LL.dropWhile func f)
                               (dropWhile func (LL.toList f))
 prop_dropWhileEnd f func = llcmp (LL.dropWhileEnd func f)
                                  (dropWhileEnd func (LL.toList f))
-prop_span f func = 
+prop_span f func =
     llcmp [(\(x, y) -> (LL.toList x, LL.toList y)) . LL.span func $ f]
           [span func (LL.toList f)]
-prop_break f func = 
+prop_break f func =
     llcmp [(\(x, y) -> (LL.toList x, LL.toList y)) . LL.break func $ f]
           [break func (LL.toList f)]
 prop_group f =
@@ -111,7 +111,7 @@ prop_group f =
     (map LL.toList (LL.group f)) == (group (LL.toList f))
 prop_inits f = (map LL.toList (LL.inits f)) == (inits (LL.toList f))
 prop_tails f = (map LL.toList (LL.tails f)) == (tails (LL.toList f))
-prop_isPrefixOf f1 f2 = LL.isPrefixOf f1 f2 == 
+prop_isPrefixOf f1 f2 = LL.isPrefixOf f1 f2 ==
     (isPrefixOf (LL.toList f1) (LL.toList f2))
 prop_isSuffixOf f1 f2 = LL.isSuffixOf f1 f2 ==
     (isSuffixOf (LL.toList f1) (LL.toList f2))
@@ -126,7 +126,7 @@ prop_elem f i = LL.elem i f == elem i (LL.toList f)
 prop_notElem f i = LL.notElem i f == notElem i (LL.toList f)
 prop_find f func = LL.find func f == find func (LL.toList f)
 prop_filter f func = llcmp (LL.filter func f) (filter func (LL.toList f))
-prop_partition f func = 
+prop_partition f func =
     (LL.toList f1, LL.toList f2) == partition func (LL.toList f)
     where (f1, f2) = LL.partition func f
 prop_index f i = (i >= 0 && i < LL.length f) ==>
@@ -149,7 +149,7 @@ prop_mapM f func = llmapM == (mapM func (LL.toList f))
     where llmapM = asTypeOf (LL.mapM func f) (Just (LL.toList f))
 
 prop_rigidMapM :: forall full item. (TestLL full item, TestLL [item] item) => full -> (item -> Maybe item) -> Property
-prop_rigidMapM f func = 
+prop_rigidMapM f func =
     case (LL.rigidMapM func f, mapM func (LL.toList f)) of
          (Just ll, Just l)  -> llcmp ll l
          (Nothing, Nothing) -> property True
@@ -159,16 +159,16 @@ prop_rigidMapM f func =
 
 prop_nub f = llcmp (LL.nub f) (nub (LL.toList f))
 prop_delete f i = llcmp (LL.delete i f) (delete i (LL.toList f))
-prop_deleteFirsts f1 f2 = llcmp (LL.deleteFirsts f1 f2) 
+prop_deleteFirsts f1 f2 = llcmp (LL.deleteFirsts f1 f2)
     ((LL.toList f1) \\ (LL.toList f2))
-prop_union f1 f2 = llcmp (LL.union f1 f2) 
+prop_union f1 f2 = llcmp (LL.union f1 f2)
     (union (LL.toList f1) (LL.toList f2))
-prop_intersect f1 f2 = llcmp (LL.intersect f1 f2) 
+prop_intersect f1 f2 = llcmp (LL.intersect f1 f2)
     (intersect (LL.toList f1) (LL.toList f2))
 prop_sort f1 = llcmp (LL.sort f1) (sort (LL.toList f1))
 prop_insert f i = llcmp (LL.insert i f) (insert i (LL.toList f))
 prop_nubBy f func = llcmp (LL.nubBy func f) (nubBy func (LL.toList f))
-prop_deleteBy f func i = llcmp (LL.deleteBy func i f) 
+prop_deleteBy f func i = llcmp (LL.deleteBy func i f)
                          (deleteBy func i (LL.toList f))
 prop_deleteFirstsBy f1 f2 func = llcmp (LL.deleteFirstsBy func f1 f2)
     (deleteFirstsBy func (LL.toList f1) (LL.toList f2))
@@ -204,12 +204,12 @@ prop_genericReplicate f (count::Integer) i = count >= 0 ==>
 --    full -> Result
 prop_zip f = LL.zip f f2 == zip (LL.toList f) f2
     where f2 = [(-5::Int)..]
-prop_zipWith f = 
+prop_zipWith f =
     LL.toList res == (zipWith func (LL.toList f) f2)
     where f2 = [(100::Int)..(-100)]
           func x y = (y + 5, x)
           res = asTypeOf (LL.zipWith func f f2) [(5::Int, LL.head f)]
---FIXME: prop_unzip 
+--FIXME: prop_unzip
 --FIXME: prop_and
 --FIXME: prop_or
 --FIXME: prop_sum
@@ -217,7 +217,7 @@ prop_zipWith f =
 prop_foldl f func (i::Int) = LL.foldl func i f == foldl func i (LL.toList f)
 prop_foldl' f func (i::Integer) =
     LL.foldl' func i f == foldl' func i (LL.toList f)
-prop_foldl1 f func = not (LL.null f) ==> 
+prop_foldl1 f func = not (LL.null f) ==>
     (LL.foldl1 func f) == (foldl1 func (LL.toList f))
 prop_foldr f func (i::Int) = LL.foldr func i f == foldr func i (LL.toList f)
 prop_foldr' f func (i::Integer) =
@@ -235,7 +235,7 @@ prop_foldMap f func = res == resl
 prop_toString f =
     ((LL.fromString . LL.toString $ f) == f)
     where l = LL.toList f
-prop_fromString f x = 
+prop_fromString f x =
     LL.toString (asTypeOf (LL.fromString x) f) == x
 prop_lines f = map LL.toString res == lines (LL.toString f)
     where res = asTypeOf (LL.lines f) [f]
@@ -324,13 +324,13 @@ allt = [apf "empty" (t prop_empty),
         apf "genericSplitAt" (t prop_genericSplitAt),
         apf "genericReplicate" (t prop_genericReplicate),
         apf "zip" (t prop_zip),
-        apf "zipWith" (t prop_zipWith) 
+        apf "zipWith" (t prop_zipWith)
         -- apf "unzip" (t prop_unzip),
         -- apf "and" (t prop_and),
         -- apf "or" (t prop_or),
         -- apf "sum" (t prop_sum),
         -- apf "propduct" (t prop_product),
-        -- sequence_ 
+        -- sequence_
         ]
 
 allf = (if compilerName == "hugs" then [] else [ apf "foldl" (t prop_foldl),
@@ -342,14 +342,14 @@ allf = (if compilerName == "hugs" then [] else [ apf "foldl" (t prop_foldl),
         apf "foldr" (t prop_foldr),
         apf "foldr'" (t prop_foldr'),
         apw "fold" (LLWrap prop_fold),
-        apf "foldMap" (t prop_foldMap) 
+        apf "foldMap" (t prop_foldMap)
        ]
 
 alls = [
         aps "toString" (t prop_toString),
         aps "fromString" (t prop_fromString),
         aps "lines" (t prop_lines),
-        aps "words" (t prop_words) 
+        aps "words" (t prop_words)
         -- FIXME: aps (t prop_unlines),
         -- FIXME: aps (t prop_unwords)
        ]
@@ -360,7 +360,7 @@ allTests = HU.TestList $ reverse $
 
 testh = HU.runTestTT $ allTests
 testv = runVerbTestText (HU.putTextToHandle stderr True) $ allTests
-         
-main = 
+
+main =
     do testv
        return ()

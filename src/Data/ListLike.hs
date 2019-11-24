@@ -23,12 +23,12 @@ Written by John Goerzen, jgoerzen\@complete.org
 Please start with the introduction at "Data.ListLike#intro".
 -}
 
-module Data.ListLike 
+module Data.ListLike
                 (-- * Introduction
                  -- $intro
-                 
+
                  -- * Creation & Basic Functions
-                 empty, singleton, 
+                 empty, singleton,
                  cons, snoc, append, uncons, head, last, tail, init, null, length,
                  -- * List transformations
                  map, rigidMap, reverse, intersperse,
@@ -52,7 +52,7 @@ module Data.ListLike
                  -- * Sublists
                  -- ** Extracting sublists
                  take, drop, splitAt, takeWhile, dropWhile, dropWhileEnd, span, break,
-                 group, inits, tails, 
+                 group, inits, tails,
                  -- ** Predicates
                  isPrefixOf, isSuffixOf, isInfixOf,
                  -- ** Modify based on predicate
@@ -163,7 +163,7 @@ the relevant one.
 In most cases, functions here can act as drop-in replacements for their
 list-specific counterparts.  They will use the same underlying implementations
 for lists, so there should be no performance difference.
-    
+
 You can make your own types instances of 'ListLike' as well.  For more
 details, see the notes for the 'ListLike' typeclass.
 -}
@@ -226,7 +226,7 @@ exceptions:
 * 'map' uses the 'ListLike' implementation.  'rigidMap' is more efficient.
   The same goes for 'concatMap' vs. 'rigidConcatMap'.
 
-* 'isInfixOf', 'sequence', 'mapM' and similar monad operations, 'insert', 
+* 'isInfixOf', 'sequence', 'mapM' and similar monad operations, 'insert',
   'union', 'intersect', 'sortBy', and similar functions are not implemented
   in 'ByteStream' and use a naive default implementation.
 

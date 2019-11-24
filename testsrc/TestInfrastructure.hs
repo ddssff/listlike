@@ -343,7 +343,7 @@ apw msg x = HU.TestLabel msg $ HU.TestList $
      ]
 
 -- | all props, 1 args: full
-apf :: String -> (forall f i. (Ord i, TestLL f i, Show i, Eq i, LL.ListLike f i, Eq f, Show f, Arbitrary f, Arbitrary i, CoArbitrary f, CoArbitrary i) => LLTest f i) -> HU.Test 
+apf :: String -> (forall f i. (Ord i, TestLL f i, Show i, Eq i, LL.ListLike f i, Eq f, Show f, Arbitrary f, Arbitrary i, CoArbitrary f, CoArbitrary i) => LLTest f i) -> HU.Test
 apf msg x = HU.TestLabel msg $ HU.TestList $
     [w "[Int]" (x::LLTest [Int] Int),
      w "MyList Int" (x::LLTest (MyList Int) Int),
@@ -375,7 +375,7 @@ apf msg x = HU.TestLabel msg $ HU.TestList $
     ]
 
 -- | all props, 1 args: full
-aps :: String -> (forall f i. (Ord i, TestLL f i, Show i, Eq i, LL.StringLike f, LL.ListLike f i, Eq f, Show f, Arbitrary f, Arbitrary i) => LLTest f i) -> HU.Test 
+aps :: String -> (forall f i. (Ord i, TestLL f i, Show i, Eq i, LL.StringLike f, LL.ListLike f i, Eq f, Show f, Arbitrary f, Arbitrary i) => LLTest f i) -> HU.Test
 aps msg x = HU.TestLabel msg $ HU.TestList $
     [w "String" (x::LLTest String Char),
      w "MyList Char" (x::LLTest (MyList Char) Char),

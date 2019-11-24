@@ -29,7 +29,7 @@ module Data.ListLike.Utils
     (and, or, sum, product, zip, zipWith, unzip, sequence_, toMonadPlus, list,
      intercalate
     ) where
-import Prelude hiding (length, head, last, null, tail, map, filter, concat, 
+import Prelude hiding (length, head, last, null, tail, map, filter, concat,
                        any, lookup, init, all, foldl, foldr, foldl1, foldr1,
                        maximum, minimum, iterate, span, break, takeWhile,
                        dropWhile, reverse, zip, zipWith, sequence,
