@@ -284,7 +284,7 @@ instance LL.StringLike (MyList Char) where
     fromString x = MyList x
 
 mkTest :: Testable prop => String -> prop -> HU.Test
-mkTest msg test = HU.TestLabel msg $ HU.TestCase (quickCheck test)
+mkTest msg test = HU.TestLabel msg $ HU.TestCase (quickCheckResult test >>= HU.assertBool msg . isSuccess)
 
 -- Modified from HUnit
 runVerbTestText :: HU.PutText st -> HU.Test -> IO (HU.Counts, st)

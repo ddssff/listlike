@@ -36,6 +36,7 @@ import Data.List
 --import Data.Monoid
 import TestInfrastructure
 import Data.Foldable(foldr', fold, foldMap)
+import System.Exit
 import System.Info
 
 
@@ -361,6 +362,10 @@ allTests = HU.TestList $ reverse $
 testh = HU.runTestTT $ allTests
 testv = runVerbTestText (HU.putTextToHandle stderr True) $ allTests
 
-main =
-    do testv
-       return ()
+main = do
+  (counts, n) <- testv
+  case HU.errors counts + HU.failures counts of
+    0 -> return ()
+    n -> do
+      putStrLn ("counts=" ++ show counts ++ " n=" ++ show n)
+      exitWith (ExitFailure 1)
