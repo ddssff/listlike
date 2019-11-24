@@ -88,4 +88,4 @@ Test-suite listlike-tests
 
 source-repository head
   type:     git
-  location: git://github.com/JohnLato/listlike.git
+  location: git://github.com/ddssff/listlike.git
