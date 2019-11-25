@@ -535,6 +535,11 @@ instance ListLikeIO (S.Seq Char) Char where
     -- writeFile
     -- appendFile
 
+#if !MIN_VERSION_containers(0,5,7)
+instance a ~ Char => IsString (S.Seq a) where
+  fromString = S.fromList
+#endif
+
 instance StringLike (S.Seq Char) where
     toString = toList
     --fromString = fromList

@@ -73,10 +73,10 @@ class IsString s => StringLike s where
     fromStringLike :: StringLike s' => s -> s'
     fromStringLike = fromString . toString
 
-    {- | Implement 'fromText' to avoid extra 'String' conversions. -}
+    {- | Override this to avoid extra 'String' conversions. -}
     fromText :: StringLike Text => Text -> s
     fromText = fromString . toString
-    {- | Implement 'fromLazyText' to avoid extra 'String' conversions. -}
+    {- | Override this to avoid extra 'String' conversions. -}
     fromLazyText :: StringLike Lazy.Text => Lazy.Text -> s
     fromLazyText = fromString . toString
 
