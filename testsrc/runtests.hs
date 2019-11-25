@@ -1,4 +1,5 @@
 {-# LANGUAGE CPP
+            ,TypeFamilies
             ,ScopedTypeVariables
             ,RankNTypes
             ,ExistentialQuantification

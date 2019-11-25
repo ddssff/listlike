@@ -536,7 +536,7 @@ instance ListLikeIO (S.Seq Char) Char where
     -- appendFile
 
 #if !MIN_VERSION_containers(0,5,7)
-instance a ~ Char => IsString (S.Seq a) where
+instance IsString (S.Seq Char) where
   fromString = S.fromList
 #endif
 
