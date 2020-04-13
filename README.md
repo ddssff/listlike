@@ -11,8 +11,8 @@ CHANGES
 Version 4.7
 -----------
 
-  * Make `GHC.Exts.IsList` a superclass of `ListLike` and use its `fromList and `toList` methods
-  * make `Data.String.IsString` a superclass of `Stringlike and use its `fromString` method
+  * Make `GHC.Exts.IsList` a superclass of `ListLike` and use its `fromList` and `toList` methods
+  * make `Data.String.IsString` a superclass of `Stringlike` and use its `fromString` method
   * Add methods to `StringLike`: `show`, `fromText`, `fromLazyText`
   * Add a class `ListOps`, alternative to `ListLike`, that uses the `GHC.Exts.Item` instead of
     the `item` type parameter.
