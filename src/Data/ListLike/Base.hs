@@ -130,7 +130,6 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
     {- | Length of the list.  See also 'genericLength'. -}
     length :: full -> Int
     length = genericLength
-    {-# DEPRECATED length "Use Data.Foldable.length #-}
 
     ------------------------------ List Transformations
 
@@ -142,7 +141,6 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
     map func inp
         | null inp = empty
         | otherwise = cons (func (head inp)) (map func (tail inp))
-    {-# DEPRECATED map "Use fmap" #-}
 
     {- | Like 'map', but without the possibility of changing the type of
        the item.  This can have performance benefits for things such as
@@ -179,7 +177,6 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
     concatMap :: (ListLike full' item') =>
                  (item -> full') -> full -> full'
     concatMap = foldMap
-    {-# DEPRECATED concatMap "Use Data.Foldable.concatMap" #-}
 
     {- | Like 'concatMap', but without the possibility of changing
          the type of the item.  This can have performance benefits
@@ -190,22 +187,18 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
     {- | True if any items satisfy the function -}
     any :: (item -> Bool) -> full -> Bool
     any p = getAny . foldMap (Any . p)
-    {-# DEPRECATED concatMap "Use Data.Foldable.any" #-}
 
     {- | True if all items satisfy the function -}
     all :: (item -> Bool) -> full -> Bool
     all p = getAll . foldMap (All . p)
-    {-# DEPRECATED concatMap "Use Data.Foldable.all" #-}
 
     {- | The maximum value of the list -}
     maximum :: Ord item => full -> item
     maximum = foldr1 max
-    {-# DEPRECATED concatMap "Use Data.Foldable.maximum " #-}
 
     {- | The minimum value of the list -}
     minimum :: Ord item => full -> item
     minimum = foldr1 min
-    {-# DEPRECATED concatMap "Use Data.Foldable.minimum " #-}
 
     ------------------------------ Infinite lists
     {- | Generate a structure with the specified length with every element
@@ -316,12 +309,10 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
     {- | True if the item occurs in the list -}
     elem :: Eq item => item -> full -> Bool
     elem i = any (== i)
-    {-# DEPRECATED elem "Use Data.Foldable.elem" #-}
 
     {- | True if the item does not occur in the list -}
     notElem :: Eq item => item -> full -> Bool
     notElem i = all (/= i)
-    {-# DEPRECATED notElem "Use Data.Foldable.notElem" #-}
 
     {- | Take a function and return the first matching element, or Nothing
        if there is no such element. -}
@@ -380,7 +371,6 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
                 do x <- litem
                    xs <- results
                    return (cons x xs)
-    {-# DEPRECATED sequence "Use Data.Traversable.sequence #-}
 
     {- | A map in monad space.  Same as @'sequence' . 'map'@
 
@@ -389,7 +379,6 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
             (item -> m item') -> full -> m full'
     mapM func l = sequence mapresult
             where mapresult = asTypeOf (map func l) []
-    {-# DEPRECATED mapM "Use Data.Traversable.mapM #-}
 
     {- | Like 'mapM', but without the possibility of changing the type
          of the item.  This can have performance benefits with some types. -}
@@ -447,13 +436,11 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
          use this implementation. -}
     toList' :: full -> [item]
     toList' = fromListLike
-    {-# DEPRECATED toList' "Use GHC.Exts.toList #-}
 
     {- | Generates the structure from a list. -}
     fromList' :: [item] -> full
     fromList' [] = empty
     fromList' (x:xs) = cons x (fromList xs)
-    {-# DEPRECATED toList' "Use GHC.Exts.fromList #-}
 
     {- | Converts one ListLike to another.  See also 'toList''.
          Default implementation is @fromListLike = map id@ -}
