@@ -23,7 +23,7 @@ For license and copyright information, see the file COPYRIGHT
 module TestInfrastructure where
 
 import Test.QuickCheck
---import Test.QuickCheck.Test
+import Test.QuickCheck.Test
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as BSL
 import qualified Data.ListLike as LL
