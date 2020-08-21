@@ -1,5 +1,6 @@
 {-# LANGUAGE NoImplicitPrelude, MultiParamTypeClasses, FlexibleInstances #-}
 {-# OPTIONS -fno-warn-orphans #-}
+{-# LANGUAGE CPP #-}
 -- | 'Data.ListLike.ListLike' instances for 'Data.DList.DList'
 module Data.ListLike.DList () where
 --import qualified Prelude as P
@@ -34,7 +35,11 @@ instance ListLike (DList a) a where
   snoc = D.snoc
   append = D.append
   head = D.head
+#if MIN_VERSION_dlist(1,0,0)
+  tail = D.fromList . D.tail
+#else
   tail = D.tail
+#endif
   rigidMap = D.map
   null = null . D.toList
   --toList = D.toList
