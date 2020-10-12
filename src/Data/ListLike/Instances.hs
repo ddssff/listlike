@@ -132,10 +132,12 @@ instance FoldableLL BS.ByteString Word8 where
     foldr' = BS.foldr'
     foldr1 = BS.foldr1
 
+#if !MIN_VERSION_bytestring(0,10,12)
 instance IsList BS.ByteString where
     type Item BS.ByteString = Word8
     toList = BS.unpack
     fromList = BS.pack
+#endif
 
 instance ListLike BS.ByteString Word8 where
     empty = BS.empty
@@ -255,10 +257,12 @@ mi64toi :: Maybe Int64 -> Maybe Int
 mi64toi Nothing = Nothing
 mi64toi (Just x) = Just (fromIntegral x)
 
+#if !MIN_VERSION_bytestring(0,10,12)
 instance IsList BSL.ByteString where
     type Item BSL.ByteString = Word8
     toList = BSL.unpack
     fromList = BSL.pack
+#endif
 
 instance ListLike BSL.ByteString Word8 where
     empty = BSL.empty
