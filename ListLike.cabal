@@ -22,7 +22,15 @@ Description: Generalized support for list-like structures in Haskell.
  ByteString, for types that support input and output, and for types that can handle
  infinite lists.
 Stability: Stable
-Tested-With: GHC == 8.8.1, GHC == 8.6.5, GHC == 8.4.4, GHC == 8.2.2, GHC == 8.0.2, GHC == 7.10.2
+
+Tested-With:
+  GHC == 8.10.3
+  GHC == 8.8.4
+  GHC == 8.6.5
+  GHC == 8.4.4
+  GHC == 8.2.2
+  GHC == 8.0.2
+  GHC == 7.10.3
 
 Library
   default-language: Haskell2010

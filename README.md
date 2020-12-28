@@ -1,4 +1,5 @@
 [![Build Status](https://secure.travis-ci.org/ddssff/ListLike.png?branch=master)](http://travis-ci.org/ddssff/ListLike)
+[![Build Status](https://github.com/ddssff/ListLike/workflows/Haskell-CI/badge.svg)](https://github.com/ddssff/ListLike/actions)
 
 ListLike
 ========
@@ -8,6 +9,7 @@ polymorphism over many common datatypes.
 
 CHANGES
 =======
+
 Version 4.7
 -----------
 
