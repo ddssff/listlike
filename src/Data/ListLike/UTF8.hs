@@ -31,7 +31,9 @@ import Data.ListLike.String (StringLike(..))
 import Data.Maybe (fromMaybe)
 import Data.Monoid (Monoid(..))
 import Data.Semigroup (Semigroup(..))
+#if !MIN_VERSION_utf8_string(1,0,2)
 import Data.String (IsString(fromString))
+#endif
 import Data.String.UTF8 (UTF8{-, UTF8Bytes-})
 import qualified Data.String.UTF8 as UTF8
 import GHC.Exts (IsList(..))
@@ -147,8 +149,10 @@ instance ListLikeIO (UTF8 BS.ByteString) Char where
     -- writeFile = BS.writeFile
     -- appendFile = BS.appendFile
 
+#if !MIN_VERSION_utf8_string(1,0,2)
 instance IsString (UTF8 BS.ByteString) where
     fromString = UTF8.fromString
+#endif
 
 instance StringLike (UTF8 BS.ByteString) where
     toString = UTF8.toString
@@ -271,8 +275,10 @@ instance ListLikeIO (UTF8 BSL.ByteString) Char where
 instance Semigroup (UTF8 BSL.ByteString) where
   (<>) = mappend
 
+#if !MIN_VERSION_utf8_string(1,0,2)
 instance IsString (UTF8 BSL.ByteString) where
     fromString = UTF8.fromString
+#endif
 
 instance StringLike (UTF8 BSL.ByteString) where
     toString = UTF8.toString
