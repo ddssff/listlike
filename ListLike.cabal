@@ -66,8 +66,21 @@ Library
                 ,vector     >= 0.5   && < 0.13
                 ,dlist      >= 0.7   && < 1.1
                 ,fmlist     >= 0.8   && < 0.10
-                ,utf8-string
+                ,utf8-string >= 0.3.1 && < 1.1
                 ,deepseq
+
+  -- Remark: Atm, we don't comply with the Haskell Package Versioning Policy
+  --   https://pvp.haskell.org/
+  -- > §6. Client defines orphan instance.
+  -- > If a package defines an orphan instance, it MUST depend on the
+  -- > minor version of the packages that define the data type and the
+  -- > type class to be backwards compatible. For example,
+  -- > build-depends: mypkg >= 2.1.1 && < 2.1.2.
+  --
+  -- Since ListLike defines orphan instances, we would need to include
+  -- the minor version number in the upper bounds.
+  -- (See issues #7 and #10.)
+  -- However, this could involve a maintenance to relax upper bounds.
 
   If !impl(ghc >= 8.4)
     Build-Depends: semigroups >= 0.16 && < 0.20
