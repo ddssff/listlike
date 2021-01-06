@@ -18,7 +18,6 @@ import qualified Data.String as S
 import Control.Monad.Zip (MonadZip)
 import qualified Control.Monad.Zip as Z
 --import Data.Function
-import Data.Char (Char)
 import GHC.Exts (IsList(..))
 
 instance FoldableLL (FMList a) a where

@@ -40,7 +40,6 @@ import Prelude hiding (length, head, last, null, tail, map, filter, concat,
 import Control.Monad (MonadPlus(..))
 import Data.ListLike.Base
 import Data.ListLike.FoldableLL
-import Data.Maybe (maybe)
 import Data.Monoid
 
 -- | Returns True if all elements are True

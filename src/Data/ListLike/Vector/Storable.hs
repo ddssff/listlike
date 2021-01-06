@@ -14,11 +14,9 @@ import           Data.Vector.Storable ((!))
 import           Data.ListLike.Base
 import           Data.ListLike.FoldableLL
 import           Data.ListLike.String
-import           Data.String (IsString(fromString))
+import           Data.String (IsString)
 
-import           Data.Monoid
 import           Foreign.Storable (Storable)
-import           GHC.Exts (IsList(..))
 
 
 instance Storable a => FoldableLL (V.Vector a) a where
@@ -107,4 +105,3 @@ isSuffixOf' needle haystack
                           haystack
   | V.length needle == V.length haystack = needle == haystack
   | otherwise = False
-

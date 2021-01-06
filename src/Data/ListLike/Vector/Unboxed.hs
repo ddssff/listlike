@@ -14,10 +14,7 @@ import           Data.Vector.Unboxed (Unbox, (!))
 import           Data.ListLike.Base
 import           Data.ListLike.FoldableLL
 import           Data.ListLike.String
-import           Data.String (IsString(fromString))
-
-import           Data.Monoid
-import           GHC.Exts (IsList(..))
+import           Data.String (IsString)
 
 
 instance Unbox a => FoldableLL (V.Vector a) a where
@@ -106,4 +103,3 @@ isSuffixOf' needle haystack
                           haystack
   | V.length needle == V.length haystack = needle == haystack
   | otherwise = False
-

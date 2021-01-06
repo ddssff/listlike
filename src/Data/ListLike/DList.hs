@@ -8,7 +8,7 @@ import Data.ListLike.Base
 import Data.ListLike.FoldableLL
 --import Data.ListLike.IO
 import Data.ListLike.String
-import Data.DList (DList(..))
+import Data.DList (DList)
 import qualified Data.DList as D
 --import Data.Foldable (Foldable)
 import qualified Data.Foldable as F
@@ -18,7 +18,6 @@ import qualified Data.Foldable as F
 import qualified Data.String as S
 import Control.Category
 import Data.Char (Char)
-import GHC.Exts (IsList(..))
 
 instance FoldableLL (DList a) a where
   foldl = F.foldl

@@ -14,7 +14,7 @@ import           Data.Monoid
 #endif
 import           Control.DeepSeq
 --import           Control.Monad
-import           Data.String as String (IsString(fromString))
+import           Data.String as String (IsString)
 import           Data.Semigroup (Semigroup(..))
 import qualified Data.Text.Lazy as T
 --import qualified Data.Text.Lazy.IO as TI

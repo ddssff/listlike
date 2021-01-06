@@ -39,7 +39,6 @@ import Prelude hiding (length, head, last, null, tail, map, filter, concat,
                        splitAt, elem, notElem, unzip, lines, words,
                        unlines, unwords)
 import qualified Prelude as P
-import           Control.Applicative ((<$>), (<*>))
 import           Control.Monad
 import qualified Data.List as L
 import qualified Data.Sequence as S
@@ -54,7 +53,6 @@ import           Data.ListLike.UTF8 ()
 import           Data.ListLike.Vector ()
 import           Data.Int
 --import           Data.Maybe (fromMaybe)
-import           Data.Monoid
 import           Data.Semigroup (Semigroup(..))
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Char8 as BSC
@@ -64,7 +62,7 @@ import qualified Data.Array.IArray as A
 import           Data.Array.IArray((!), (//), Ix(..))
 import qualified Data.ByteString.Lazy as BSL
 import qualified Data.ByteString.Lazy.Char8 as BSLC
-import           Data.String (IsString(fromString))
+import           Data.String (IsString)
 --import           Data.String.UTF8 (UTF8)
 --import qualified Data.String.UTF8 as UTF8
 import qualified System.IO as IO

@@ -14,10 +14,7 @@ import           Data.Vector ((!))
 import           Data.ListLike.Base
 import           Data.ListLike.FoldableLL
 import           Data.ListLike.String
-import           Data.String (IsString(fromString))
-
-import           Data.Monoid
-import           GHC.Exts (IsList(..))
+import           Data.String (IsString)
 
 instance FoldableLL (V.Vector a) a where
     foldl = V.foldl

@@ -23,8 +23,7 @@ import           Data.Vector.Generic ((!))
 import           Data.ListLike.Base
 import           Data.ListLike.FoldableLL
 import           Data.ListLike.String
-import           Data.Monoid
-import           Data.String (IsString(fromString))
+import           Data.String (IsString)
 import           GHC.Exts (IsList(..))
 
 instance {-# OVERLAPPABLE #-} V.Vector v a => FoldableLL (v a) a where

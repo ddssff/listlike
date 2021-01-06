@@ -49,7 +49,6 @@ import           Data.ListLike.String
 import           Data.ListLike.IO
 import           Data.ListLike.FoldableLL
 import           Data.Int
-import           Data.Monoid
 import           Data.Semigroup (Semigroup(..))
 import           Data.String (IsString(..))
 import qualified Data.ByteString.Char8 as BS

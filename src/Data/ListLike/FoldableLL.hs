@@ -33,7 +33,6 @@ module Data.ListLike.FoldableLL
     ) where
 import Prelude hiding (foldl, foldr, foldr1, sequence_, mapM_, foldMap)
 import qualified Data.Foldable as F
-import Data.Monoid
 import Data.Maybe
 import qualified Data.List as L
 
