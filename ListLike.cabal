@@ -5,7 +5,6 @@ Maintainer: David Fox <dsf@seereason.com>
 Author: John Goerzen
 Copyright: Copyright (c) 2007-2008 John Goerzen
 license-file: COPYRIGHT
-extra-source-files: COPYRIGHT, README.md
 Category: list, string, text, bytestring, vector
 Cabal-Version: >= 1.10
 Build-Type: Simple
@@ -31,6 +30,10 @@ Tested-With:
   GHC == 8.2.2
   GHC == 8.0.2
   GHC == 7.10.3
+
+extra-source-files:
+  README.md
+  CHANGELOG.md
 
 Library
   default-language: Haskell2010
