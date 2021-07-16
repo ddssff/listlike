@@ -1,6 +1,10 @@
 CHANGES
 =======
 
+### 4.7.5
+
+  - warning-free for `-Wall` and `-Wcompat`
+
 ### 4.7.4 (2021-01-07)
 
   - support utf8-string-1.0.2 ([#10](https://github.com/ddssff/listlike/issues/10))

@@ -1,7 +1,9 @@
-{-# LANGUAGE MultiParamTypeClasses
+{-# LANGUAGE CPP
+            ,MultiParamTypeClasses
             ,FlexibleInstances
             ,TypeFamilies
-            ,TypeSynonymInstances #-}
+            ,TypeSynonymInstances
+            ,GeneralizedNewtypeDeriving #-}
 
 
 {-
@@ -49,7 +51,9 @@ import           Data.ListLike.String
 import           Data.ListLike.IO
 import           Data.ListLike.FoldableLL
 import           Data.Int
+#if !MIN_VERSION_base(4,11,0)
 import           Data.Semigroup (Semigroup(..))
+#endif
 import           Data.String (IsString(..))
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.ByteString.Lazy.Char8 as BSL
@@ -64,14 +68,7 @@ import           GHC.Exts (IsList(..))
 -- | Newtype wrapper around Data.ByteString.Char8.ByteString,
 --   this allows for ListLike instances with Char elements.
 newtype CharString = CS { unCS :: BS.ByteString }
-  deriving (Read, Show, Eq, Ord)
-
-instance Semigroup CharString where
-  (<>) = mappend
-
-instance Monoid CharString where
-  mempty = CS mempty
-  mappend l r = CS $ mappend (unCS l) (unCS r)
+  deriving (Read, Show, Eq, Ord, Semigroup, Monoid)
 
 instance FoldableLL CharString Char where
     foldl f i0  ls = BS.foldl f i0 (unCS ls)
@@ -189,14 +186,7 @@ instance StringLike CharString where
 -- | Newtype wrapper around Data.ByteString.Lazy.Char8.ByteString,
 --   this allows for ListLike instances with Char elements.
 newtype CharStringLazy = CSL { unCSL :: BSL.ByteString }
-  deriving (Read, Show, Eq, Ord)
-
-instance Semigroup CharStringLazy where
-  (<>) = mappend
-
-instance Monoid CharStringLazy where
-  mempty = CSL mempty
-  mappend l r = CSL $ mappend (unCSL l) (unCSL r)
+  deriving (Read, Show, Eq, Ord, Semigroup, Monoid)
 
 instance FoldableLL CharStringLazy Char where
     foldl f i0  ls = BSL.foldl f i0 (unCSL ls)

@@ -52,8 +52,9 @@ import           Data.ListLike.Text ()
 import           Data.ListLike.UTF8 ()
 import           Data.ListLike.Vector ()
 import           Data.Int
---import           Data.Maybe (fromMaybe)
+#if !MIN_VERSION_base(4,11,0)
 import           Data.Semigroup (Semigroup(..))
+#endif
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Char8 as BSC
 --import qualified Data.Foldable as F
@@ -386,17 +387,17 @@ instance Ix i => FoldableLL (A.Array i e) e where
     foldr' = F.foldr'
 
 instance (Integral i, Ix i) => Semigroup (A.Array i e) where
-  (<>) = mappend
+  l1 <> l2 = A.array (blow, newbhigh) $
+               A.assocs l1 ++ zip [bhigh + 1 .. newbhigh] (A.elems l2)
+    where
+    newlen        = genericLength newelems
+    newelems      = A.elems l2
+    newbhigh      = bhigh + newlen
+    (blow, bhigh) = A.bounds l1
 
 instance (Integral i, Ix i) => Monoid (A.Array i e) where
-    mempty = A.listArray (0, -1) []
-    mappend l1 l2 =
-        A.array (blow, newbhigh)
-              (A.assocs l1 ++ zip [(bhigh + 1)..newbhigh] (A.elems l2))
-        where newlen = genericLength newelems
-              newelems = A.elems l2
-              newbhigh = bhigh + newlen
-              (blow, bhigh) = A.bounds l1
+  mempty  = A.listArray (0, -1) []
+  mappend = (<>)
 
 instance (Integral i, Ix i) => IsList (A.Array i e) where
     type Item (A.Array i e) = e

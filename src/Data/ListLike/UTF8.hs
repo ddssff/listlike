@@ -29,8 +29,9 @@ import Data.ListLike.FoldableLL
 import Data.ListLike.IO
 import Data.ListLike.String (StringLike(..))
 import Data.Maybe (fromMaybe)
-import Data.Monoid (Monoid(..))
+#if !MIN_VERSION_base(4,11,0)
 import Data.Semigroup (Semigroup(..))
+#endif
 #if !MIN_VERSION_utf8_string(1,0,2)
 import Data.String (IsString(fromString))
 #endif
@@ -158,11 +159,11 @@ instance StringLike (UTF8 BS.ByteString) where
     toString = UTF8.toString
 
 instance Semigroup (UTF8 BS.ByteString) where
-  (<>) = mappend
+  a <> b = UTF8.fromRep $ UTF8.toRep a <> UTF8.toRep b
 
 instance Monoid (UTF8 BS.ByteString) where
-    mempty = UTF8.fromString []
-    mappend a b = UTF8.fromRep (mappend (UTF8.toRep a) (UTF8.toRep b))
+  mempty  = UTF8.fromString []
+  mappend = (<>)
 
 --------------------------------------------------
 -- UTF8 Lazy.ByteString
@@ -272,9 +273,6 @@ instance ListLikeIO (UTF8 BSL.ByteString) Char where
     -- writeFile = BSL.writeFile
     -- appendFile = BSL.appendFile
 
-instance Semigroup (UTF8 BSL.ByteString) where
-  (<>) = mappend
-
 #if !MIN_VERSION_utf8_string(1,0,2)
 instance IsString (UTF8 BSL.ByteString) where
     fromString = UTF8.fromString
@@ -283,8 +281,11 @@ instance IsString (UTF8 BSL.ByteString) where
 instance StringLike (UTF8 BSL.ByteString) where
     toString = UTF8.toString
 
+instance Semigroup (UTF8 BSL.ByteString) where
+  a <> b = UTF8.fromRep $ UTF8.toRep a <> UTF8.toRep b
+
 instance Monoid (UTF8 BSL.ByteString) where
-    mempty = UTF8.fromString []
-    mappend a b = UTF8.fromRep (mappend (UTF8.toRep a) (UTF8.toRep b))
+  mempty  = UTF8.fromString []
+  mappend = (<>)
 
 {-# RULES "fromListLike/a" fromListLike = id :: a -> a #-}

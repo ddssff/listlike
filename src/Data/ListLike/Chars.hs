@@ -15,7 +15,9 @@ import           Data.Monoid
 import           Control.DeepSeq
 --import           Control.Monad
 import           Data.String as String (IsString)
-import           Data.Semigroup (Semigroup(..))
+#if !MIN_VERSION_base(4,11,0)
+import Data.Semigroup (Semigroup(..))
+#endif
 import qualified Data.Text.Lazy as T
 --import qualified Data.Text.Lazy.IO as TI
 import qualified Data.Text.Lazy.Builder as Builder
@@ -38,11 +40,11 @@ builder (T s) = Builder.fromLazyText s
 {-# INLINE builder #-}
 
 instance Semigroup Chars where
-  (<>) = mappend
+  a <> b = B $ builder a <> builder b
 
 instance Monoid Chars where
-    mempty = B mempty
-    mappend a b = B $ mappend (builder a) (builder b)
+  mempty  = B mempty
+  mappend = (<>)
 
 instance String.IsString Chars where
   -- Builder already has an IsString instance, do we want to use it?
