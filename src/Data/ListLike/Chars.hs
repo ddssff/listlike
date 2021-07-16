@@ -1,4 +1,3 @@
--- | Work in progress.
 {-# LANGUAGE CPP
             ,MultiParamTypeClasses
             ,TypeFamilies

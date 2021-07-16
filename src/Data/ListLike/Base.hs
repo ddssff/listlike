@@ -22,8 +22,8 @@ For license and copyright information, see the file COPYRIGHT
    Copyright  : Copyright (C) 2007 John Goerzen
    License    : BSD3
 
-   Maintainer : John Lato <jwlato@gmail.com>
-   Stability  : provisional
+   Maintainer : David Fox <dsf@seereason.com>, Andreas Abel
+   Stability  : stable
    Portability: portable
 
 Generic operations over list-like structures
