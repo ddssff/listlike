@@ -1,0 +1,14 @@
+# Format of a line:
+#
+# Proper Name <Proper@email> commit name <commit@email>
+# \-----------+------------/ \----------+-------------/
+#             |                         |
+#          replace                     find
+#
+# <Proper@email> is never optional and cannot appear by itself.
+# Besides that, the other parts are optional (as long as 2 parts
+# are present).
+
+David Fox <dsf@seereason.com> David Fox <ddssff@gmail.com>
+John Lato <jwlato@gmail.com>  John Lato <jwlato@tsurucapital.com>
+John Lato <jwlato@gmail.com>  John Lato <jwlato@google.com>
