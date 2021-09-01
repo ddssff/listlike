@@ -1,6 +1,10 @@
 CHANGES
 =======
 
+### 4.7.6
+
+  - New implementation of tail in DList instance.
+
 ### 4.7.5
 
   - warning-free for `-Wall` and `-Wcompat`
