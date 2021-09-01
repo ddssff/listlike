@@ -1,20 +1,22 @@
 {-# LANGUAGE NoImplicitPrelude, MultiParamTypeClasses, FlexibleInstances #-}
 {-# OPTIONS -fno-warn-orphans #-}
 {-# LANGUAGE CPP #-}
+
 -- | 'Data.ListLike.ListLike' instances for 'Data.DList.DList'
+
 module Data.ListLike.DList () where
---import qualified Prelude as P
+
 import Data.ListLike.Base
 import Data.ListLike.FoldableLL
---import Data.ListLike.IO
 import Data.ListLike.String
+#if MIN_VERSION_dlist(1,0,0)
+import Data.DList.Unsafe (DList(UnsafeDList), unsafeApplyDList)
+#else
 import Data.DList (DList)
+#endif
 import qualified Data.DList as D
---import Data.Foldable (Foldable)
 import qualified Data.Foldable as F
---import Data.Traversable (Traversable)
---import qualified Data.Traversable as T
---import Data.String (IsString)
+import qualified Data.List as List
 import qualified Data.String as S
 import Control.Category
 import Data.Char (Char)
@@ -35,7 +37,17 @@ instance ListLike (DList a) a where
   append = D.append
   head = D.head
 #if MIN_VERSION_dlist(1,0,0)
-  tail = D.fromList . D.tail
+  -- Andreas Abel, 2021-09-01, issue #14,
+  -- work around https://github.com/spl/dlist/issues/98:
+  --
+  -- dlist-1.0 changed @tail@ so that it is not an operation
+  -- on difference lists anymore, but collapses the difference list
+  -- into a plain list.
+  --
+  -- The following tail function restores the spirit of difference
+  -- lists, at the cost of breaking data abstraction, i.e.,
+  -- using the constructor and destructor of the newtype DList.
+  tail = UnsafeDList . (List.tail .) . unsafeApplyDList
 #else
   tail = D.tail
 #endif
