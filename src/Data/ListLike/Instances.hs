@@ -4,6 +4,9 @@
             ,TypeFamilies
             ,TypeSynonymInstances #-}
 {-# OPTIONS -fno-warn-orphans #-}
+#if __GLASGOW_HASKELL__ > 901
+{-# OPTIONS -fno-warn-incomplete-uni-patterns #-}
+#endif
 
 {-
 Copyright (C) 2007 John Goerzen <jgoerzen@complete.org>
@@ -39,7 +42,6 @@ import Prelude hiding (length, head, last, null, tail, map, filter, concat,
                        splitAt, elem, notElem, unzip, lines, words,
                        unlines, unwords)
 import qualified Prelude as P
-import           Control.Monad
 import qualified Data.List as L
 import qualified Data.Sequence as S
 import           Data.Sequence ((><), (|>), (<|))
@@ -188,8 +190,8 @@ instance ListLike BS.ByteString Word8 where
     findIndices x = fromList . BS.findIndices x
     -- the default definitions don't work well for array-like things, so
     -- do monadic stuff via a list instead
-    sequence  = liftM fromList . P.sequence  . toList
-    mapM func = liftM fromList . P.mapM func . toList
+    sequence  = fmap fromList . P.sequenceA  . toList
+    mapM func = fmap fromList . P.traverse func . toList
     --nub = BS.nub
     --delete = BS.delete
     --deleteFirsts = BS.deleteFirsts
@@ -311,8 +313,8 @@ instance ListLike BSL.ByteString Word8 where
     --elemIndices x = fromList . L.map fromIntegral . BSL.elemIndices x
     findIndex f = mi64toi . BSL.findIndex f
     --findIndices x = fromList . L.map fromIntegral . BSL.findIndices x
-    sequence  = liftM fromList . P.sequence  . toList
-    mapM func = liftM fromList . P.mapM func . toList
+    sequence  = fmap fromList . P.sequenceA  . toList
+    mapM func = fmap fromList . P.traverse func . toList
     --sequence = BSL.sequence
     --mapM = BSL.mapM
     --mapM_ = BSL.mapM_
@@ -460,8 +462,8 @@ instance (Integral i, Ix i) => ListLike (A.Array i e) e where
     elemIndices i = fromList . L.elemIndices i . toList
     findIndex f = L.findIndex f . toList
     findIndices f = fromList . L.findIndices f . toList
-    sequence  = liftM fromList . P.sequence  . toList
-    mapM func = liftM fromList . P.mapM func . toList
+    sequence  = fmap fromList . P.sequenceA  . toList
+    mapM func = fmap fromList . P.traverse func . toList
     -- rigidMapM = mapM
     nub = fromList . L.nub . toList
     -- delete

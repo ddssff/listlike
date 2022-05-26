@@ -7,7 +7,6 @@ module Data.ListLike.Text.Text
 where
 
 import           Prelude as P
-import           Control.Monad
 import qualified Data.Text as T
 import qualified Data.Text.IO as TI
 import qualified Data.Text.Lazy as Lazy (toStrict)
@@ -78,8 +77,8 @@ instance ListLike T.Text Char where
     genericSplitAt i = T.splitAt (fromIntegral i)
     genericReplicate i = LL.replicate (fromIntegral i)
 
-    sequence  = liftM fromList . P.sequence  . toList
-    mapM func = liftM fromList . P.mapM func . toList
+    sequence  = fmap fromList . P.sequenceA  . toList
+    mapM func = fmap fromList . P.traverse func . toList
 
 instance ListLikeIO T.Text Char where
     hGetLine = TI.hGetLine

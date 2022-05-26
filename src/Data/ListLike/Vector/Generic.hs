@@ -4,6 +4,7 @@
             ,FlexibleInstances
             ,TypeFamilies
             ,UndecidableInstances #-}
+{-# LANGUAGE TypeOperators #-}  -- for GHC >= 9.4
 #if __GLASGOW_HASKELL__ < 710
 {-# LANGUAGE OverlappingInstances #-}
 #endif
@@ -17,7 +18,6 @@ module Data.ListLike.Vector.Generic ()
 where
 
 import           Prelude as P
-import           Control.Monad
 import qualified Data.Vector.Generic as V
 import           Data.Vector.Generic ((!))
 import           Data.ListLike.Base
@@ -90,8 +90,8 @@ instance {-# OVERLAPPABLE #-} (IsList (v a), Item (v a) ~ a, Monoid (v a), Eq (v
     --genericSplitAt i =
     genericReplicate i = V.replicate (fromIntegral i)
 
-    sequence  = liftM fromList . P.sequence  . toList
-    mapM func = liftM fromList . P.mapM func . toList
+    sequence  = fmap fromList . P.sequenceA  . toList
+    mapM func = fmap fromList . P.traverse func . toList
 
 instance (Eq (v Char), V.Vector v Char) => IsString (v Char) where
     fromString = V.fromList

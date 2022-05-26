@@ -8,7 +8,6 @@ module Data.ListLike.Vector.Storable ()
 where
 
 import           Prelude as P
-import           Control.Monad
 import qualified Data.Vector.Storable as V
 import           Data.Vector.Storable ((!))
 import           Data.ListLike.Base
@@ -76,8 +75,8 @@ instance Storable a => ListLike (V.Vector a) a where
     --genericSplitAt i =
     genericReplicate i = V.replicate (fromIntegral i)
 
-    sequence  = liftM fromList . P.sequence  . toList
-    mapM func = liftM fromList . P.mapM func . toList
+    sequence  = fmap fromList . P.sequenceA  . toList
+    mapM func = fmap fromList . P.traverse func . toList
 
 instance IsString (V.Vector Char) where
     fromString = fromList

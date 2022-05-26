@@ -1,12 +1,16 @@
 CHANGES
 =======
 
-### 4.7.6
+### 4.7.7 (2022-05-26)
 
-  - New implementation of tail in DList instance.
+  - methods `sequence` and `mapM`: relax `Monad` constraint to `Applicative`
+  - `LANGUAGE TypeOperators` to fix GHC 9.4 warning
+  - allow `text-2.0`
+  - tested with GHC 7.10 - 9.4
 
-### 4.7.5
+### 4.7.6 (2021-09-01)
 
+  - new implementation of `tail` in `DList` instance
   - warning-free for `-Wall` and `-Wcompat`
 
 ### 4.7.4 (2021-01-07)
