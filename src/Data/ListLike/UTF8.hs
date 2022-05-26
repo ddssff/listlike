@@ -108,8 +108,8 @@ instance ListLike (UTF8 BS.ByteString) Char where
     -- findIndices x = fromList . UTF8.findIndices x
     -- -- the default definitions don't work well for array-like things, so
     -- -- do monadic stuff via a list instead
-    -- sequence  = liftM fromList . P.sequence  . toList
-    -- mapM func = liftM fromList . P.mapM func . toList
+    -- sequence  = fmap fromList . P.sequenceA  . toList
+    -- mapM func = fmap fromList . P.traverse func . toList
     -- --nub = UTF8.nub
     -- --delete = UTF8.delete
     -- --deleteFirsts = UTF8.deleteFirsts
@@ -231,8 +231,8 @@ instance ListLike (UTF8 BSL.ByteString) Char where
     -- findIndices x = fromList . UTF8.findIndices x
     -- -- the default definitions don't work well for array-like things, so
     -- -- do monadic stuff via a list instead
-    -- sequence  = liftM fromList . P.sequence  . toList
-    -- mapM func = liftM fromList . P.mapM func . toList
+    -- sequence  = fmap fromList . P.sequenceA  . toList
+    -- mapM func = fmap fromList . P.traverse func . toList
     -- --nub = UTF8.nub
     -- --delete = UTF8.delete
     -- --deleteFirsts = UTF8.deleteFirsts

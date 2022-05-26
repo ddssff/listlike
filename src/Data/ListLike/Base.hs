@@ -7,6 +7,7 @@
             ,FlexibleContexts
             ,ConstraintKinds
             ,CPP #-}
+{-# LANGUAGE TypeOperators #-}  -- for GHC >= 9.4
 
 {-
 Copyright (C) 2007 John Goerzen <jgoerzen@complete.org>
@@ -38,19 +39,24 @@ module Data.ListLike.Base
     InfiniteListLike(..),
     zip, zipWith, sequence_
     ) where
-import Prelude hiding (length, {-uncons,-} head, last, null, tail, map, filter, concat,
-                       any, lookup, init, all, foldl, foldr, foldl1, foldr1,
-                       maximum, minimum, iterate, span, break, takeWhile,
-                       dropWhile, {-dropWhileEnd,-} reverse, zip, zipWith, sequence,
-                       sequence_, mapM, mapM_, concatMap, and, or, sum,
-                       product, repeat, replicate, cycle, take, drop,
-                       splitAt, elem, notElem, unzip, lines, words,
-                       unlines, unwords, foldMap)
+
+import Prelude
+  ( Applicative(..), Bool(..), Eq(..), Int, Integer, Integral
+  , Maybe(..), Monad, Monoid(..), Num(..), Ord(..), Ordering(..)
+  , ($), (.), (&&), (||), (++), asTypeOf, error, flip, fst, snd
+  , id, maybe, max, min, not, otherwise
+  , sequenceA
+  )
+#if MIN_VERSION_base(4,17,0)
+import Data.Type.Equality -- GHC 9.4: type equality ~ is just an operator now
+#endif
+
 import qualified Data.List as L
 import Data.ListLike.FoldableLL
-import qualified Control.Monad as M
-import Data.Monoid
-import Data.Maybe
+    ( FoldableLL(foldr, foldr1, foldl), fold, foldMap, sequence_ )
+import qualified Control.Applicative as A
+import Data.Monoid ( All(All, getAll), Any(Any, getAny) )
+import Data.Maybe ( listToMaybe )
 import GHC.Exts (IsList(Item, fromList, {-fromListN,-} toList))
 
 {- | The class implementing list-like functions.
@@ -364,18 +370,14 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
 
     ------------------------------ Monadic operations
     {- | Evaluate each action in the sequence and collect the results -}
-    sequence :: (Monad m, ListLike fullinp (m item)) =>
+    sequence :: (Applicative m, ListLike fullinp (m item)) =>
                 fullinp -> m full
-    sequence l = foldr func (return empty) l
-        where func litem results =
-                do x <- litem
-                   xs <- results
-                   return (cons x xs)
+    sequence = foldr (A.liftA2 cons) (pure empty)
 
     {- | A map in monad space.  Same as @'sequence' . 'map'@
 
          See also 'rigidMapM' -}
-    mapM :: (Monad m, ListLike full' item') =>
+    mapM :: (Applicative m, ListLike full' item') =>
             (item -> m item') -> full -> m full'
     mapM func l = sequence mapresult
             where mapresult = asTypeOf (map func l) []
@@ -550,12 +552,12 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
         | count <= 0 = empty
         | otherwise = map (\_ -> x) [1..count]
 
-#if __GLASGOW_HASKELL__ >= 708
+
     {-# MINIMAL (singleton, uncons, null) |
                 (singleton, uncons, genericLength) |
                 (singleton, head, tail, null) |
                 (singleton, head, tail, genericLength) #-}
-#endif
+
 
 -- | A version of 'ListLike' with a single type parameter, the item
 -- type is obtained using the 'Item' type function from 'IsList'.
@@ -646,7 +648,7 @@ instance ListLike [a] a where
     elemIndex = L.elemIndex
     elemIndices item = fromList . L.elemIndices item
     findIndex = L.findIndex
-    sequence = M.sequence . toList
+    sequence = sequenceA . toList
     -- mapM = M.mapM
     nub = L.nub
     delete = L.delete
@@ -671,7 +673,7 @@ zip :: (ListLike full item,
           ListLike fullb itemb,
           ListLike result (item, itemb)) =>
           full -> fullb -> result
-zip = zipWith (\a b -> (a, b))
+zip = zipWith (,)
 
 {- | Takes two lists and combines them with a custom combining function -}
 zipWith :: (ListLike full item,

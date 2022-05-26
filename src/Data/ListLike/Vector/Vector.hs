@@ -8,7 +8,6 @@ module Data.ListLike.Vector.Vector ()
 where
 
 import           Prelude as P
-import           Control.Monad
 import qualified Data.Vector as V
 import           Data.Vector ((!))
 import           Data.ListLike.Base
@@ -73,8 +72,8 @@ instance ListLike (V.Vector a) a where
     --genericSplitAt i =
     genericReplicate i = V.replicate (fromIntegral i)
 
-    sequence  = liftM fromList . P.sequence  . toList
-    mapM func = liftM fromList . P.mapM func . toList
+    sequence  = fmap fromList . P.sequenceA  . toList
+    mapM func = fmap fromList . P.traverse func . toList
 
 instance IsString (V.Vector Char) where
     fromString = fromList
