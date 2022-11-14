@@ -513,10 +513,11 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
     {- | Like 'insert', but with a custom comparison function -}
     insertBy :: (item -> item -> Ordering) -> item ->
                 full -> full
-    insertBy cmp x ys
-        | null ys = singleton x
-        | otherwise = case cmp x (head ys) of
-                        GT -> cons (head ys) (insertBy cmp x (tail ys))
+    insertBy cmp x ys =
+        case uncons ys of
+            Nothing -> singleton x
+            Just (ys_head,ys_tail) -> case cmp x ys_head of
+                        GT -> cons ys_head (insertBy cmp x ys_tail)
                         _ ->  cons x ys
 
     ------------------------------ Generic Operations
