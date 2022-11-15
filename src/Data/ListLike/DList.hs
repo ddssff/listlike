@@ -6,6 +6,8 @@
 
 module Data.ListLike.DList () where
 
+import qualified Prelude
+
 import Data.ListLike.Base
 import Data.ListLike.FoldableLL
 import Data.ListLike.String
@@ -20,6 +22,7 @@ import qualified Data.List as List
 import qualified Data.String as S
 import Control.Category
 import Data.Char (Char)
+
 
 instance FoldableLL (DList a) a where
   foldl = F.foldl
@@ -56,6 +59,11 @@ instance ListLike (DList a) a where
   --toList = D.toList
   --fromList = D.fromList
   replicate = D.replicate
+  uncons xs = case xs of
+    D.Nil -> Prelude.Nothing
+    D.Cons d_head l_tail -> Prelude.Just (d_head,fromList l_tail)
+    _ -> Prelude.error "Workaround for missing COMPLETE pragma on dlist patterns"
+
 
 instance StringLike (DList Char) where
   toString = D.toList
