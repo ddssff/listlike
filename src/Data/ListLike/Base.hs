@@ -43,7 +43,7 @@ module Data.ListLike.Base
 import Prelude
   ( Applicative(..), Bool(..), Eq(..), Int, Integer, Integral
   , Maybe(..), Monad, Monoid(..), Num(..), Ord(..), Ordering(..)
-  , ($), (.), (&&), (||), (++), asTypeOf, error, flip, fst, snd
+  , ($), (.), (&&), (||), asTypeOf, error, flip, fst, snd
   , id, maybe, max, min, not, otherwise
   , sequenceA
   )
@@ -53,9 +53,8 @@ import Data.Type.Equality -- GHC 9.4: type equality ~ is just an operator now
 
 import qualified Data.List as L
 import Data.ListLike.FoldableLL
-    ( FoldableLL(foldr, foldr1, foldl), fold, foldMap, sequence_ )
+    ( FoldableLL(foldr, foldl, foldl', foldl1), fold, foldMap, sequence_ )
 import qualified Control.Applicative as A
-import Data.Monoid ( All(All, getAll), Any(Any, getAny) )
 import Data.Maybe ( listToMaybe )
 import GHC.Exts (IsList(Item, fromList, {-fromListN,-} toList))
 
@@ -69,16 +68,21 @@ just replace the value already there.
 
 Implementators must define at least:
 
-* singleton
+* 'singleton' or 'cons'
 
-* head
+* 'tail' or 'uncons'
 
-* tail
+'genericLength' should be provided for types that track their length.
 
-* null or genericLength
+The default definitions are biased toward structures with efficient 'cons' and 'uncons'.
 -}
 class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
     ListLike full item | full -> item where
+    {-# MINIMAL (singleton, uncons) |
+                (singleton, tail) |
+                (cons, uncons) |
+                (cons, tail) #-}
+
 
     ------------------------------ Creation
     {- | The empty list -}
@@ -87,6 +91,7 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
 
     {- | Creates a single-element list out of an element -}
     singleton :: item -> full
+    singleton item = cons item empty
 
     ------------------------------ Basic Functions
 
@@ -104,7 +109,7 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
 
     {- | Extracts the first element of a 'ListLike'. -}
     head :: full -> item
-    head = maybe (error "head") fst . uncons
+    head = foldr (\ item _ -> item) (error "head")
 
     {- | Extract head and tail, return Nothing if empty -}
     uncons :: full -> Maybe (item, full)
@@ -112,10 +117,7 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
 
     {- | Extracts the last element of a 'ListLike'. -}
     last :: full -> item
-    last l = case genericLength l of
-                  (0::Integer) -> error "Called last on empty list"
-                  1 -> head l
-                  _ -> last (tail l)
+    last = foldl (\ _ item -> item) (error "Called last on empty list")
 
     {- | Gives all elements after the head. -}
     tail :: full -> full
@@ -123,15 +125,14 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
 
     {- | All elements of the list except the last one.  See also 'inits'. -}
     init :: full -> full
-    init l
-        | null l = error "init: empty list"
-        | null xs = empty
-        | otherwise = cons (head l) (init xs)
-        where xs = tail l
+    init l =
+        case uncons l of
+            Just (x, xs) | not (null xs) -> cons x (init xs)
+            _ -> empty
 
     {- | Tests whether the list is empty. -}
     null :: full -> Bool
-    null x = genericLength x == (0::Integer)
+    null = foldr (\ _ _ -> False) True
 
     {- | Length of the list.  See also 'genericLength'. -}
     length :: full -> Int
@@ -144,9 +145,7 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
          as fast, if not faster, than this function and is recommended
          if it will work for your purposes.  See also 'mapM'. -}
     map :: ListLike full' item' => (item -> item') -> full -> full'
-    map func inp
-        | null inp = empty
-        | otherwise = cons (func (head inp)) (map func (tail inp))
+    map func = foldr (\ x ys -> cons (func x) ys) empty
 
     {- | Like 'map', but without the possibility of changing the type of
        the item.  This can have performance benefits for things such as
@@ -157,18 +156,16 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
 
     {- | Reverse the elements in a list. -}
     reverse :: full -> full
-    reverse l = rev l empty
-        where rev rl a
-                | null rl = a
-                | otherwise = rev (tail rl) (cons (head rl) a)
+    reverse = foldl' (\ a x -> cons x a) empty
+
     {- | Add an item between each element in the structure -}
     intersperse :: item -> full -> full
-    intersperse sep l
-        | null l = empty
-        | null xs = singleton x
-        | otherwise = cons x (cons sep (intersperse sep xs))
-        where x = head l
-              xs = tail l
+    intersperse sep l =
+        case uncons l of
+            Nothing -> empty
+            Just (x, xs)
+                | null xs -> singleton x
+                | otherwise -> cons x (cons sep (intersperse sep xs))
 
     ------------------------------ Reducing Lists (folds)
     -- See also functions in FoldableLLL
@@ -192,19 +189,19 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
 
     {- | True if any items satisfy the function -}
     any :: (item -> Bool) -> full -> Bool
-    any p = getAny . foldMap (Any . p)
+    any p = foldr (\ x b -> p x || b) False
 
     {- | True if all items satisfy the function -}
     all :: (item -> Bool) -> full -> Bool
-    all p = getAll . foldMap (All . p)
+    all p = foldr (\ x b -> p x && b) True
 
     {- | The maximum value of the list -}
     maximum :: Ord item => full -> item
-    maximum = foldr1 max
+    maximum = foldl1 max
 
     {- | The minimum value of the list -}
     minimum :: Ord item => full -> item
-    minimum = foldr1 min
+    minimum = foldl1 min
 
     ------------------------------ Infinite lists
     {- | Generate a structure with the specified length with every element
@@ -227,11 +224,10 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
 
     {- | Returns all elements at start of list that satisfy the function. -}
     takeWhile :: (item -> Bool) -> full -> full
-    takeWhile func l
-        | null l = empty
-        | func x = cons x (takeWhile func (tail l))
-        | otherwise = empty
-        where x = head l
+    takeWhile func l =
+        case uncons l of
+            Just (x, tail_l) | func x -> cons x (takeWhile func tail_l)
+            _ -> empty
 
     {- | Drops all elements from the start of the list that satisfy the
        function. -}
@@ -269,8 +265,7 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
     inits l
         | null l = singleton empty
         | otherwise =
-            append (singleton empty)
-                   (map (cons (head l)) theinits)
+            cons empty (map (cons (head l)) theinits)
             where theinits = asTypeOf (inits (tail l)) [l]
 
     {- | All final segnemts, longest first -}
@@ -329,10 +324,12 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
 
     {- | Returns only the elements that satisfy the function. -}
     filter :: (item -> Bool) -> full -> full
-    filter func l
-        | null l = empty
-        | func (head l) = cons (head l) (filter func (tail l))
-        | otherwise = filter func (tail l)
+    filter func l =
+        case uncons l of
+            Nothing -> empty
+            Just (x, xs)
+                | func x -> cons x (filter func xs)
+                | otherwise -> filter func xs
 
     {- | Returns the lists that do and do not satisfy the function.
        Same as @('filter' p xs, 'filter' ('not' . p) xs)@ -}
@@ -372,15 +369,14 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
     {- | Evaluate each action in the sequence and collect the results -}
     sequence :: (Applicative m, ListLike fullinp (m item)) =>
                 fullinp -> m full
-    sequence = foldr (A.liftA2 cons) (pure empty)
+    sequence = mapM id
 
     {- | A map in monad space.  Same as @'sequence' . 'map'@
 
          See also 'rigidMapM' -}
     mapM :: (Applicative m, ListLike full' item') =>
             (item -> m item') -> full -> m full'
-    mapM func l = sequence mapresult
-            where mapresult = asTypeOf (map func l) []
+    mapM func = foldr (\ x mys -> A.liftA2 cons (func x) mys) (pure empty)
 
     {- | Like 'mapM', but without the possibility of changing the type
          of the item.  This can have performance benefits with some types. -}
@@ -499,16 +495,16 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
     {- | Generic version of 'group'. -}
     groupBy :: (ListLike full' full, Eq item) =>
                 (item -> item -> Bool) -> full -> full'
-    groupBy eq l
-        | null l = empty
-        | otherwise = cons (cons x ys) (groupBy eq zs)
-                      where (ys, zs) = span (eq x) xs
-                            x = head l
-                            xs = tail l
+    groupBy eq l =
+        case uncons l of
+            Nothing -> empty
+            Just (x, xs) ->
+              let (ys, zs) = span (eq x) xs
+              in cons (cons x ys) (groupBy eq zs)
 
     {- | Sort function taking a custom comparison function -}
     sortBy :: (item -> item -> Ordering) -> full -> full
-    sortBy cmp = foldr (insertBy cmp) empty
+    sortBy cmp = fromList . sortBy cmp . toList
 
     {- | Like 'insert', but with a custom comparison function -}
     insertBy :: (item -> item -> Ordering) -> item ->
@@ -523,18 +519,17 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
     ------------------------------ Generic Operations
     {- | Length of the list -}
     genericLength :: Num a => full -> a
-    genericLength l = calclen 0 l
-        where calclen !accum cl =
-                  if null cl
-                     then accum
-                     else calclen (accum + 1) (tail cl)
+    genericLength = foldl' (\ accum _ -> 1 + accum) 0
 
     {- | Generic version of 'take' -}
     genericTake :: Integral a => a -> full -> full
     genericTake n l
-        | n <= 0 = empty
-        | null l = empty
-        | otherwise = cons (head l) (genericTake (n - 1) (tail l))
+       | n <= 0
+       = empty
+       | otherwise
+       = case uncons l of
+           Nothing -> empty
+           Just (x, xs) -> cons x (genericTake (n - 1) xs)
 
     {- | Generic version of 'drop' -}
     genericDrop :: Integral a => a -> full -> full
@@ -553,11 +548,6 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
         | count <= 0 = empty
         | otherwise = map (\_ -> x) [1..count]
 
-
-    {-# MINIMAL (singleton, uncons, null) |
-                (singleton, uncons, genericLength) |
-                (singleton, head, tail, null) |
-                (singleton, head, tail, genericLength) #-}
 
 
 -- | A version of 'ListLike' with a single type parameter, the item
@@ -600,11 +590,11 @@ class (ListLike full item) => InfiniteListLike full item | full -> item where
 -- This instance is here due to some default class functions
 
 instance ListLike [a] a where
-    empty = []
-    singleton x = [x]
-    cons x l = x : l
-    snoc l x = l ++ [x]
-    append = (++)
+    -- empty = []  -- same as default
+    -- singleton x = [x] -- same as default
+    cons = (:)
+    -- snoc l x = l ++ [x]  -- same as default
+    -- append = (++)  -- same as default
     head = L.head
     last = L.last
     tail = L.tail
@@ -650,7 +640,7 @@ instance ListLike [a] a where
     elemIndices item = fromList . L.elemIndices item
     findIndex = L.findIndex
     sequence = sequenceA . toList
-    -- mapM = M.mapM
+    -- rigidMapM = Control.Monad.mapM
     nub = L.nub
     delete = L.delete
     deleteFirsts = (L.\\)
@@ -682,6 +672,8 @@ zipWith :: (ListLike full item,
             ListLike result resultitem) =>
             (item -> itemb -> resultitem) -> full -> fullb -> result
 zipWith f a b
-    | null a = empty
-    | null b = empty
-    | otherwise = cons (f (head a) (head b)) (zipWith f (tail a) (tail b))
+    | Just (head_a, tail_a) <- uncons a
+    , Just (head_b, tail_b) <- uncons b
+    = cons (f head_a head_b) (zipWith f tail_a tail_b)
+    | otherwise
+    = empty
