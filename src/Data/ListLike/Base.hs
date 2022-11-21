@@ -125,10 +125,13 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
 
     {- | All elements of the list except the last one.  See also 'inits'. -}
     init :: full -> full
-    init l =
-        case uncons l of
-            Just (x, xs) | not (null xs) -> cons x (init xs)
-            _ -> empty
+    init l = case uncons l of
+        Just (x, xs) -> init1 x xs
+        Nothing -> empty
+      where
+        init1 y ys = case uncons ys of
+            Just (y', ys') -> cons y (init1 y' ys')
+            Nothing -> empty
 
     {- | Tests whether the list is empty. -}
     null :: full -> Bool
@@ -160,12 +163,13 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
 
     {- | Add an item between each element in the structure -}
     intersperse :: item -> full -> full
-    intersperse sep l =
-        case uncons l of
-            Nothing -> empty
-            Just (x, xs)
-                | null xs -> singleton x
-                | otherwise -> cons x (cons sep (intersperse sep xs))
+    intersperse sep l = case uncons l of
+        Nothing -> empty
+        Just (x, xs) -> loop x xs
+      where
+        loop y ys = case uncons ys of
+            Nothing -> singleton y
+            Just (y', ys') -> cons y (cons sep (loop y' ys'))
 
     ------------------------------ Reducing Lists (folds)
     -- See also functions in FoldableLLL
@@ -226,7 +230,7 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
     takeWhile :: (item -> Bool) -> full -> full
     takeWhile func l =
         case uncons l of
-            Just (x, tail_l) | func x -> cons x (takeWhile func tail_l)
+            Just (x, xs) | func x -> cons x (takeWhile func xs)
             _ -> empty
 
     {- | Drops all elements from the start of the list that satisfy the
@@ -672,8 +676,8 @@ zipWith :: (ListLike full item,
             ListLike result resultitem) =>
             (item -> itemb -> resultitem) -> full -> fullb -> result
 zipWith f a b
-    | Just (head_a, tail_a) <- uncons a
-    , Just (head_b, tail_b) <- uncons b
-    = cons (f head_a head_b) (zipWith f tail_a tail_b)
+    | Just (x, xs) <- uncons a
+    , Just (y, ys) <- uncons b
+    = cons (f x y) (zipWith f xs ys)
     | otherwise
     = empty
