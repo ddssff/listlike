@@ -113,14 +113,14 @@ module Data.ListLike
                  InfiniteListLike
                 )
        where
-import Prelude hiding (length, head, last, null, tail, map, filter, concat,
-                       any, lookup, init, all, foldl, foldr, foldl1, foldr1,
-                       maximum, minimum, iterate, span, break, takeWhile,
+import Prelude hiding (Foldable(..), head, last, tail, map, filter, concat,
+                       any, lookup, init, all,
+                       iterate, span, break, takeWhile,
                        dropWhile, {-dropWhileEnd,-} reverse, zip, zipWith, sequence,
-                       sequence_, mapM, mapM_, concatMap, and, or, sum,
-                       product, repeat, replicate, cycle, take, drop,
-                       splitAt, elem, notElem, unzip, lines, words,
-                       unlines, unwords, foldMap, show)
+                       sequence_, mapM, mapM_, concatMap, and, or,
+                       repeat, replicate, cycle, take, drop,
+                       splitAt, notElem, unzip, lines, words,
+                       unlines, unwords, show)
 import Data.ListLike.Base
 import Data.ListLike.Chars
 import Data.ListLike.CharString
