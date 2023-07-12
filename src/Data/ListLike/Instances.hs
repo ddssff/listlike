@@ -215,13 +215,13 @@ instance ListLike BS.ByteString Word8 where
     genericReplicate i = BS.replicate (fromIntegral i)
 
 instance ListLikeIO BS.ByteString Word8 where
-    hGetLine = BS.hGetLine
+    hGetLine = BSC.hGetLine
     hGetContents = BS.hGetContents
     hGet = BS.hGet
     hGetNonBlocking = BS.hGetNonBlocking
     hPutStr = BS.hPutStr
     hPutStrLn = BSC.hPutStrLn
-    getLine = BS.getLine
+    getLine = BSC.getLine
     getContents = BS.getContents
     putStr = BS.putStr
     putStrLn = BSC.putStrLn
@@ -345,13 +345,13 @@ instance ListLike BSL.ByteString Word8 where
 strict2lazy :: BS.ByteString -> IO BSL.ByteString
 strict2lazy b = return (BSL.fromChunks [b])
 instance ListLikeIO BSL.ByteString Word8 where
-    hGetLine h = BS.hGetLine h >>= strict2lazy
+    hGetLine h = BSC.hGetLine h >>= strict2lazy
     hGetContents = BSL.hGetContents
     hGet = BSL.hGet
     hGetNonBlocking = BSL.hGetNonBlocking
     hPutStr = BSL.hPut
     -- hPutStrLn = BSLC.hPutStrLn
-    getLine = BS.getLine >>= strict2lazy
+    getLine = BSC.getLine >>= strict2lazy
     getContents = BSL.getContents
     putStr = BSL.putStr
     putStrLn = BSLC.putStrLn

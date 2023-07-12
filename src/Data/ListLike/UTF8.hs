@@ -135,7 +135,7 @@ instance ListLike (UTF8 BS.ByteString) Char where
     -- genericReplicate i = UTF8.replicate (fromIntegral i)
 
 instance ListLikeIO (UTF8 BS.ByteString) Char where
-    hGetLine h = UTF8.fromRep <$> BS.hGetLine h
+    hGetLine h = UTF8.fromRep <$> BSC.hGetLine h
     hGetContents h = UTF8.fromRep <$> BS.hGetContents h
     hGet h n = UTF8.fromRep <$> BS.hGet h n
     hGetNonBlocking h n = UTF8.fromRep <$> BS.hGetNonBlocking h n
@@ -258,7 +258,7 @@ instance ListLike (UTF8 BSL.ByteString) Char where
     -- genericReplicate i = UTF8.replicate (fromIntegral i)
 
 instance ListLikeIO (UTF8 BSL.ByteString) Char where
-    hGetLine h = (UTF8.fromRep . BSL.fromStrict) <$> BS.hGetLine h
+    hGetLine h = (UTF8.fromRep . BSL.fromStrict) <$> BSC.hGetLine h
     hGetContents h = (UTF8.fromRep) <$> BSL.hGetContents h
     hGet h n = UTF8.fromRep <$> BSL.hGet h n
     hGetNonBlocking h n = UTF8.fromRep <$> BSL.hGetNonBlocking h n

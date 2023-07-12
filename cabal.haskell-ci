@@ -1,1 +1,7 @@
 branches: master
+
+constraint-set bytestring-0.12
+  ghc: >= 8.2
+  constraints: bytestring >= 0.12
+  tests: True
+  run-tests: True
