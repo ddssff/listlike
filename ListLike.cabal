@@ -1,5 +1,5 @@
 Name: ListLike
-Version: 4.7.8
+Version: 4.7.8.1
 License: BSD3
 Maintainer: David Fox <dsf@seereason.com>, Andreas Abel
 Author: John Goerzen
@@ -120,4 +120,4 @@ Test-suite listlike-tests
 
 source-repository head
   type:     git
-  location: git://github.com/ddssff/listlike.git
+  location: https://github.com/ddssff/listlike.git

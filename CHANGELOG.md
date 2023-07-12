@@ -1,6 +1,18 @@
 CHANGES
 =======
 
+#### 4.7.8.1 (2023-07-12)
+
+  - allow `bytestring-0.12` and fix its deprecation warnings
+  - tested with GHC 7.10 - 9.6
+
+### 4.7.8 (2022-11-15)
+
+  - change default `insertBy` implementation to work better with dlists
+    ([#18](https://github.com/ddssff/listlike/pull/18))
+  - allow `vector-0.13`
+  - tested with GHC 7.10 - 9.4
+
 ### 4.7.7 (2022-05-26)
 
   - methods `sequence` and `mapM`: relax `Monad` constraint to `Applicative`
