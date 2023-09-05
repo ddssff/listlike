@@ -1,5 +1,7 @@
-[![Build Status](https://secure.travis-ci.org/ddssff/ListLike.png?branch=master)](http://travis-ci.org/ddssff/ListLike)
-[![Build Status](https://github.com/ddssff/ListLike/workflows/Haskell-CI/badge.svg)](https://github.com/ddssff/ListLike/actions)
+[![Build Status](https://github.com/ddssff/listlike/actions/workflows/haskell-ci.yml/badge.svg?branch=master)](https://github.com/ddssff/listlike/actions/workflows/haskell-ci.yml)
+[![Hackage](https://img.shields.io/hackage/v/ListLike.svg)](https://hackage.haskell.org/package/ListLike)
+[![Stackage Nightly](http://stackage.org/package/ListLike/badge/nightly)](http://stackage.org/nightly/package/ListLike)
+[![Stackage LTS](http://stackage.org/package/ListLike/badge/lts)](http://stackage.org/lts/package/ListLike)
 
 ListLike
 ========
