@@ -1,6 +1,11 @@
 CHANGES
 =======
 
+#### 4.7.8.2 (2023-10-10)
+
+  - pacify GHC 9.8's new `x-partial` warning
+  - tested with GHC 7.10 - 9.8
+
 #### 4.7.8.1 (2023-07-12)
 
   - allow `bytestring-0.12` and fix its deprecation warnings

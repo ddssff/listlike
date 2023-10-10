@@ -58,9 +58,13 @@ prop_length f = LL.length f == length (LL.toList f)
 prop_cons f i = llcmp (LL.cons i f) (i : (LL.toList f))
 prop_append f1 f2 = llcmp (LL.append f1 f2) (LL.toList f1 ++ LL.toList f2)
 prop_head f = not (LL.null f) ==> LL.head f == head (LL.toList f)
-prop_last f = not (LL.null f) ==> LL.last f == last (LL.toList f)
+  where head (x:xs) = x
+  -- Andreas Abel, 2023-10-10, issue #32:
+  -- Redefine 'head' and 'tail' to avoid the x-partial warning of GHC 9.8.
 prop_tail f = not (LL.null f) ==> llcmp (LL.tail f) (tail (LL.toList f))
+  where tail (x:xs) = xs
 prop_init f = not (LL.null f) ==> llcmp (LL.init f) (init (LL.toList f))
+prop_last f = not (LL.null f) ==> LL.last f == last (LL.toList f)
 prop_null f = LL.null f == null (LL.toList f)
 prop_length2 f = checkLengths f (LL.toList f)
 prop_length3 f1 f2 = llcmp (LL.append f1 f2) (LL.toList f1 ++ LL.toList f2)

@@ -271,10 +271,11 @@ instance LL.FoldableLL (MyList a) a where
     foldl1 f (MyList x) = foldl1 f x
 
 instance Sem.Semigroup (MyList a) where
-  (<>) = mappend
+    MyList x <> MyList y = MyList (x ++ y)
+
 instance Monoid (MyList a) where
     mempty = MyList []
-    mappend (MyList x) (MyList y) = MyList (x ++ y)
+    mappend = (Sem.<>)
 
 instance IsList (MyList a) where
     type Item (MyList a) = a
@@ -283,8 +284,10 @@ instance IsList (MyList a) where
 
 instance LL.ListLike (MyList a) a where
     singleton x = MyList [x]
-    head (MyList x) = head x
-    tail (MyList x) = MyList (tail x)
+    -- Andreas Abel, 2023-10-10, issue #32:
+    -- Avoid 'head' and 'tail' from 'Prelude' and thus the x-partial warning of GHC 9.8.
+    head (MyList (x:xs)) = x
+    tail (MyList (x:xs)) = MyList xs
     null (MyList x) = null x
 
 instance IsString (MyList Char) where

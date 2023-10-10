@@ -605,9 +605,11 @@ instance ListLike [a] a where
     cons x l = x : l
     snoc l x = l ++ [x]
     append = (++)
-    head = L.head
+    -- Andreas Abel, 2023-10-10, issue #32:
+    -- Use implementation of 'head' and 'tail' in terms of 'uncons' to avoid the x-partial warning under GHC 9.8
+    uncons []       = Nothing
+    uncons (x : xs) = Just (x, xs)
     last = L.last
-    tail = L.tail
     init = L.init
     null = L.null
     length = L.length

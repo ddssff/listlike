@@ -50,7 +50,9 @@ instance ListLike (DList a) a where
   -- The following tail function restores the spirit of difference
   -- lists, at the cost of breaking data abstraction, i.e.,
   -- using the constructor and destructor of the newtype DList.
-  tail = UnsafeDList . (List.tail .) . unsafeApplyDList
+  -- Andreas Abel, 2023-10-10, issue #32:
+  -- Use @drop 1@ instead of @tail@ as the latter triggers the x-partial warning in GHC 9.8.
+  tail = UnsafeDList . (List.drop 1 .) . unsafeApplyDList
 #else
   tail = D.tail
 #endif
