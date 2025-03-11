@@ -1,7 +1,7 @@
 {-# LANGUAGE MultiParamTypeClasses
             ,TypeFamilies
             ,FlexibleInstances #-}
-{-# OPTIONS -fno-warn-orphans #-}
+{-# OPTIONS -Wno-orphans #-}
 
 module Data.ListLike.Vector.Unboxed ()
 

@@ -1,5 +1,5 @@
 {-# LANGUAGE NoImplicitPrelude, MultiParamTypeClasses, FlexibleInstances #-}
-{-# OPTIONS -fno-warn-orphans #-}
+{-# OPTIONS -Wno-orphans #-}
 {-# LANGUAGE CPP #-}
 
 -- | 'Data.ListLike.ListLike' instances for 'Data.DList.DList'

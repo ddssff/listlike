@@ -3,9 +3,9 @@
             ,FlexibleInstances
             ,TypeFamilies
             ,TypeSynonymInstances #-}
-{-# OPTIONS -fno-warn-orphans #-}
+{-# OPTIONS -Wno-orphans #-}
 #if __GLASGOW_HASKELL__ > 901
-{-# OPTIONS -fno-warn-incomplete-uni-patterns #-}
+{-# OPTIONS -Wno-incomplete-uni-patterns #-}
 #endif
 
 {-
@@ -539,11 +539,6 @@ instance ListLikeIO (S.Seq Char) Char where
     -- readFile
     -- writeFile
     -- appendFile
-
-#if !MIN_VERSION_containers(0,5,7)
-instance IsString (S.Seq Char) where
-  fromString = S.fromList
-#endif
 
 instance StringLike (S.Seq Char) where
     toString = toList

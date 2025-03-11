@@ -1,6 +1,12 @@
 CHANGES
 =======
 
+#### 4.7.8.3 (2025-03-13)
+
+  - drop support for GHC 7
+  - allow `containers-0.8` and up
+  - tested with GHC 8.0 - 9.12.1
+
 #### 4.7.8.2 (2023-10-10)
 
   - pacify GHC 9.8's new `x-partial` warning

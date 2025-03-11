@@ -8,7 +8,7 @@
             ,UndecidableInstances
             ,TypeFamilies
             ,FlexibleContexts #-}
-{-# OPTIONS -fno-warn-orphans #-}
+{-# OPTIONS -Wno-orphans #-}
 
 {-
 Copyright (C) 2007 John Goerzen <jgoerzen@complete.org>
@@ -81,18 +81,6 @@ instance (Arbitrary i) => Arbitrary (FM.FMList i) where
 
 instance (CoArbitrary i) => CoArbitrary (FM.FMList i) where
     coarbitrary l = coarbitrary (LL.toList l)
-
-#if ! MIN_VERSION_QuickCheck(2,8,2)
-instance (Arbitrary i) => Arbitrary (S.Seq i) where
-    arbitrary = sized (\n -> choose (0, n) >>= myVector)
-        where myVector n =
-                  do arblist <- vector n
-                     return (LL.fromList arblist)
-    shrink = map LL.fromList . shrink . LL.toList
-
-instance (CoArbitrary i) => CoArbitrary (S.Seq i) where
-    coarbitrary l = coarbitrary (LL.toList l)
-#endif
 
 instance Arbitrary (BSL.ByteString) where
     arbitrary = sized (\n -> choose (0, n) >>= myVector)
@@ -311,11 +299,7 @@ runVerbTestText (HU.PutText put us) test = do
     put (HU.showCounts (HU.counts ss)) False us'
   reportError   = reportProblem "Error:"   "Error in:   "
   reportFailure = reportProblem "Failure:" "Failure in: "
-#if MIN_VERSION_HUnit(1,3,0)
   reportProblem p0 p1 _mloc msg ss us' = put line True us'
-#else
-  reportProblem p0 p1 msg ss us' = put line True us'
-#endif
    where line  = "### " ++ kind ++ path' ++ '\n' : msg
          kind  = if null path' then p0 else p1
          path' = HU.showPath (HU.path ss)

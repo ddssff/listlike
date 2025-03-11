@@ -1,5 +1,5 @@
 {-# LANGUAGE MultiParamTypeClasses, FlexibleInstances, TypeFamilies #-}
-{-# OPTIONS -fno-warn-orphans #-}
+{-# OPTIONS -Wno-orphans #-}
 -- | 'Data.ListLike.ListLike' instances for 'Data.FMList.FMList'
 module Data.ListLike.FMList () where
 import Prelude hiding (cycle, map)
