@@ -1,14 +1,12 @@
-{-# LANGUAGE CPP
-            ,MultiParamTypeClasses
-            ,FlexibleContexts
-            ,FlexibleInstances
-            ,TypeFamilies
-            ,UndecidableInstances #-}
+{-# LANGUAGE CPP #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE TypeOperators #-}  -- for GHC >= 9.4
-#if __GLASGOW_HASKELL__ < 710
-{-# LANGUAGE OverlappingInstances #-}
-#endif
-{-# OPTIONS -fno-warn-orphans #-}
+
+{-# OPTIONS -Wno-orphans #-}
 
 -- | ListLike instance for any type supporting the @Data.Vector.Generic@
 -- interface.  To avoid collisions with other Vector instances, this module

@@ -7,10 +7,6 @@ module Data.ListLike.Chars
 
 where
 
-#if !MIN_VERSION_base(4,8,0)
-import           Control.Applicative
-import           Data.Monoid
-#endif
 import           Control.DeepSeq
 --import           Control.Monad
 import           Data.String as String (IsString)

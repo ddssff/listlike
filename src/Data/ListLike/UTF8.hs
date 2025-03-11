@@ -4,7 +4,7 @@
             ,TypeFamilies
             ,TypeSynonymInstances
             ,UndecidableInstances #-}
-{-# OPTIONS -fno-warn-orphans #-}
+{-# OPTIONS -Wno-orphans #-}
 
 {- |
 Instances of 'Data.ListLike.ListLike' and related classes.
@@ -16,9 +16,6 @@ Re-exported by "Data.ListLike".
 
 module Data.ListLike.UTF8 () where
 
-#if !MIN_VERSION_base(4,8,0)
-import           Control.Applicative
-#endif
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Char8 as BSC
 import qualified Data.ByteString.Lazy as BSL

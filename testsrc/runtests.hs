@@ -1,18 +1,17 @@
-{-# LANGUAGE CPP
-            ,TypeFamilies
-            ,ScopedTypeVariables
-            ,RankNTypes
-            ,ExistentialQuantification
-            ,MultiParamTypeClasses
-            ,FunctionalDependencies
-            ,FlexibleInstances
-            ,UndecidableInstances
-            ,FlexibleContexts #-}
-{-# OPTIONS -fno-warn-missing-signatures #-}
-
-#if __GLASGOW_HASKELL__ >= 708
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE AllowAmbiguousTypes #-}
-#endif
+{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE ExistentialQuantification #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FunctionalDependencies #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE UndecidableInstances #-}
+{-# LANGUAGE FlexibleContexts #-}
+
+{-# OPTIONS -Wno-missing-signatures #-}
+
 
 {-
 Copyright (C) 2007 John Goerzen <jgoerzen@complete.org>
