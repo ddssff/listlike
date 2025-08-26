@@ -4,7 +4,7 @@
             ,TypeFamilies
             ,TypeSynonymInstances #-}
 {-# OPTIONS -Wno-orphans #-}
-#if __GLASGOW_HASKELL__ > 901
+#if __GLASGOW_HASKELL__ >= 900
 {-# OPTIONS -Wno-incomplete-uni-patterns #-}
 #endif
 

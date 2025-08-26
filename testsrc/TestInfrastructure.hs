@@ -275,7 +275,9 @@ instance LL.ListLike (MyList a) a where
     -- Andreas Abel, 2023-10-10, issue #32:
     -- Avoid 'head' and 'tail' from 'Prelude' and thus the x-partial warning of GHC 9.8.
     head (MyList (x:xs)) = x
+    head (MyList [])     = undefined
     tail (MyList (x:xs)) = MyList xs
+    tail (MyList []    ) = undefined
     null (MyList x) = null x
 
 instance IsString (MyList Char) where

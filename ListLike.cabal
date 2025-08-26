@@ -112,7 +112,6 @@ Test-suite listlike-tests
     , ListLike
     , HUnit      >= 1.5 && < 2
     , QuickCheck >= 2.9 && < 3
-    , random     >= 1.1 && < 2
     , array
     , bytestring
     , containers
