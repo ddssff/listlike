@@ -1,6 +1,11 @@
 CHANGES
 =======
 
+#### 4.7.8.4 (2025-08-26)
+
+  - fix build with `-Werror=incomplete-patterns`
+  - tested with GHC 8.0 - 9.14 alpha1
+
 #### 4.7.8.3 (2025-03-13)
 
   - drop support for GHC 7
