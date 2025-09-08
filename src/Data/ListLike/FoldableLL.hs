@@ -32,6 +32,7 @@ module Data.ListLike.FoldableLL
      fold, foldMap, foldM, sequence_, mapM_
     ) where
 import Prelude hiding (foldl, foldr, foldr1, sequence_, mapM_, foldMap)
+import qualified GHC.Exts as GHC (build)
 import qualified Data.Foldable as F
 import Data.Maybe
 import qualified Data.List as L
@@ -84,7 +85,9 @@ fold = foldMap id
 
 {- | Map each element to a monoid, then combine the results -}
 foldMap :: (FoldableLL full item, Monoid m) => (item -> m) -> full -> m
-foldMap f = foldr (mappend . f) mempty
+-- foldMap f = foldr (mappend . f) mempty
+foldMap f = \ xs -> mconcat (GHC.build (\ g z -> foldr (\ x z' -> f x `g` z') z xs))
+{-# INLINABLE foldMap #-}
 
 instance FoldableLL [a] a where
     foldl = L.foldl
