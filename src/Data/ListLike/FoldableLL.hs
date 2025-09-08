@@ -43,6 +43,10 @@ Instances of 'FoldableLL' can be folded, and can be many and varied.
 
 These functions are used heavily in "Data.ListLike". -}
 class FoldableLL full item | full -> item where
+    {-# MINIMAL (foldl, foldr)
+              | (foldl, genericIndexMaybe)
+      #-}
+
     {- | Left-associative fold -}
     foldl :: (a -> item -> a) -> a -> full -> a
 
@@ -60,8 +64,16 @@ class FoldableLL full item | full -> item where
                     (foldl mf Nothing xs)
            where mf Nothing y = Just y
                  mf (Just x) y = Just (f x y)
+
     {- | Right-associative fold -}
     foldr :: (item -> b -> b) -> b -> full -> b
+    foldr f z xs = gor i0
+      where
+        i0 :: Integer
+        i0 = 0
+        gor i = case genericIndexMaybe xs i of
+            Nothing -> z
+            Just x -> f x (gor $! i + 1)
 
     -- | Strict version of 'foldr'
     foldr' :: (item -> b -> b) -> b -> full -> b
@@ -76,6 +88,20 @@ class FoldableLL full item | full -> item where
                     (foldr mf Nothing xs)
            where mf x Nothing = Just x
                  mf x (Just y) = Just (f x y)
+
+    -- | @genericIndexMaybe@ is a safe, generic version of
+    -- 'Data.ListLike.index'. When the index is out of bounds it returns
+    -- 'Nothing'; otherwise it returns 'Just' the item at that index.
+    genericIndexMaybe :: (Integral index)=> full -> index -> Maybe item
+    genericIndexMaybe xs i = integerIndexMaybe xs (toInteger i)
+      where
+        {- Use Integer as concrete index representation to avoid bizarre behavior
+           with exotic Integral instances. -}
+        integerIndexMaybe ys j
+            | i < 0 = Nothing
+            | otherwise = integerIfoldr
+                (\ j' x mx -> if j == j' then Just x else mx) Nothing ys
+
 
 {- | Combine the elements of a structure using a monoid.
      @'fold' = 'foldMap' id@ -}
@@ -116,3 +142,24 @@ mapM_ func = foldr ((>>) . func) (return ())
    Same as @'mapM_' 'id'@. -}
 sequence_ :: (Monad m, FoldableLL full (m item)) => full -> m ()
 sequence_ = mapM_ id
+
+{-| @genericElemIndex x xs@ returns 'Just' the index of the leftmost item equal to
+    @x@ in @xs@ if it is found; otherwise 'Nothing'. -}
+genericElemIndex ::
+    (FoldableLL full item, Eq item, Integral index)=> item -> full -> Maybe index
+genericElemIndex = genericFindIndex . (==)
+
+{-| @genericElemIndex p xs@ returns 'Just' the index of the leftmost item in @xs@
+    that satisfies @p@, 'Nothing' if @p@ is unsatisfied. -}
+genericFindIndex ::
+    (FoldableLL full item, Integral index)=>
+    (item -> Bool) -> full -> Maybe index
+genericFindIndex p =
+    integerIfoldr (\ i x mi -> if p x then Just (fromInteger i) else mi) Nothing
+
+{-| @integerIfoldr@ is equivalent to 'foldr', but also passes an 'Integer'
+    0-based index to the function.
+    Not exported; used to define @genericFindIndex@ and @genericIndexMaybe@. -}
+integerIfoldr ::
+    (FoldableLL full item)=> (Integer -> item -> a -> a) -> a -> full -> a
+integerIfoldr f z ys = foldr (\ y k j -> f j y (k $! j + 1)) (\_-> z) ys 0
