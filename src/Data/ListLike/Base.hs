@@ -37,7 +37,8 @@ module Data.ListLike.Base
     ListLike(..), ListOps,
     toList, fromList,
     InfiniteListLike(..),
-    zip, zipWith, sequence_
+    zip, zipWith, sequence_,
+    genericElemIndices, genericFindIndices,
     ) where
 
 import Prelude
@@ -53,7 +54,7 @@ import Data.Type.Equality -- GHC 9.4: type equality ~ is just an operator now
 
 import qualified Data.List as L
 import Data.ListLike.FoldableLL
-    ( FoldableLL(foldr, foldr1, foldl), fold, foldMap, sequence_ )
+    ( FoldableLL(foldr, foldr1, foldl), fold, foldMap, sequence_, genericIndexMaybe )
 import qualified Control.Applicative as A
 import Data.Monoid ( All(All, getAll), Any(Any, getAny) )
 import Data.Maybe ( listToMaybe )
@@ -344,10 +345,10 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
          of bounds.  Like (!!) for lists. -}
     index :: full -> Int -> item
     index l i
-        | null l = error "index: index not found"
         | i < 0 = error "index: index must be >= 0"
-        | i == 0 = head l
-        | otherwise = index (tail l) (i - 1)
+        | otherwise = case genericIndexMaybe l i of
+            Nothing -> error "index: index not found"
+            Just x -> x
 
     {- | Returns the index of the element, if it exists. -}
     elemIndex :: Eq item => item -> full -> Maybe Int
@@ -365,8 +366,7 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
 
     {- | Returns the indices of all elements satisfying the function -}
     findIndices :: (ListLike result Int) => (item -> Bool) -> full -> result
-    findIndices p xs = map snd $ filter (p . fst) $ thezips
-        where thezips = asTypeOf (zip xs [0..]) [(head xs, 0::Int)]
+    findIndices = genericFindIndices
 
     ------------------------------ Monadic operations
     {- | Evaluate each action in the sequence and collect the results -}
@@ -558,6 +558,28 @@ class (IsList full, item ~ Item full, FoldableLL full item, Monoid full) =>
                 (singleton, uncons, genericLength) |
                 (singleton, head, tail, null) |
                 (singleton, head, tail, genericLength) #-}
+
+
+{-^ @genericElemIndices x xs@ is the indices of the items of @xs@ that are equal to
+    @x@. See also 'elemIndices'. -}
+genericElemIndices ::
+    (FoldableLL full item, Eq item, ListLike indices index, Integral index)=>
+    item -> full -> indices
+genericElemIndices = genericFindIndices . (==)
+
+{-^ @genericFindIndices predicate xs@ is the indices of the items of @xs@ that
+    satisfy @predicate@. See also 'findIndices'. -}
+genericFindIndices ::
+    (FoldableLL full item, ListLike indices index, Integral index)=>
+    (item -> Bool) -> full -> indices
+genericFindIndices p xs = fromList (build (\ cons' nil' ->
+    integerIfoldr (\ i x is -> if p x then cons' (fromInteger i) is else is) nil' xs))
+
+-- Copy-pasted from FoldableLL because it isn't exported.
+-- At the top level to avoid ScopedTypeVariables:
+integerIfoldr ::
+    (FoldableLL full item)=> (Integer -> item -> a -> a) -> a -> full -> a
+integerIfoldr f z ys = foldr (\ y k !j -> f j y (k (j + 1))) (\_-> z) ys 0
 
 
 -- | A version of 'ListLike' with a single type parameter, the item
