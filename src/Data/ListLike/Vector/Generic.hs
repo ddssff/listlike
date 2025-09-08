@@ -31,6 +31,7 @@ instance {-# OVERLAPPABLE #-} V.Vector v a => FoldableLL (v a) a where
     foldr = V.foldr
     foldr' = V.foldr'
     foldr1 = V.foldr1
+    genericIndexMaybe xs i = xs V.!? fromIntegral i
 
 #if 0
 instance {-# OVERLAPPABLE #-} (Monoid (v a), Eq (v a), V.Vector v a) => IsList (v a) where
