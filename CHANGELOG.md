@@ -1,6 +1,17 @@
 CHANGES
 =======
 
+#### 4.7.X.X
+
+  - add `FoldableLL` method `genericIndexMaybe`
+  - define `index` in terms of `genericIndexMaybe`
+  - add default `foldr` in terms of `genericIndexMaybe`
+  - add MINIMAL pragma to `FoldableLL`
+  - add `genericElemIndex` and `genericFindIndex` to Data.ListLike.FoldableLL
+  - add `genericElemIndices` and `genericFindIndices` to Data.ListLike.Base
+  - define `findIndices` = `genericFindIndices`
+  - tested with GHC 9.8.4
+
 #### 4.7.8.4 (2025-08-26)
 
   - fix build with `-Werror=incomplete-patterns`
