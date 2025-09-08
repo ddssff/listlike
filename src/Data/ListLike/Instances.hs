@@ -132,6 +132,7 @@ instance FoldableLL BS.ByteString Word8 where
     foldr = BS.foldr
     foldr' = BS.foldr'
     foldr1 = BS.foldr1
+    genericIndexMaybe xs i = BS.indexMaybe xs (fromIntegral i)
 
 #if !MIN_VERSION_bytestring(0,10,12)
 instance IsList BS.ByteString where
@@ -253,6 +254,7 @@ instance FoldableLL BSL.ByteString Word8 where
     foldr = BSL.foldr
     --foldr' = BSL.foldr'
     foldr1 = BSL.foldr1
+    genericIndexMaybe xs i = BSL.indexMaybe xs (fromIntegral i)
 
 mi64toi :: Maybe Int64 -> Maybe Int
 mi64toi Nothing = Nothing
@@ -380,13 +382,15 @@ instance StringLike BSL.ByteString where
 -- Arrays
 
 -- This constraint is required for ghc < 8
-instance Ix i => FoldableLL (A.Array i e) e where
+instance (Integral i, Ix i)=> FoldableLL (A.Array i e) e where
     foldl = F.foldl
     foldl1 = F.foldl1
     foldl' = F.foldl'
     foldr = F.foldr
     foldr1 = F.foldr1
     foldr' = F.foldr'
+    genericIndexMaybe l i = l A.!? (fromIntegral i + offset)
+      where offset = fst $ A.bounds l
 
 instance (Integral i, Ix i) => Semigroup (A.Array i e) where
   l1 <> l2 = A.array (blow, newbhigh) $
@@ -551,6 +555,7 @@ instance FoldableLL (S.Seq a) a where
     foldr = F.foldr
     foldr' = F.foldr'
     foldr1 = F.foldr1
+    genericIndexMaybe xs i = S.lookup (fromIntegral i) xs
 
 instance ListLike (S.Seq a) a where
     empty = S.empty
