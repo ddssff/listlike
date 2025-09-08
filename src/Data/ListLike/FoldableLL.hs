@@ -29,7 +29,8 @@ module Data.ListLike.FoldableLL
     (-- * FoldableLL Class
      FoldableLL(..),
      -- * Utilities
-     fold, foldMap, foldM, sequence_, mapM_
+     fold, foldMap, foldM, sequence_, mapM_,
+     genericElemIndex, genericFindIndex,
     ) where
 import Prelude hiding (foldl, foldr, foldr1, sequence_, mapM_, foldMap)
 import qualified Data.Foldable as F
