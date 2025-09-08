@@ -23,6 +23,7 @@ instance Unbox a => FoldableLL (V.Vector a) a where
     foldr = V.foldr
     foldr' = V.foldr'
     foldr1 = V.foldr1
+    genericIndexMaybe xs i = xs V.!? fromIntegral i
 
 instance Unbox a => ListLike (V.Vector a) a where
     empty = V.empty
