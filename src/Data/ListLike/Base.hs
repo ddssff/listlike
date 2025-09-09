@@ -58,7 +58,7 @@ import Data.ListLike.FoldableLL
 import qualified Control.Applicative as A
 import Data.Monoid ( All(All, getAll), Any(Any, getAny) )
 import Data.Maybe ( listToMaybe )
-import GHC.Exts (IsList(Item, fromList, {-fromListN,-} toList))
+import GHC.Exts (IsList(Item, fromList, {-fromListN,-} toList), build)
 
 {- | The class implementing list-like functions.
 
