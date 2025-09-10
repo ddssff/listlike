@@ -382,15 +382,13 @@ instance StringLike BSL.ByteString where
 -- Arrays
 
 -- This constraint is required for ghc < 8
-instance (Integral i, Ix i)=> FoldableLL (A.Array i e) e where
+instance (Ix i)=> FoldableLL (A.Array i e) e where
     foldl = F.foldl
     foldl1 = F.foldl1
     foldl' = F.foldl'
     foldr = F.foldr
     foldr1 = F.foldr1
     foldr' = F.foldr'
-    genericIndexMaybe l i = l A.!? (fromIntegral i + offset)
-      where offset = fst $ A.bounds l
 
 instance (Integral i, Ix i) => Semigroup (A.Array i e) where
   l1 <> l2 = A.array (blow, newbhigh) $
