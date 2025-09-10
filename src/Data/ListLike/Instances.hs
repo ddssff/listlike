@@ -70,6 +70,7 @@ import           Data.String (IsString)
 --import qualified Data.String.UTF8 as UTF8
 import qualified System.IO as IO
 import           Data.Word
+import qualified GHC.Arr (unsafeAt)
 import           GHC.Exts (IsList(..))
 
 --------------------------------------------------
@@ -389,6 +390,13 @@ instance (Ix i)=> FoldableLL (A.Array i e) e where
     foldr = F.foldr
     foldr1 = F.foldr1
     foldr' = F.foldr'
+    genericIndexMaybe l i
+        | 0 <= toInteger i  &&  toInteger i < integerLength l
+        = Just (GHC.Arr.unsafeAt l (fromIntegral i))
+        | otherwise
+        = Nothing
+      where
+        integerLength xs = toInteger (A.rangeSize (A.bounds xs))
 
 instance (Integral i, Ix i) => Semigroup (A.Array i e) where
   l1 <> l2 = A.array (blow, newbhigh) $
