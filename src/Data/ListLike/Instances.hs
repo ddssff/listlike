@@ -133,7 +133,17 @@ instance FoldableLL BS.ByteString Word8 where
     foldr = BS.foldr
     foldr' = BS.foldr'
     foldr1 = BS.foldr1
+#if MIN_VERSION_bytestring(0,11,0)
     genericIndexMaybe xs i = BS.indexMaybe xs (fromIntegral i)
+#else
+    genericIndexMaybe xs i
+        | 0 <= i'  && i' < BS.length xs
+        = Just (BS.index xs i')
+        | otherwise
+        = Nothing
+      where
+        i' = fromIntegral i
+#endif
 
 #if !MIN_VERSION_bytestring(0,10,12)
 instance IsList BS.ByteString where
@@ -255,7 +265,17 @@ instance FoldableLL BSL.ByteString Word8 where
     foldr = BSL.foldr
     --foldr' = BSL.foldr'
     foldr1 = BSL.foldr1
+#if MIN_VERSION_bytestring(0,11,0)
     genericIndexMaybe xs i = BSL.indexMaybe xs (fromIntegral i)
+#else
+    genericIndexMaybe xs i
+        | 0 <= i'  &&  i' < (BSL.length xs)
+        = Just (BSL.index xs i')
+        | otherwise
+        = Nothing
+      where
+        i' = fromIntegral i
+#endif
 
 mi64toi :: Maybe Int64 -> Maybe Int
 mi64toi Nothing = Nothing
