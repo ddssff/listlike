@@ -26,6 +26,7 @@ module Main where
 import Control.Applicative ((<$>), (<*>))
 import Test.QuickCheck
 import qualified Data.ListLike as LL
+import qualified Data.ListLike.FoldableLL as LL
 --import qualified Data.Foldable as F
 --import System.Random
 import qualified Test.HUnit as HU
@@ -241,6 +242,16 @@ prop_foldMap f func = res == resl
     where res = LL.foldMap func f
           resl = foldMap func  (LL.toList f) -- asTypeOf (foldMap (LL.toList f)) (head f)
 
+prop_genericIndexMaybe f i
+    | i >= 0 && i < toInteger (LL.length f)
+    = result === Just (LL.index f (fromInteger i))
+    | i >= 0 && i < LL.genericLength f
+    = result === LL.genericIndexMaybe (LL.toList f) i
+    | otherwise
+    = result === Nothing
+  where
+    result = LL.genericIndexMaybe f i
+
 prop_toString f =
     ((LL.fromString . LL.toString $ f) == f)
     where l = LL.toList f
@@ -352,6 +363,7 @@ allf = (if compilerName == "hugs" then [] else [ apf "foldl" (t prop_foldl),
         apf "foldr'" (t prop_foldr'),
         apw "fold" (LLWrap prop_fold),
         apf "foldMap" (t prop_foldMap)
+       ,apf "genericIndexMaybe" (t prop_genericIndexMaybe)
        ]
 
 alls = [
