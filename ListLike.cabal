@@ -67,7 +67,9 @@ Library
           Data.ListLike.Vector.Vector
           Data.ListLike.DList
           Data.ListLike.FMList
-  -- Other-Modules: Data.ConfigFile.Lexer
+  Other-Modules:
+          -- Data.ConfigFile.Lexer
+          Data.ListLike.Vector.Extra
   Build-Depends:
       base        >= 4.9      && < 5
     , containers  >= 0.5.7    && < 1
@@ -112,6 +114,34 @@ Test-suite listlike-tests
     , ListLike
     , HUnit      >= 1.5 && < 2
     , QuickCheck >= 2.9 && < 3
+    , array
+    , bytestring
+    , containers
+    , dlist
+    , fmlist
+    , text
+    , vector
+    , utf8-string
+  If !impl(ghc >= 8.4)
+    Build-Depends: semigroups >= 0.16 && < 0.20
+
+Benchmark listlike-benchmarks
+  default-language: Haskell2010
+  Hs-source-dirs: benchmarksrc
+  Main-is:        runbenchmarks.hs
+  Type:           exitcode-stdio-1.0
+  ghc-options:   "-with-rtsopts=-A32m"
+  if impl(ghc >= 8.6)
+      ghc-options: -fproc-alignment=64
+
+  Other-modules:  BenchmarkInfrastructure
+      BenchmarkInfrastructure.FoldableLL.Methods
+      BenchmarkInfrastructure.ListLike.Methods
+  Build-depends:
+      base
+    , ListLike
+    , deepseq    >= 1.5
+    , tasty-bench
     , array
     , bytestring
     , containers

@@ -153,7 +153,7 @@ instance ListLike BS.ByteString Word8 where
     init = BS.init
     null = BS.null
     length = BS.length
-    -- map =
+    map func l = fromListN (BS.length l) $ L.map func $ BS.unpack l
     rigidMap = BS.map
     reverse = BS.reverse
     intersperse = BS.intersperse
@@ -191,7 +191,7 @@ instance ListLike BS.ByteString Word8 where
     -- the default definitions don't work well for array-like things, so
     -- do monadic stuff via a list instead
     sequence  = fmap fromList . P.sequenceA  . toList
-    mapM func = fmap fromList . P.traverse func . toList
+    mapM func l = fmap (fromListN (BS.length l)) $ P.traverse func $ toList l
     --nub = BS.nub
     --delete = BS.delete
     --deleteFirsts = BS.deleteFirsts
@@ -199,7 +199,9 @@ instance ListLike BS.ByteString Word8 where
     --intersect = BS.intersect
     sort = BS.sort
     --insert = BS.insert
-    --fromListLike = fromList . toList
+    toList' = BS.unpack
+    fromList' = BS.pack
+    fromListLike l = fromListN (BS.length l) $ BS.unpack l
     --nubBy = BS.nubBy
     --deleteBy = BS.deleteBy
     --deleteFirstsBy = BS.deleteFirstsBy
@@ -564,8 +566,8 @@ instance ListLike (S.Seq a) a where
     init s = S.index (S.inits s) (S.length s - 1)
     null = S.null
     length = S.length
-    map f = fromList . toList . fmap f
-    --rigidMap =
+    map f l = fromListN (S.length l) $ L.map f $ toList l
+    rigidMap = P.fmap
     reverse = S.reverse
     --intersperse =
     --concat =
@@ -579,15 +581,17 @@ instance ListLike (S.Seq a) a where
     take = S.take
     drop = S.drop
     splitAt = S.splitAt
-    --takeWhile =
-    --dropWhile =
+    takeWhile = S.takeWhileL
+    dropWhile = S.dropWhileL
+    dropWhileEnd = S.dropWhileR
     span = S.spanl
     -- break =
     --group =
-    inits = fromList . toList . S.inits
-    tails = fromList . toList . S.tails
-    --isPrefixOf =
-    --isSuffixOf =
+    inits = fromListLike . S.inits
+    tails = fromListLike . toList . S.tails
+    isPrefixOf pat xs = S.length pat <= S.length xs  &&  pat == S.take (S.length pat) xs
+    isSuffixOf pat xs =
+        S.length pat <= S.length xs  &&  pat == S.drop (S.length xs - S.length pat) xs
     --isInfixOf =
     --elem =
     --notElem =
@@ -600,7 +604,8 @@ instance ListLike (S.Seq a) a where
     findIndex = S.findIndexL
     findIndices p = fromList . S.findIndicesL p
     --sequence =
-    --mapM f =
+    mapM f l = fmap (fromListN (S.length l)) $ P.traverse f (toList l)
+    rigidMapM = P.traverse
     --nub =
     --delete =
     --deleteFirsts =
@@ -608,7 +613,9 @@ instance ListLike (S.Seq a) a where
     --intersect =
     sort = S.sort
     --insert = S.insert
-    --fromListLike = fromList . toList
+    toList' = toList
+    fromList' = S.fromList
+    fromListLike l = fromListN (S.length l) $ toList l
     --nubBy =
     --deleteBy =
     --deleteFirstsBy =
